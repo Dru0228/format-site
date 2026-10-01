@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FORMAT — Media for a wider perspective</title>
+<title>FORMAT / Studio</title>
 <meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, and FabLab apparel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,6 +243,23 @@ body.sub main{display:none}
 .advl li span:first-child{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding-top:2px}
 .advl li .m{font-size:15px;line-height:1.55}
 @media (max-width:820px){.adv{grid-template-columns:1fr}.advl li{grid-template-columns:1fr}}
+/* viewfinder overlay on the Video card */
+.vfo{position:absolute;inset:0;pointer-events:none;color:#fff;font:500 10px/1 var(--sans);letter-spacing:.18em;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.vfo .c{position:absolute;width:22px;height:22px;border:0 solid rgba(255,255,255,.85)}
+.vfo .tl{top:14px;left:14px;border-top-width:1px;border-left-width:1px}
+.vfo .tr{top:14px;right:14px;border-top-width:1px;border-right-width:1px}
+.vfo .bl{bottom:14px;left:14px;border-bottom-width:1px;border-left-width:1px}
+.vfo .br{bottom:14px;right:14px;border-bottom-width:1px;border-right-width:1px}
+.vfo .rec,.vfo .fmt{position:absolute}
+.vfo .rec{top:24px;left:28px;display:flex;align-items:center;gap:7px}
+.vfo .rec b{width:7px;height:7px;border-radius:50%;background:#FF2A63;animation:recb 1.2s steps(1) infinite}
+.vfo .fmt{top:24px;right:28px}
+.vfo .x{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+.vfo .x::before,.vfo .x::after{content:"";position:absolute;background:rgba(255,255,255,.7)}
+.vfo .x::before{left:50%;top:0;bottom:0;width:1px}
+.vfo .x::after{top:50%;left:0;right:0;height:1px}
+@keyframes recb{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.vfo .rec b{animation:none}}
 /* closing line on every page, links to Contact */
 .closer{padding:clamp(64px,10vw,128px) 0;border-top:1px solid var(--line)}
 .closer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
@@ -255,72 +272,40 @@ body.sub main{display:none}
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a></nav>
+    <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
+    <nav class="lbl pnav" aria-label="Main"><a href="#top" aria-current="page"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a></nav>
     <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
 
 <main id="top">
-
-<section class="frame" id="frame" aria-label="Intro">
-  <div class="media" id="media"><video class="layer cur" id="heroVid" autoplay muted loop playsinline preload="auto" disablepictureinpicture poster="assets/15090d0f12.jpg" aria-label="FPV drone chasing a green drift car as it slides through a corner at Texas Motor Speedway"><source src="assets/f27790ee67.mp4" type="video/mp4"></video><picture><source media="(max-width:640px)" srcset="assets/4df052394a.jpg"><img class="layer" id="heroImg" src="assets/0088d09d31.jpg" alt="FPV drone view from above of a drift car trailing tire smoke through a corner at golden hour, Texas Motor Speedway"></picture></div>
-  <button class="vp lbl" id="vp" type="button" aria-pressed="false">Pause</button>
-  <div class="scrim" aria-hidden="true"></div>
-  <div class="shut" aria-hidden="true"><i></i><i></i></div>
-  <div class="mode" id="mode" role="group" aria-label="Hero media"><span class="mi" aria-hidden="true"></span><button class="lbl" type="button" data-m="film" aria-pressed="true">Film</button><button class="lbl" type="button" data-m="still" aria-pressed="false">Still</button></div>
-  <div class="vf" id="vf"></div>
-  <i class="c tl" aria-hidden="true"></i><i class="c tr" aria-hidden="true"></i><i class="c bl" aria-hidden="true"></i><i class="c br" aria-hidden="true"></i>
-  <div class="hero-copy">
-    <div>
-      <h1>Media //<br>For those<br>who look<br>closer.</h1>
+<section class="page" id="studio" aria-labelledby="studioH">
+  <div class="wrap">
+    <div class="ghead">
+      <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
+      <h2 id="studioH">Format <span class="sl">/</span> Studio</h2>
+      <div class="lbl m">Photo / Video / FPV / Advisory</div>
+      <p class="m">Photo, video and FPV production for brands, events and people, plus advisory on brand, media and AI. From concept to final cut, on the ground and in the air.</p>
       <span class="tick"></span>
     </div>
-    <div class="ratios" role="group" aria-label="Preview framing">
-      <button data-ar="16:9" aria-pressed="false">16:9</button>
-      <button data-ar="4:3" aria-pressed="false">4:3</button>
-      <button data-ar="9:16" aria-pressed="false">9:16</button>
-    </div>
-  </div>
-</section>
-
-<section class="block" aria-labelledby="whatH">
-  <div class="wrap">
-  <div class="head"><h2 id="whatH">Three pillars.<br>One format.</h2></div>
-  <div class="grid3 div">
-    <a href="studio.html"><div class="ph"><img src="assets/b3031f081b.jpg" alt="Florence Cathedral dome and bell tower lit at dusk above the rooftops" loading="lazy"></div><h3>Studio</h3><div class="lbl m">Photo / Video / FPV</div><p>Photo, video and FPV production for brands, events and people. From concept to final cut, on the ground and in the air.</p><div class="lbl act">Enter Studio <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="archive.html"><div class="ph"><img src="assets/10d3b531e5.jpg" alt="Small red-roofed cabin in snow under a sky full of stars" loading="lazy"></div><h3>Archive</h3><div class="lbl m">Prints / Licensing / AI</div><p>A growing archive of people, places, things, and ideas. Browse the gallery, order prints, license photo and video, or explore FORMAT // AI.</p><div class="lbl act">Enter Archive <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="fablab.html"><div class="ph"><img src="assets/7bb9df16f7.jpg" alt="Model seated on a chrome chair in a black and white FORMAT track jacket under red light" loading="lazy" style="object-position:50% 0"></div><h3>FabLab</h3><div class="lbl m">Apparel / Builds</div><p>Apparel, objects and experiments. Limited-run clothing and custom FPV builds, made in small batches.</p><div class="lbl act">Enter FabLab <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-  </div>
-  </div>
-</section>
-
-<section class="block work" id="work" aria-labelledby="workH">
-  <div class="wrap">
-    <div class="head"><h2 id="workH">Selected work</h2><a class="lbl more" href="archive.html#gallery">View gallery <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div>
-    <div class="grid3">
-      <figure style="margin:0"><div class="ph"><img src="assets/b7d74ac668.jpg" alt="Office towers lit at night against a deep red sky" loading="lazy"></div><figcaption class="cap lbl"><span>Night shift</span><span class="m">Architecture</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/d5325c9da8.jpg" alt="Aerial view of a lit stone farmhouse among cypress trees at dusk" loading="lazy"></div><figcaption class="cap lbl"><span>Blue hour</span><span class="m">Aerial</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/77658e2de8.jpg" alt="Top-down aerial of a dirt road curving between a wheat field and green crops" loading="lazy"></div><figcaption class="cap lbl"><span>Field lines</span><span class="m">Top-down</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/f0ebd8b7fb.jpg" alt="Crew member rolling a worn drift tire past a jacked-up car in the pits" loading="lazy"></div><figcaption class="cap lbl"><span>Pit lane</span><span class="m">Motorsport</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/e6ffae7957.jpg" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></div><figcaption class="cap lbl"><span>Last light</span><span class="m">Landscape</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/f8a55aaa82.jpg" alt="Black and white photo of a pop-top camper van parked on a beach" loading="lazy"></div><figcaption class="cap lbl"><span>Low tide</span><span class="m">Places</span></figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="about" aria-labelledby="aboutH">
-  <div class="wrap about">
-    <div class="ph"><img src="assets/23bccd9a9e.jpg" alt="Man in sunglasses and a white shirt beside a white convertible on a desert road lined with red rock" loading="lazy" style="object-position:55% 45%"></div>
-    <div>
-      <h2 id="aboutH">Discipline<br>creates<br>freedom.</h2>
-      <p>FORMAT is a Houston creative studio for photo, video and FPV. We combine technical skill and creative vision to capture what others miss, from fast-moving subjects to still moments.</p>
+    <div class="grid3 div"><a href="contact.html#s=photo"><div class="ph"><img src="assets/3c2263a3fe.jpg" alt="Gray wolf walking across patchy snow, looking off to the side" loading="lazy" style="object-position:55% 50%"></div><h3>Photo</h3><div class="lbl m">Portraits / Places / Products</div><p>Stills for brands, events and people.</p><div class="lbl act">Book photo <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="contact.html#s=video"><div class="ph vf-on"><img src="assets/07e31d1d4d.jpg" alt="Green drift car at speed along a track at golden hour" loading="lazy"><div class="vfo" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><span class="rec"><b></b>REC</span><span class="fmt">4K / 24P</span><span class="x"></span></div></div><h3>Video</h3><div class="lbl m">Brand / Event / Social</div><p>Concept, shoot and edit, delivered as a finished cut.</p><div class="lbl act">Book video <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="contact.html#s=fpv"><div class="ph"><img src="assets/4cd71a82df.jpg" alt="FPV pilot in goggles and headset, wearing a FORMAT varsity jacket, flying with a radio controller under red and blue neon" loading="lazy" style="object-position:50% 30%"></div><h3>FPV</h3><div class="lbl m">Motorsport / Aerial / Property</div><p>FAA Part 107 certified. Close, fast flying for motorsport, property and places.</p><div class="lbl act">Book FPV <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a></div>
+    <div class="adv" aria-labelledby="advH">
+      <div>
+        <h3 id="advH">Advisory</h3>
+        <div class="lbl m">Brand / Media / AI</div>
+        <p>A second set of eyes from people who make the work. One-on-one sessions for founders and teams who want sharper ideas, clearer direction, and tools that actually get used.</p>
+        <a class="lbl act" href="contact.html#s=advisory">Book a consultation <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a>
+      </div>
+      <ul class="advl">
+        <li><span>Brand + marketing</span><span class="m">Identity, positioning, campaigns and the story behind them.</span></li>
+        <li><span>Media + product</span><span class="m">Content plans, graphics, merch and product, from idea to launch.</span></li>
+        <li><span>AI implementation</span><span class="m">The right AI tools for your business, set up in real workflows, with your team trained to use them.</span></li>
+      </ul>
     </div>
   </div>
 </section>
 
 <section class="closer" aria-label="Contact"><div class="wrap"><div><h2 class="ch">Same world.<br>Different format.</h2><span class="tick"></span></div><a class="gt lbl" href="contact.html">Get in touch <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div></section>
-
 </main>
 
 <footer>
@@ -353,47 +338,6 @@ body.sub main{display:none}
   // links to the other FORMAT pages open at the top level
   function go(u){try{window.top.location.href=u}catch(e){window.open(u,'_blank','noopener')}}
   [].slice.call(document.querySelectorAll('a[data-ext]')).forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.href)})});
-  // Film / Still switch: the new frame opens from a line, like a shutter
-  var fr=document.getElementById('frame'),hi=document.getElementById('heroImg'),mode=document.getElementById('mode'),mi=mode.querySelector('.mi'),mbs=[].slice.call(mode.querySelectorAll('button'));
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)'),curM='film',busy=null;
-  function ind(){var b=mode.querySelector('[aria-pressed="true"]');mi.style.height=b.offsetHeight+'px';mi.style.transform='translateY('+b.offsetTop+'px)'}
-  function setMode(m,instant){
-    if(m===curM&&!instant)return;
-    var inc=m==='film'?hv:hi,out=m==='film'?hi:hv;curM=m;
-    mbs.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===m)});ind();
-    fr.classList.toggle('still',m==='still');
-    try{localStorage.setItem('format-hero',m)}catch(e){}
-    if(m==='film'&&!reduce.matches){var r=hv.play();if(r&&r.catch)r.catch(function(){})}
-    clearTimeout(busy);[hv,hi].forEach(function(l){l.classList.remove('enter','go','leave')});fr.classList.remove('sw','go');
-    function done(){out.classList.remove('cur','leave');inc.classList.remove('enter','go');inc.classList.add('cur');fr.classList.remove('sw','go');if(m==='still')hv.pause()}
-    if(instant||reduce.matches){done();return}
-    inc.classList.add('enter');fr.classList.add('sw');void inc.offsetWidth;
-    requestAnimationFrame(function(){inc.classList.add('go');out.classList.add('leave');fr.classList.add('go')});
-    busy=setTimeout(done,1300);
-  }
-  mbs.forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.m)})});
-  window.addEventListener('resize',ind);
-  var saved=null;try{saved=localStorage.getItem('format-hero')}catch(e){}
-  ind();
-
-  // hero video: pause control, and stay still for reduced-motion visitors
-  var hv=document.getElementById('heroVid'),vp=document.getElementById('vp');
-  function vpSync(){var p=hv.paused;vp.textContent=p?'Play':'Pause';vp.setAttribute('aria-pressed',p)}
-  vp.addEventListener('click',function(){if(hv.paused){var r=hv.play();if(r&&r.catch)r.catch(function(){})}else hv.pause()});
-  hv.addEventListener('play',vpSync);hv.addEventListener('pause',vpSync);
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){hv.removeAttribute('autoplay');hv.pause()}
-  vpSync();
-  if(saved==='still')setMode('still',true);
-
-  // ratio buttons reframe the hero
-  var frame=document.getElementById('frame'),vf=document.getElementById('vf'),btns=frame.querySelectorAll('.ratios button'),ar=null;
-  function fit(){if(!ar)return;var p=ar.split(':'),r=p[0]/p[1],W=frame.clientWidth-80,H=frame.clientHeight-80,w=W,h=w/r;if(h>H){h=H;w=h*r}vf.style.width=w+'px';vf.style.height=h+'px'}
-  btns.forEach(function(b){b.addEventListener('click',function(){
-    if(ar===b.dataset.ar){ar=null;frame.removeAttribute('data-ar');b.setAttribute('aria-pressed','false');return}
-    ar=b.dataset.ar;frame.setAttribute('data-ar',ar);btns.forEach(function(x){x.setAttribute('aria-pressed',x===b)});fit();
-  })});
-  window.addEventListener('resize',fit);
-
 })();
 </script>
 </body>

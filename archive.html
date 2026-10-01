@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FORMAT / Archive</title>
+<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, and FabLab apparel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F0ED; --ink:#161616; --mute:#6E6D69; --line:#D9D7D2; --accent:#E3124B;
+  --sans:"Barlow","DIN Alternate","Helvetica Neue",Arial,sans-serif;
+  --pad:clamp(20px,4vw,56px);
+  --hh:64px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121212;--ink:#ECEBE7;--mute:#8E8D89;--line:#2A2A2A;--accent:#FF2A63}}
+:root[data-theme="dark"]{--paper:#121212;--ink:#ECEBE7;--mute:#8E8D89;--line:#2A2A2A;--accent:#FF2A63}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--hh))}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500}
+.m{color:var(--mute)}
+.tick{display:block;width:32px;height:3px;background:var(--accent)}
+html.theming,html.theming *{transition:background-color .35s,color .35s,border-color .35s!important}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo img{height:17px;width:auto}
+.logo .lp{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .logo .li{display:none}:root:not([data-theme="light"]) .logo .lp{display:block}}
+:root[data-theme="dark"] .logo .li{display:none}:root[data-theme="dark"] .logo .lp{display:block}
+.pnav{display:flex;align-items:center;gap:clamp(18px,3vw,40px)}
+.pnav a{position:relative;padding:6px 0;transition:color .3s}
+.pnav .sl{color:var(--mute);margin-right:.5em;transition:color .3s}
+.pnav a:hover,.pnav a[aria-current="page"]{color:var(--ink)}
+.pnav a:hover .sl,.pnav a[aria-current="page"] .sl{color:var(--accent)}
+.pnav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.77,0,.18,1)}
+.pnav a[aria-current="page"]::after{transform:scaleX(1)}
+.pnav a:not([aria-current]){color:var(--mute)}
+.hr{display:flex;align-items:center;gap:clamp(16px,2.4vw,28px)}
+.cta{border-bottom:1px solid var(--accent);padding:4px 0}
+.cta:hover{color:var(--accent)}
+.sl{color:var(--accent)}
+.brk{white-space:nowrap;border:0;background:none;color:inherit;font:300 20px var(--sans);letter-spacing:.3em;padding:4px 0 4px .3em;cursor:pointer}
+.brk:hover{color:var(--accent)}
+
+/* hero */
+.frame{position:relative;height:calc(100svh - var(--hh));min-height:520px;max-height:900px;background:#0E0E0E;overflow:hidden;color:#F4F3EF}
+.media{position:absolute;inset:0;isolation:isolate;overflow:hidden;background:#0E0E0E}
+.layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;clip-path:inset(0);will-change:clip-path,transform}
+.media picture{display:contents}
+#heroVid{object-position:50% 42%}#heroImg{object-position:50% 45%}
+.layer.cur{z-index:1;opacity:1}
+.layer.enter{z-index:2;opacity:1;clip-path:inset(50% 0 50% 0);transform:scale(1.1)}
+.layer.enter.go{clip-path:inset(0 0 0 0);transform:scale(1);transition:clip-path .95s cubic-bezier(.77,0,.18,1),transform 1.4s cubic-bezier(.16,1,.3,1)}
+.layer.cur.leave{transform:scale(1.04);filter:brightness(.45) saturate(.6);transition:transform 1.2s cubic-bezier(.16,1,.3,1),filter .9s cubic-bezier(.77,0,.18,1)}
+.shut{position:absolute;inset:0;pointer-events:none;z-index:1}
+.shut i{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--accent);opacity:0;transform:scaleX(0)}
+.frame.sw .shut i{opacity:1;transform:scaleX(1);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.frame.sw.go .shut i{opacity:0;transition:top .95s cubic-bezier(.77,0,.18,1),transform .4s cubic-bezier(.16,1,.3,1),opacity .35s .75s}
+.frame.sw.go .shut i:first-child{top:0}.frame.sw.go .shut i:last-child{top:calc(100% - 1px)}
+.mode{position:absolute;right:24px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:6px}
+.mode button{writing-mode:vertical-rl;background:none;border:0;color:rgba(255,255,255,.5);padding:14px 10px;cursor:pointer;font-family:var(--sans);transition:color .5s}
+.mode button:hover,.mode button[aria-pressed="true"]{color:#fff}
+.mi{position:absolute;left:0;top:0;width:2px;background:var(--accent);transition:transform .7s cubic-bezier(.77,0,.18,1),height .7s cubic-bezier(.77,0,.18,1)}
+.frame.still .vp{opacity:0;pointer-events:none}
+.vp{transition:opacity .5s}
+.vp{position:absolute;top:56px;right:24px;z-index:3;background:none;border:0;color:rgba(255,255,255,.75);padding:6px 0;cursor:pointer;font-family:var(--sans)}
+.vp:hover{color:#fff}
+.scrim{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.6),rgba(0,0,0,0) 55%)}
+.c{position:absolute;width:22px;height:22px;border:0 solid rgba(255,255,255,.75)}
+.tl{top:24px;left:24px;border-top-width:1px;border-left-width:1px}.tr{top:24px;right:24px;border-top-width:1px;border-right-width:1px}
+.bl{bottom:24px;left:24px;border-bottom-width:1px;border-left-width:1px}.br{bottom:24px;right:24px;border-bottom-width:1px;border-right-width:1px}
+.hero-copy{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(48px,8vh,88px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;z-index:2}
+h1{margin:0 0 22px;font-size:clamp(40px,6.4vw,96px);line-height:1;font-weight:500;letter-spacing:.03em;text-transform:uppercase}
+.vf{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.85);box-shadow:0 0 0 200vmax rgba(0,0,0,.5);transition:width .5s,height .5s,opacity .4s;opacity:0;pointer-events:none;z-index:1}
+.frame[data-ar] .vf{opacity:1}
+.ratios{display:flex;gap:4px}
+.ratios button{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.35);color:#fff;font:500 11px var(--sans);letter-spacing:.12em;padding:8px 10px;cursor:pointer}
+.ratios button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+
+/* sections */
+section.block{padding:clamp(64px,10vw,128px) 0;border-bottom:1px solid var(--line)}
+h2{margin:0;font-size:clamp(26px,3.2vw,42px);line-height:1.1;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:clamp(28px,4vw,48px)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)}
+.ph{position:relative;overflow:hidden;background:#0E0E0E}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+a:hover .ph img{transform:scale(1.03)}
+.div .ph{aspect-ratio:4/5}
+.div .act{margin-top:14px;display:inline-flex;gap:10px;align-items:center;border-bottom:1px solid currentColor;padding-bottom:3px}
+a:hover .act{color:var(--accent)}
+.div p{margin:12px 0 0;color:var(--mute);max-width:36ch;font-size:15px;line-height:1.6}
+.div h3{margin:18px 0 4px;font-size:18px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.work .ph{aspect-ratio:3/2}
+.work .cap{display:flex;justify-content:space-between;gap:12px;padding-top:12px}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.about .ph{aspect-ratio:4/5}
+.about p{max-width:42ch;color:var(--mute);margin:24px 0 0}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px)}
+.contact h2{margin-bottom:24px}
+form{display:grid;gap:18px}
+input,textarea{width:100%;font:400 16px var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 0;border-radius:0}
+textarea{min-height:80px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-bottom-color:var(--accent)}
+.btn{justify-self:start;display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);background:none;color:inherit;padding:14px 22px;cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.sent{min-height:1.2em}
+
+/* footer */
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:32px;padding-bottom:32px}
+footer .links{display:flex;gap:28px}
+footer a:hover{color:var(--accent)}
+
+/* gallery */
+.more{display:inline-flex;gap:10px;align-items:center;border-bottom:1px solid currentColor;padding-bottom:3px}
+.more:hover,.back:hover{color:var(--accent)}
+body.g main{display:none}
+body.g .gallery{display:block}
+.gallery{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.ghead{margin-bottom:clamp(32px,5vw,64px)}
+.ghead h2{font-size:clamp(40px,6vw,88px);letter-spacing:.06em;margin:28px 0 14px}
+.ghead p{margin:0 0 22px}
+.back{display:inline-flex;gap:10px;align-items:center}
+.gbar{position:sticky;top:var(--hh);z-index:10;background:var(--paper);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;margin-bottom:clamp(14px,2vw,24px);border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:clamp(16px,3vw,32px)}
+.chip{background:none;border:0;border-bottom:1px solid transparent;color:var(--mute);padding:4px 0;cursor:pointer;font-family:var(--sans)}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.grid{--cols:4;--ar:1/1;display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:clamp(6px,.9vw,12px)}
+.grid[data-f="landscape"]{--ar:3/2}.grid[data-f="portrait"]{--ar:2/3}
+.gi{display:block;width:100%;aspect-ratio:var(--ar);padding:0;border:0;background:#0E0E0E;cursor:zoom-in;overflow:hidden}
+.gi[hidden]{display:none}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.gi:hover img{transform:scale(1.03)}
+.empty{padding:clamp(48px,8vw,96px) 0;max-width:36ch}
+.empty[hidden]{display:none}
+.gright{display:flex;align-items:center;gap:clamp(12px,2vw,20px)}
+.zoom{display:flex;gap:2px}
+.gbar .lbl{white-space:nowrap}
+@media (max-width:520px){#gCount{display:none}.chips{gap:14px}.gbar{gap:8px}}
+.zoom button{width:28px;height:28px;background:none;border:0;color:var(--mute);font:300 18px/1 var(--sans);cursor:pointer;padding:0}
+.zoom button:hover:not(:disabled){color:var(--accent)}
+.zoom button:disabled{color:var(--line);cursor:default}
+.lb{position:fixed;inset:0;z-index:50;background:#080808;display:flex;align-items:center;justify-content:center;padding:calc(64px + env(safe-area-inset-top,0px)) clamp(12px,6vw,96px) calc(96px + env(safe-area-inset-bottom,0px));color:#EDECE8}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;object-fit:contain}
+.lbc{position:absolute;top:calc(26px + env(safe-area-inset-top,0px));left:clamp(16px,4vw,40px)}
+.lbx{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:clamp(16px,4vw,40px);background:none;border:0;color:inherit;cursor:pointer;padding:8px}
+.lbn{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:inherit;cursor:pointer;padding:18px}
+.lbn:hover,.lbx:hover{color:var(--accent)}
+.prev{left:4px}.next{right:4px}
+.lbbar{position:absolute;left:clamp(16px,4vw,40px);right:clamp(16px,4vw,40px);bottom:calc(22px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap}
+.lbt{font-size:13px}
+.lbact{display:flex;gap:8px}
+.lbb,.lbfav{background:none;border:1px solid rgba(255,255,255,.35);color:inherit;padding:12px 16px;cursor:pointer;font-family:var(--sans)}
+.lbfav{width:44px;padding:0;display:grid;place-items:center}
+.lbb:hover,.lbfav:hover{border-color:var(--accent);color:var(--accent)}
+.lbfav[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+.lbfav[aria-pressed="true"] svg{fill:currentColor}
+body.lock{overflow:hidden}
+@media (max-width:820px){
+  .lb{padding-bottom:calc(132px + env(safe-area-inset-bottom,0px))}
+  .lbbar{flex-direction:column;align-items:stretch}
+  .lbb{flex:1;padding:12px 6px;white-space:nowrap;letter-spacing:.12em}
+  .lbn{padding:12px}
+}
+
+@media (max-width:820px){
+  .grid3{grid-template-columns:1fr}
+  .work .grid3{grid-template-columns:1fr 1fr}
+  .div .ph{aspect-ratio:4/3}
+  .about,.contact{grid-template-columns:1fr}
+  #heroVid{object-position:50% 40%}#heroImg{object-position:62% 45%}
+  .mode{right:12px}.mode button{padding:12px 8px}
+  .vp{top:40px;right:16px}
+  .scrim{background:linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,0) 60%),linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 20%)}
+  .c{width:16px;height:16px}.tl,.tr{top:16px}.bl,.br{bottom:16px}.tl,.bl{left:16px}.tr,.br{right:16px}
+}
+@media (max-width:640px){
+  :root{--hh:108px}
+  #heroImg{object-position:50% 40%}
+  .bar{flex-wrap:wrap;height:auto}
+  .bar>.logo{height:60px;display:flex;align-items:center}
+  .hr{height:60px}
+  .pnav{order:3;width:100%;justify-content:space-between;height:48px;border-top:1px solid var(--line)}
+}
+@media (max-width:480px){.logo img{height:13px}.brk{font-size:17px;letter-spacing:.2em}.work .grid3{grid-template-columns:1fr}}
+
+/* card with two links, FORMAT // AI page */
+.acts{display:flex;gap:24px;flex-wrap:wrap}
+.card a:hover .ph img{transform:scale(1.03)}
+.act:hover{color:var(--accent)}
+body.a main{display:none}
+body.a .aipage{display:block}
+.aipage{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.aipage .ghead h2 .sl{color:var(--accent)}
+.aipage .ghead p{max-width:44ch}
+.aigrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,28px)}
+.aigrid figure{margin:0}
+.slot{aspect-ratio:4/5;border:1px solid var(--line);display:grid;place-items:center;position:relative}
+.slot::before,.slot::after{content:"";position:absolute;width:14px;height:14px;border:0 solid var(--mute)}
+.slot::before{top:12px;left:12px;border-top-width:1px;border-left-width:1px}
+.slot::after{bottom:12px;right:12px;border-bottom-width:1px;border-right-width:1px}
+.slot span{font-size:clamp(28px,3vw,40px);font-weight:300;letter-spacing:.12em;color:var(--line)}
+.aigrid .cap{display:flex;justify-content:space-between;gap:12px;padding-top:12px}
+.aifoot{margin-top:clamp(40px,6vw,72px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+@media (max-width:820px){.aigrid{grid-template-columns:1fr 1fr 1fr;gap:8px}.aigrid .cap span:last-child{display:none}.aigrid .cap{font-size:9px}}
+@media (max-width:480px){.aigrid{grid-template-columns:1fr}.aigrid .cap span:last-child{display:inline}.aigrid .cap{font-size:11px}}
+
+/* pillar pages */
+body.sub main{display:none}
+.page{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.ghead h2 .sl{color:var(--accent)}
+.page .ghead h2{margin-bottom:10px}
+.page .ghead p{max-width:44ch;margin:18px 0 22px}
+.page .slot{aspect-ratio:auto;height:100%;border:0;background:#0E0E0E}
+.page .slot span{color:#3A3A3A}.page .slot b{font-weight:300}
+.pfoot{margin-top:clamp(40px,6vw,72px)}.pfoot:empty{display:none}
+.pfoot .btn{text-decoration:none}
+/* studio advisory band */
+.adv{margin-top:clamp(56px,8vw,112px);padding-top:clamp(28px,4vw,48px);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,6vw,96px)}
+.adv h3{margin:0 0 4px;font-size:18px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.adv p{margin:12px 0 18px;color:var(--mute);max-width:40ch;font-size:15px;line-height:1.6}
+.adv .act{display:inline-flex;gap:10px;align-items:center;border-bottom:1px solid currentColor;padding-bottom:3px}
+.advl{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.advl li{display:grid;grid-template-columns:minmax(150px,.8fr) 1.2fr;gap:8px 24px;padding:18px 0;border-bottom:1px solid var(--line)}
+.advl li span:first-child{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding-top:2px}
+.advl li .m{font-size:15px;line-height:1.55}
+@media (max-width:820px){.adv{grid-template-columns:1fr}.advl li{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="#top" aria-current="page" data-r="archive"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a></nav>
+    <div class="hr"><a class="lbl cta" href="index.html#contact">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
+  </div>
+</header>
+
+<main id="top">
+<section class="page" id="archive" aria-labelledby="archiveH">
+  <div class="wrap">
+    <div class="ghead">
+      <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
+      <h2 id="archiveH">Format <span class="sl">/</span> Archive</h2>
+      <div class="lbl m">Prints / Licensing / AI</div>
+      <p class="m">A growing archive of people, places, things, and ideas.</p>
+      <span class="tick"></span>
+    </div>
+    <div class="grid3 div"><a href="#gallery"><div class="ph"><img data-from="gi:18" alt="Red-roofed cabin in snow under a starry sky" loading="lazy"></div><h3>Gallery</h3><div class="lbl m">Photographs</div><p>The full photo archive, filterable by format.</p><div class="lbl act">Open gallery <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="#ai"><div class="ph"><div class="slot"><span><b class="sl">//</b></span></div></div><h3>Format // AI</h3><div class="lbl m">Generated work</div><p>Experiments in generated imagery, kept apart from the photo archive.</p><div class="lbl act">Enter FORMAT // AI <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="#gallery"><div class="ph"><img data-from="gi:6" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></div><h3>Prints &amp; Licensing</h3><div class="lbl m">Order / License</div><p>Open any photo in the gallery to order a print or request a license.</p><div class="lbl act">Choose a photo <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a></div>
+    <div class="pfoot"></div>
+  </div>
+</section>
+</main>
+
+<section class="gallery" data-page id="gallery" aria-labelledby="galH" hidden>
+  <div class="wrap">
+    <div class="ghead">
+      <a class="lbl back" href="#top"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Archive</a>
+      <h2 id="galH">Gallery</h2>
+      <span class="tick"></span>
+    </div>
+    <div class="gbar">
+      <div class="chips" role="group" aria-label="Filter photos">
+        <button class="chip lbl" type="button" data-f="landscape" aria-pressed="false">Landscape</button>
+        <button class="chip lbl" type="button" data-f="portrait" aria-pressed="false">Portrait</button>
+        <button class="chip lbl" type="button" data-f="saved" aria-pressed="false">Saved</button>
+      </div>
+      <div class="gright">
+        <span class="lbl m" id="gCount" role="status">36 photos</span>
+        <div class="zoom" role="group" aria-label="Photo size">
+          <button id="zIn" type="button" aria-label="Larger photos">+</button>
+          <button id="zOut" type="button" aria-label="Smaller photos">&minus;</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid" id="grid" data-f="all">
+      <button class="gi" type="button" data-i="0"><img src="assets/973c1ba839.jpg" width="618" height="1100" alt="FPV view of a green drift car sliding past a speedway grandstand at sunset" loading="lazy"></button>
+      <button class="gi" type="button" data-i="1"><img src="assets/de5baf7b64.jpg" width="1100" height="618" alt="Houston skyline at dusk from above with lit freeways" loading="lazy"></button>
+      <button class="gi" type="button" data-i="2"><img src="assets/4cb11e5122.jpg" width="1100" height="732" alt="Top-down view of a dirt road curving between a wheat field and green crops" loading="lazy"></button>
+      <button class="gi" type="button" data-i="3"><img src="assets/cfc718eab0.jpg" width="733" height="1100" alt="Office towers lit against a deep red night sky" loading="lazy"></button>
+      <button class="gi" type="button" data-i="4"><img src="assets/6cf15f3c72.jpg" width="1100" height="732" alt="Stone farmhouse among cypress trees at dusk, seen from above" loading="lazy"></button>
+      <button class="gi" type="button" data-i="5"><img src="assets/44dcf26597.jpg" width="1100" height="733" alt="Crew member rolling a worn drift tire in the pits" loading="lazy"></button>
+      <button class="gi" type="button" data-i="6"><img src="assets/5061e4a711.jpg" width="946" height="1100" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></button>
+      <button class="gi" type="button" data-i="7"><img src="assets/35f1a1e9c2.jpg" width="618" height="1100" alt="Green drift car sliding through a corner in tire smoke" loading="lazy"></button>
+      <button class="gi" type="button" data-i="8"><img src="assets/1b641f2eed.jpg" width="1100" height="619" alt="Florence Cathedral dome and bell tower lit at dusk" loading="lazy"></button>
+      <button class="gi" type="button" data-i="9"><img src="assets/5be8ecdef6.jpg" width="1100" height="732" alt="Black and white top-down view of a dirt road between fields" loading="lazy"></button>
+      <button class="gi" type="button" data-i="10"><img src="assets/cb34208ca1.jpg" width="1100" height="824" alt="Black and white camper van parked on a beach" loading="lazy"></button>
+      <button class="gi" type="button" data-i="11"><img src="assets/a9a0d563bb.jpg" width="1100" height="733" alt="Smiling crew member crouched with an impact wrench beside a car" loading="lazy"></button>
+      <button class="gi" type="button" data-i="12"><img src="assets/a68fcb2b05.jpg" width="1100" height="733" alt="Snowy mountain peak under pink sunset clouds" loading="lazy"></button>
+      <button class="gi" type="button" data-i="13"><img src="assets/ab6b7f6594.jpg" width="825" height="1100" alt="Woman beside a giant column under a lit classical portico at night" loading="lazy"></button>
+      <button class="gi" type="button" data-i="14"><img src="assets/e320124c31.jpg" width="1100" height="688" alt="Purple storm clouds over wooded hills and a vineyard" loading="lazy"></button>
+      <button class="gi" type="button" data-i="15"><img src="assets/3fd86f4cd4.jpg" width="618" height="1100" alt="Top-down FPV view of a drift car trailing smoke" loading="lazy"></button>
+      <button class="gi" type="button" data-i="16"><img src="assets/878217448a.jpg" width="733" height="1100" alt="Orange koi seen from above on black" loading="lazy"></button>
+      <button class="gi" type="button" data-i="17"><img src="assets/bca9c6780b.jpg" width="1100" height="732" alt="Downtown Houston towers at sunset from above" loading="lazy"></button>
+      <button class="gi" type="button" data-i="18"><img src="assets/4935b4ea3e.jpg" width="1100" height="733" alt="Red-roofed cabin in snow under a starry sky" loading="lazy"></button>
+      <button class="gi" type="button" data-i="19"><img src="assets/f9dec8020f.jpg" width="1100" height="733" alt="Black and white close-up of a backlit leaf" loading="lazy"></button>
+      <button class="gi" type="button" data-i="20"><img src="assets/07e31d1d4d.jpg" width="1100" height="619" alt="Green drift car at speed along a track at golden hour" loading="lazy"></button>
+      <button class="gi" type="button" data-i="21"><img src="assets/5794afb0ea.jpg" width="1100" height="732" alt="Top-down view of vineyard rows" loading="lazy"></button>
+      <button class="gi" type="button" data-i="22"><img src="assets/3592702b97.jpg" width="825" height="1100" alt="Leaf shadows falling across a window and interior" loading="lazy"></button>
+      <button class="gi" type="button" data-i="23"><img src="assets/3db5c57ff2.jpg" width="825" height="1100" alt="Residential tower lit at night under a crescent moon" loading="lazy"></button>
+      <button class="gi" type="button" data-i="24"><img src="assets/a3a29086a4.jpg" width="1100" height="733" alt="Yaks grazing a snowy slope seen past a red pickup" loading="lazy"></button>
+      <button class="gi" type="button" data-i="25"><img src="assets/6d07d67bae.jpg" width="1100" height="733" alt="Drift car jacked up with its hood open in the pits" loading="lazy"></button>
+      <button class="gi" type="button" data-i="26"><img src="assets/011813995c.jpg" width="1100" height="733" alt="Rolling green hills with low clouds" loading="lazy"></button>
+      <button class="gi" type="button" data-i="27"><img src="assets/6978a3d093.jpg" width="1100" height="619" alt="Florence skyline and cathedral dome at sunset" loading="lazy"></button>
+      <button class="gi" type="button" data-i="28"><img src="assets/e9501d6483.jpg" width="1100" height="733" alt="Red door with a handwritten Pull Hard sign" loading="lazy"></button>
+      <button class="gi" type="button" data-i="29"><img src="assets/7896659f35.jpg" width="618" height="1100" alt="Low side chase shot of a green drift car" loading="lazy"></button>
+      <button class="gi" type="button" data-i="30"><img src="assets/3193748a5d.jpg" width="1100" height="733" alt="Weathered wooden barn beside snow" loading="lazy"></button>
+      <button class="gi" type="button" data-i="31"><img src="assets/595d43d8c8.jpg" width="733" height="1100" alt="Pink oleander flowers on a dark background" loading="lazy"></button>
+      <button class="gi" type="button" data-i="32"><img src="assets/8d1e82f8f9.jpg" width="1100" height="777" alt="Foggy field at sunrise beside a covered porch" loading="lazy"></button>
+      <button class="gi" type="button" data-i="33"><img src="assets/0ab0ab73d6.jpg" width="733" height="1100" alt="Stone cat statue dusted with snow" loading="lazy"></button>
+      <button class="gi" type="button" data-i="34"><img src="assets/21f4d94476.jpg" width="1100" height="733" alt="Purple flower with raindrops" loading="lazy"></button>
+      <button class="gi" type="button" data-i="35"><img src="assets/a3cf076241.jpg" width="1100" height="688" alt="Sun behind clouds between a palm and a tree at sunset" loading="lazy"></button>
+    </div>
+    <p class="empty m" id="gEmpty" hidden>No saved photos yet. Open a photo and tap the heart to save it here.</p>
+  </div>
+</section>
+
+<section class="aipage" data-page id="ai" aria-labelledby="aiH" hidden>
+  <div class="wrap">
+    <div class="ghead">
+      <a class="lbl back" href="#top"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Archive</a>
+      <h2 id="aiH">Format <span class="sl">//</span> AI</h2>
+      <p class="m">Experiments in generated imagery. Kept apart from the photo archive: nothing on this page is a photograph.</p>
+      <span class="tick"></span>
+    </div>
+    <div class="aigrid"><figure><div class="slot"><span>01</span></div><figcaption class="cap lbl"><span>AI—001</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>02</span></div><figcaption class="cap lbl"><span>AI—002</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>03</span></div><figcaption class="cap lbl"><span>AI—003</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>04</span></div><figcaption class="cap lbl"><span>AI—004</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>05</span></div><figcaption class="cap lbl"><span>AI—005</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>06</span></div><figcaption class="cap lbl"><span>AI—006</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>07</span></div><figcaption class="cap lbl"><span>AI—007</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>08</span></div><figcaption class="cap lbl"><span>AI—008</span><span class="m">Untitled</span></figcaption></figure><figure><div class="slot"><span>09</span></div><figcaption class="cap lbl"><span>AI—009</span><span class="m">Untitled</span></figcaption></figure></div>
+    <div class="aifoot lbl"><span class="m">Series 01 / 09 works</span><a class="more" href="#gallery">Photo gallery <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div>
+  </div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <img id="lbImg" alt="">
+  <span class="lbc lbl m" id="lbCount"></span>
+  <button class="lbx lbl" id="lbClose" type="button" aria-label="Close">Close</button>
+  <button class="lbn prev" id="lbPrev" type="button" aria-label="Previous photo"><svg width="22" height="14" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg></button>
+  <button class="lbn next" id="lbNext" type="button" aria-label="Next photo"><svg width="22" height="14" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+  <div class="lbbar">
+    <span class="lbt lbl" id="lbCap"></span>
+    <div class="lbact">
+      <button class="lbb lbl" id="lbLic" type="button">License</button>
+      <button class="lbb lbl" id="lbPrint" type="button">Purchase a print</button>
+      <button class="lbfav" id="lbFav" type="button" aria-pressed="false" aria-label="Save to favorites"><svg width="18" height="16" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20.5S2 14.4 2 7.6A5.1 5.1 0 0 1 12 5.3a5.1 5.1 0 0 1 10 2.3c0 6.8-10 12.9-10 12.9z"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap lbl">
+    <span class="m">© 2026 FORMAT, Houston, TX</span>
+    <div class="links">
+      <a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener" data-todo="facebook-profile-url">Facebook</a>
+      <a href="mailto:afleming888@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // [ ] toggles light / dark and remembers the choice
+  var root=document.documentElement,tb=document.getElementById('themeBtn'),mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function themeNow(){return root.getAttribute('data-theme')||(mq.matches?'dark':'light')}
+  function label(){tb.setAttribute('aria-label','Switch to '+(themeNow()==='dark'?'light':'dark')+' theme')}
+  try{var s=localStorage.getItem('format-theme');if(s)root.setAttribute('data-theme',s)}catch(e){}
+  label();
+  tb.addEventListener('click',function(){
+    var next=themeNow()==='dark'?'light':'dark';
+    root.classList.add('theming');root.setAttribute('data-theme',next);label();
+    try{localStorage.setItem('format-theme',next)}catch(e){}
+    setTimeout(function(){root.classList.remove('theming')},400);
+  });
+  if(mq.addEventListener)mq.addEventListener('change',label);
+
+  // links to the other FORMAT pages open at the top level
+  function go(u){try{window.top.location.href=u}catch(e){window.open(u,'_blank','noopener')}}
+  [].slice.call(document.querySelectorAll('a[data-ext]')).forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.href)})});
+  // gallery page (#gallery) and photo viewer
+  var body=document.body,gal=document.getElementById('gallery');
+  var pages=[].slice.call(document.querySelectorAll('[data-page]')),navA=[].slice.call(document.querySelectorAll('.pnav a'));
+  var parent={gallery:'archive',ai:'archive'};
+  function route(){
+    var h=location.hash.slice(1),was=body.classList.contains('sub');
+    var pg=pages.filter(function(s){return s.id===h})[0];
+    pages.forEach(function(s){s.hidden=s!==pg});
+    body.classList.toggle('sub',!!pg);body.classList.toggle('g',h==='gallery');body.classList.toggle('a',h==='ai');
+    var cur='archive';
+    navA.forEach(function(a){if(a.dataset.r===cur)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+    if(pg){window.scrollTo(0,0);return}
+    if(was)window.scrollTo(0,0)
+  }
+  [].slice.call(document.querySelectorAll('img[data-from]')).forEach(function(im){
+    var k=im.dataset.from.split(':'),s=k[0]==='gi'?document.querySelector('.gi[data-i="'+k[1]+'"] img'):document.querySelectorAll('.div .ph img')[+k[1]];
+    if(s)im.src=s.getAttribute('src');
+  });
+  window.addEventListener('hashchange',route);route();
+  var caps=[["Grandstand", "Motorsport / FPV"], ["Houston at dusk", "City / Aerial"], ["Field lines", "Aerial"], ["Night shift", "Architecture"], ["Blue hour", "Aerial / Property"], ["Pit lane", "Motorsport"], ["Last light", "Landscape"], ["Drift weekend", "Motorsport / FPV"], ["Duomo", "Places"], ["Dirt road", "Aerial"], ["Low tide", "Places"], ["Crew", "Motorsport"], ["High ground", "Landscape"], ["Portico", "Places"], ["Storm front", "Aerial / Landscape"], ["Smoke trail", "Motorsport / FPV"], ["Koi", "Detail"], ["Downtown", "City / Aerial"], ["Night cabin", "Places"], ["Vein study", "Detail"], ["Golden lap", "Motorsport"], ["Vineyard rows", "Aerial"], ["Window shadows", "Detail"], ["Moonrise", "Architecture"], ["Open range", "Places"], ["Jacked up", "Motorsport"], ["Green hills", "Aerial / Landscape"], ["Florence", "Places"], ["Pull hard", "Detail"], ["Side chase", "Motorsport / FPV"], ["Barn", "Places"], ["Oleander", "Detail"], ["Morning fog", "Landscape"], ["First snow", "Detail"], ["Petals", "Detail"], ["Last sun", "Landscape"]];
+  var grid=document.getElementById('grid'),items=[].slice.call(grid.querySelectorAll('.gi')),vis=items.slice();
+  var lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap'),lbCount=document.getElementById('lbCount'),lbFav=document.getElementById('lbFav');
+  var gCount=document.getElementById('gCount'),gEmpty=document.getElementById('gEmpty'),chips=[].slice.call(document.querySelectorAll('.chip'));
+  var idx=0,cur=0,lastBtn=null,filter=null,favs=[];
+  items.forEach(function(b){var im=b.querySelector('img');b.dataset.o=(+im.getAttribute('width')>=+im.getAttribute('height'))?'landscape':'portrait';b.setAttribute('aria-label','Open '+caps[+b.dataset.i][0])});
+  try{favs=JSON.parse(localStorage.getItem('format-favs')||'[]')}catch(e){}
+  function saveFavs(){try{localStorage.setItem('format-favs',JSON.stringify(favs))}catch(e){}}
+
+  // filter: Landscape / Portrait / Saved (tap again to show all)
+  function applyFilter(){
+    vis=items.filter(function(b){return !filter||(filter==='saved'?favs.indexOf(+b.dataset.i)>-1:b.dataset.o===filter)});
+    items.forEach(function(b){b.hidden=vis.indexOf(b)<0});
+    grid.dataset.f=filter==='landscape'||filter==='portrait'?filter:'all';
+    chips.forEach(function(c){c.setAttribute('aria-pressed',c.dataset.f===filter)});
+    gCount.textContent=vis.length+(vis.length===1?' photo':' photos');
+    gEmpty.hidden=!(filter==='saved'&&!vis.length);
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){filter=filter===c.dataset.f?null:c.dataset.f;applyFilter()})});
+
+  // + / - grid size
+  var zIn=document.getElementById('zIn'),zOut=document.getElementById('zOut'),small=window.matchMedia('(max-width:820px)'),cols=null;
+  try{cols=+localStorage.getItem('format-cols')||null}catch(e){}
+  function lim(){return small.matches?[1,4]:[2,6]}
+  function setCols(n){var l=lim();cols=Math.max(l[0],Math.min(l[1],n||(small.matches?2:4)));grid.style.setProperty('--cols',cols);zIn.disabled=cols<=l[0];zOut.disabled=cols>=l[1];try{localStorage.setItem('format-cols',cols)}catch(e){}}
+  zIn.addEventListener('click',function(){setCols(cols-1)});
+  zOut.addEventListener('click',function(){setCols(cols+1)});
+  if(small.addEventListener)small.addEventListener('change',function(){setCols(cols)});
+  setCols(cols);
+
+  // full-screen viewer
+  function show(i){idx=(i+vis.length)%vis.length;var b=vis[idx],im=b.querySelector('img');cur=+b.dataset.i;lbImg.src=im.currentSrc||im.src;lbImg.alt=im.alt;lbCap.textContent=caps[cur][0];lbCount.textContent=String(idx+1).padStart(2,'0')+' / '+String(vis.length).padStart(2,'0');lbFav.setAttribute('aria-pressed',favs.indexOf(cur)>-1);lbFav.setAttribute('aria-label',favs.indexOf(cur)>-1?'Remove from favorites':'Save to favorites')}
+  function open(b){lastBtn=b;show(vis.indexOf(b));lb.hidden=false;body.classList.add('lock');document.getElementById('lbClose').focus()}
+  function close(){lb.hidden=true;body.classList.remove('lock');if(filter==='saved')applyFilter();if(lastBtn&&!lastBtn.hidden)lastBtn.focus()}
+  items.forEach(function(b){b.addEventListener('click',function(){open(b)})});
+  document.getElementById('lbClose').addEventListener('click',close);
+  document.getElementById('lbPrev').addEventListener('click',function(){show(idx-1)});
+  document.getElementById('lbNext').addEventListener('click',function(){show(idx+1)});
+  lb.addEventListener('click',function(e){if(e.target===lb)close()});
+  document.addEventListener('keydown',function(e){if(lb.hidden)return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(idx-1);if(e.key==='ArrowRight')show(idx+1)});
+  var sx=null;lb.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  lb.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(idx+(dx<0?1:-1));sx=null});
+  lbFav.addEventListener('click',function(){var k=favs.indexOf(cur);if(k>-1)favs.splice(k,1);else favs.push(cur);saveFavs();show(idx)});
+
+  // License / Purchase a print open an email with the photo filled in
+  function request(kind,ask){var t=caps[cur][0],ref='FMT-'+String(cur+1).padStart(3,'0');
+    var url='mailto:afleming888@gmail.com?subject='+encodeURIComponent(kind+': '+t+' ('+ref+')')+'&body='+encodeURIComponent('Photo: '+t+' ('+ref+')\n\n'+ask+'\n\nName:\n');
+    try{window.top.location.href=url}catch(err){window.location.href=url}}
+  document.getElementById('lbLic').addEventListener('click',function(){request('License request','How and where will the photo be used?')});
+  document.getElementById('lbPrint').addEventListener('click',function(){request('Print order','Size and finish you have in mind:')});
+  applyFilter();
+
+})();
+</script>
+</body>
+</html>

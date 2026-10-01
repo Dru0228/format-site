@@ -1,42 +1,35 @@
 # FORMAT — website
 
-Homepage for FORMAT, a creative studio in Houston, TX (est. 2026): photo, video and FPV production, a media archive, and FabLab apparel.
-
-## What's here
+Static site: plain HTML, CSS and JS. No build step.
 
 ```
-index.html        The whole page: HTML, CSS and JavaScript in one file
-assets/img/       Photography (web-sized JPEGs)
-assets/img/gallery/  The 36 gallery photographs
-assets/logo/      FORMAT wordmark, ink (dark) and paper (light) versions
+index.html     Home
+studio.html    FORMAT / Studio
+archive.html   FORMAT / Archive (gallery)
+fablab.html    FORMAT / FabLab (store)
+contact.html   Contact
+assets/        Images and the hero video
 ```
-
-No build step and no dependencies. Fonts (Barlow, Michroma) load from Google Fonts.
 
 ## Preview locally
-
-Open `index.html` in a browser, or run a local server from this folder:
 
 ```
 python3 -m http.server 8000
 ```
 
-then visit http://localhost:8000.
+Then open http://localhost:8000
 
-## Publish free with GitHub Pages
+## Deploy
 
-1. Push this folder to a GitHub repository.
-2. In the repository, open Settings › Pages.
-3. Under "Build and deployment", choose "Deploy from a branch", pick `main` and `/ (root)`, and save.
-4. Your site will be live at `https://<your-username>.github.io/<repo-name>/` within a minute or two.
+Any static host works. Point it at the repo root; there is no build command.
 
-## Before launch
+- **GitHub Pages:** Settings → Pages → Deploy from branch → `main` / root.
+- **Netlify / Vercel / Cloudflare Pages:** import the repo, leave the build command empty, publish directory `/`.
 
-- Contact form: sends to afleming888@gmail.com.
-- Social links: Instagram goes to @andrewlfleming. Facebook still points to facebook.com; search `index.html` for `facebook-profile-url` and replace the link with your profile URL.
-- Logo: the wordmark PNGs are traced from the mockup. Swap in vector (SVG) files when you have them.
-- Gallery: lives at `index.html#gallery`. To add a photo, drop it in `assets/img/gallery/` and copy one of the `<button class="gi">` lines in `index.html`, then add its title to the list near `// gallery page` in the script.
+Then add your custom domain in the host's settings and update DNS at your registrar.
 
-## Editing photos
+## Still to wire up
 
-Replace a file in `assets/img/` with a new image of the same name, or change the `src` in `index.html`. Keep images around 1,400–2,000px on the long edge and under ~500 KB.
+- **Contact form:** `ENDPOINT` in `contact.html` is empty, so submissions don't go anywhere yet. Set it to the URL of the backend that emails you and logs to the leads Google Sheet (for example a Google Apps Script web app).
+- **FabLab checkout:** "Request to order" sends people to the contact form; there is no payment checkout yet.
+- **Footer:** the Facebook link still points to facebook.com (marked `data-todo="facebook-profile-url"`).

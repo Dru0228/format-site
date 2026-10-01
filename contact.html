@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FORMAT — Media for a wider perspective</title>
+<title>FORMAT / Contact</title>
 <meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, and FabLab apparel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,84 +243,117 @@ body.sub main{display:none}
 .advl li span:first-child{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding-top:2px}
 .advl li .m{font-size:15px;line-height:1.55}
 @media (max-width:820px){.adv{grid-template-columns:1fr}.advl li{grid-template-columns:1fr}}
+/* viewfinder overlay on the Video card */
+.vfo{position:absolute;inset:0;pointer-events:none;color:#fff;font:500 10px/1 var(--sans);letter-spacing:.18em;text-shadow:0 1px 4px rgba(0,0,0,.55)}
+.vfo .c{position:absolute;width:22px;height:22px;border:0 solid rgba(255,255,255,.85)}
+.vfo .tl{top:14px;left:14px;border-top-width:1px;border-left-width:1px}
+.vfo .tr{top:14px;right:14px;border-top-width:1px;border-right-width:1px}
+.vfo .bl{bottom:14px;left:14px;border-bottom-width:1px;border-left-width:1px}
+.vfo .br{bottom:14px;right:14px;border-bottom-width:1px;border-right-width:1px}
+.vfo .rec,.vfo .fmt{position:absolute}
+.vfo .rec{top:24px;left:28px;display:flex;align-items:center;gap:7px}
+.vfo .rec b{width:7px;height:7px;border-radius:50%;background:#FF2A63;animation:recb 1.2s steps(1) infinite}
+.vfo .fmt{top:24px;right:28px}
+.vfo .x{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+.vfo .x::before,.vfo .x::after{content:"";position:absolute;background:rgba(255,255,255,.7)}
+.vfo .x::before{left:50%;top:0;bottom:0;width:1px}
+.vfo .x::after{top:50%;left:0;right:0;height:1px}
+@keyframes recb{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.vfo .rec b{animation:none}}
 /* closing line on every page, links to Contact */
 .closer{padding:clamp(64px,10vw,128px) 0;border-top:1px solid var(--line)}
 .closer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
 .closer .ch{margin:0 0 18px;font-size:clamp(26px,3.2vw,42px);line-height:1.1;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
 .gt{display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:14px 22px;color:inherit}
 .gt:hover{background:var(--ink);color:var(--paper)}
+/* contact page */
+.cpage{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.cpage .ghead h2{margin-bottom:10px}.cpage .ghead p{max-width:44ch;margin:18px 0 22px}.cpage .ghead .p2{margin-top:-8px}
+.cgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(40px,7vw,112px);align-items:start}
+.cinfo .lbl{margin-top:28px}
+.cinfo p{margin:6px 0 0}
+.dmtop{padding-bottom:28px;margin-bottom:32px;border-bottom:1px solid var(--line)}
+.dmtop .dm{margin:0;color:var(--mute)}
+.dmtop .igl{margin:6px 0 0;font-size:18px}
+.dmtop .igl a{border-bottom:1px solid var(--accent);padding-bottom:2px}
+.dmtop .igl a:hover{color:var(--accent)}
+.cinfo .lbl:first-of-type{margin-top:32px}
+.cinfo a:hover{color:var(--accent)}
+.cform{display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0;margin-bottom:14px}
+.svc{display:flex;flex-wrap:wrap;gap:8px}
+.svc button{background:none;border:1px solid var(--line);color:var(--ink);padding:11px 14px;cursor:pointer;font:400 14px var(--sans);letter-spacing:.04em}
+.svc button:hover{border-color:var(--ink)}
+.svc button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.other[hidden]{display:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.cform input,.cform textarea{width:100%;font:400 16px var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 0;border-radius:0}
+.cform textarea{min-height:120px;resize:vertical}
+.cform input:focus,.cform textarea:focus{outline:none;border-bottom-color:var(--accent)}
+.cform [aria-invalid="true"]{border-bottom-color:var(--accent)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.send{justify-self:start;display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:15px 24px;cursor:pointer}
+.send:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.send:disabled{opacity:.5;cursor:default}
+.cstat{min-height:1.4em;margin:0;max-width:44ch}
+.done h3{margin:0 0 12px;font-size:clamp(26px,3vw,40px);font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.done p{margin:0;color:var(--mute);max-width:40ch}
+@media (max-width:820px){.cgrid{grid-template-columns:1fr}.cinfo{order:2}}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
+    <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
     <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a></nav>
-    <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
+    <div class="hr"><a class="lbl cta" href="#top" aria-current="page">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
 
-<main id="top">
-
-<section class="frame" id="frame" aria-label="Intro">
-  <div class="media" id="media"><video class="layer cur" id="heroVid" autoplay muted loop playsinline preload="auto" disablepictureinpicture poster="assets/15090d0f12.jpg" aria-label="FPV drone chasing a green drift car as it slides through a corner at Texas Motor Speedway"><source src="assets/f27790ee67.mp4" type="video/mp4"></video><picture><source media="(max-width:640px)" srcset="assets/4df052394a.jpg"><img class="layer" id="heroImg" src="assets/0088d09d31.jpg" alt="FPV drone view from above of a drift car trailing tire smoke through a corner at golden hour, Texas Motor Speedway"></picture></div>
-  <button class="vp lbl" id="vp" type="button" aria-pressed="false">Pause</button>
-  <div class="scrim" aria-hidden="true"></div>
-  <div class="shut" aria-hidden="true"><i></i><i></i></div>
-  <div class="mode" id="mode" role="group" aria-label="Hero media"><span class="mi" aria-hidden="true"></span><button class="lbl" type="button" data-m="film" aria-pressed="true">Film</button><button class="lbl" type="button" data-m="still" aria-pressed="false">Still</button></div>
-  <div class="vf" id="vf"></div>
-  <i class="c tl" aria-hidden="true"></i><i class="c tr" aria-hidden="true"></i><i class="c bl" aria-hidden="true"></i><i class="c br" aria-hidden="true"></i>
-  <div class="hero-copy">
-    <div>
-      <h1>Media //<br>For those<br>who look<br>closer.</h1>
+<main id="top" class="cpage">
+  <div class="wrap">
+    <div class="ghead">
+      <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
+      <h2>Format <span class="sl">/</span> Contact</h2>
+      <div class="lbl m">Studio / Archive / FabLab</div>
+      <p class="m">Tell us what you're working on. Pick a service, add a few details, and we'll reply by email.</p>
+      <p class="m p2">Prefer a call or text? Leave your number and we'll reach out that way.</p>
       <span class="tick"></span>
     </div>
-    <div class="ratios" role="group" aria-label="Preview framing">
-      <button data-ar="16:9" aria-pressed="false">16:9</button>
-      <button data-ar="4:3" aria-pressed="false">4:3</button>
-      <button data-ar="9:16" aria-pressed="false">9:16</button>
+    <div class="cgrid">
+      <div class="cinfo">
+        <h2 style="margin:0;font-size:clamp(26px,3.2vw,42px);letter-spacing:.12em">Same world.<br>Different format.</h2>
+        <div class="lbl m">Email</div><p><a href="mailto:afleming888@gmail.com">afleming888@gmail.com</a></p>
+        <div class="lbl m">Studio</div><p>Houston, TX</p>
+      </div>
+      <div>
+        <div class="dmtop"><p class="dm">For direct contact, DM me on Instagram</p><p class="igl"><a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">@andrewlfleming</a></p></div>
+        <form class="cform" id="cform" novalidate>
+          <fieldset>
+            <legend class="lbl">What can we help with? <span class="m">Required</span></legend>
+            <div class="svc" id="svc" role="group" aria-label="Service"><button type="button" data-s="photo" aria-pressed="false">Photo</button><button type="button" data-s="video" aria-pressed="false">Video</button><button type="button" data-s="fpv" aria-pressed="false">FPV</button><button type="button" data-s="advisory" aria-pressed="false">Advisory</button><button type="button" data-s="prints" aria-pressed="false">Prints + licensing</button><button type="button" data-s="fablab" aria-pressed="false">FabLab</button><button type="button" data-s="other" aria-pressed="false">Something else…</button></div>
+          </fieldset>
+          <div class="other" id="otherWrap" hidden><input id="other" name="other" placeholder="What do you have in mind?" aria-label="What do you have in mind?" maxlength="120"></div>
+          <div class="row2">
+            <input name="name" placeholder="Name" autocomplete="name" aria-label="Name" required>
+            <input name="email" type="email" placeholder="Email" autocomplete="email" aria-label="Email" required>
+          </div>
+          <div class="row2">
+            <input name="phone" type="tel" placeholder="Phone (optional)" autocomplete="tel" aria-label="Phone, optional">
+            <input name="timeline" placeholder="Timeline (optional)" aria-label="Timeline, optional">
+          </div>
+          <textarea name="message" placeholder="Tell us about the project" aria-label="Message" required></textarea>
+          <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
+          <button class="send lbl" type="submit" id="send">Send message <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+          <p class="cstat m" id="cstat" role="status"></p>
+        </form>
+        <div class="done" id="done" hidden tabindex="-1"><h3>Message sent.</h3><p id="doneP">Thanks. We'll be in touch soon.</p></div>
+      </div>
     </div>
   </div>
-</section>
-
-<section class="block" aria-labelledby="whatH">
-  <div class="wrap">
-  <div class="head"><h2 id="whatH">Three pillars.<br>One format.</h2></div>
-  <div class="grid3 div">
-    <a href="studio.html"><div class="ph"><img src="assets/b3031f081b.jpg" alt="Florence Cathedral dome and bell tower lit at dusk above the rooftops" loading="lazy"></div><h3>Studio</h3><div class="lbl m">Photo / Video / FPV</div><p>Photo, video and FPV production for brands, events and people. From concept to final cut, on the ground and in the air.</p><div class="lbl act">Enter Studio <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="archive.html"><div class="ph"><img src="assets/10d3b531e5.jpg" alt="Small red-roofed cabin in snow under a sky full of stars" loading="lazy"></div><h3>Archive</h3><div class="lbl m">Prints / Licensing / AI</div><p>A growing archive of people, places, things, and ideas. Browse the gallery, order prints, license photo and video, or explore FORMAT // AI.</p><div class="lbl act">Enter Archive <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="fablab.html"><div class="ph"><img src="assets/7bb9df16f7.jpg" alt="Model seated on a chrome chair in a black and white FORMAT track jacket under red light" loading="lazy" style="object-position:50% 0"></div><h3>FabLab</h3><div class="lbl m">Apparel / Builds</div><p>Apparel, objects and experiments. Limited-run clothing and custom FPV builds, made in small batches.</p><div class="lbl act">Enter FabLab <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-  </div>
-  </div>
-</section>
-
-<section class="block work" id="work" aria-labelledby="workH">
-  <div class="wrap">
-    <div class="head"><h2 id="workH">Selected work</h2><a class="lbl more" href="archive.html#gallery">View gallery <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div>
-    <div class="grid3">
-      <figure style="margin:0"><div class="ph"><img src="assets/b7d74ac668.jpg" alt="Office towers lit at night against a deep red sky" loading="lazy"></div><figcaption class="cap lbl"><span>Night shift</span><span class="m">Architecture</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/d5325c9da8.jpg" alt="Aerial view of a lit stone farmhouse among cypress trees at dusk" loading="lazy"></div><figcaption class="cap lbl"><span>Blue hour</span><span class="m">Aerial</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/77658e2de8.jpg" alt="Top-down aerial of a dirt road curving between a wheat field and green crops" loading="lazy"></div><figcaption class="cap lbl"><span>Field lines</span><span class="m">Top-down</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/f0ebd8b7fb.jpg" alt="Crew member rolling a worn drift tire past a jacked-up car in the pits" loading="lazy"></div><figcaption class="cap lbl"><span>Pit lane</span><span class="m">Motorsport</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/e6ffae7957.jpg" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></div><figcaption class="cap lbl"><span>Last light</span><span class="m">Landscape</span></figcaption></figure>
-      <figure style="margin:0"><div class="ph"><img src="assets/f8a55aaa82.jpg" alt="Black and white photo of a pop-top camper van parked on a beach" loading="lazy"></div><figcaption class="cap lbl"><span>Low tide</span><span class="m">Places</span></figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="about" aria-labelledby="aboutH">
-  <div class="wrap about">
-    <div class="ph"><img src="assets/23bccd9a9e.jpg" alt="Man in sunglasses and a white shirt beside a white convertible on a desert road lined with red rock" loading="lazy" style="object-position:55% 45%"></div>
-    <div>
-      <h2 id="aboutH">Discipline<br>creates<br>freedom.</h2>
-      <p>FORMAT is a Houston creative studio for photo, video and FPV. We combine technical skill and creative vision to capture what others miss, from fast-moving subjects to still moments.</p>
-    </div>
-  </div>
-</section>
-
-<section class="closer" aria-label="Contact"><div class="wrap"><div><h2 class="ch">Same world.<br>Different format.</h2><span class="tick"></span></div><a class="gt lbl" href="contact.html">Get in touch <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div></section>
-
 </main>
 
 <footer>
@@ -353,47 +386,36 @@ body.sub main{display:none}
   // links to the other FORMAT pages open at the top level
   function go(u){try{window.top.location.href=u}catch(e){window.open(u,'_blank','noopener')}}
   [].slice.call(document.querySelectorAll('a[data-ext]')).forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.href)})});
-  // Film / Still switch: the new frame opens from a line, like a shutter
-  var fr=document.getElementById('frame'),hi=document.getElementById('heroImg'),mode=document.getElementById('mode'),mi=mode.querySelector('.mi'),mbs=[].slice.call(mode.querySelectorAll('button'));
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)'),curM='film',busy=null;
-  function ind(){var b=mode.querySelector('[aria-pressed="true"]');mi.style.height=b.offsetHeight+'px';mi.style.transform='translateY('+b.offsetTop+'px)'}
-  function setMode(m,instant){
-    if(m===curM&&!instant)return;
-    var inc=m==='film'?hv:hi,out=m==='film'?hi:hv;curM=m;
-    mbs.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===m)});ind();
-    fr.classList.toggle('still',m==='still');
-    try{localStorage.setItem('format-hero',m)}catch(e){}
-    if(m==='film'&&!reduce.matches){var r=hv.play();if(r&&r.catch)r.catch(function(){})}
-    clearTimeout(busy);[hv,hi].forEach(function(l){l.classList.remove('enter','go','leave')});fr.classList.remove('sw','go');
-    function done(){out.classList.remove('cur','leave');inc.classList.remove('enter','go');inc.classList.add('cur');fr.classList.remove('sw','go');if(m==='still')hv.pause()}
-    if(instant||reduce.matches){done();return}
-    inc.classList.add('enter');fr.classList.add('sw');void inc.offsetWidth;
-    requestAnimationFrame(function(){inc.classList.add('go');out.classList.add('leave');fr.classList.add('go')});
-    busy=setTimeout(done,1300);
+  // contact form: sends in the background to the lead sheet + email, never opens a mail app
+  var ENDPOINT="";
+  var NAMES={photo:'Photo',video:'Video',fpv:'FPV',advisory:'Advisory',prints:'Prints + licensing',fablab:'FabLab',other:'Something else'};
+  var form=document.getElementById('cform'),svc=document.getElementById('svc'),ow=document.getElementById('otherWrap'),other=document.getElementById('other');
+  var stat=document.getElementById('cstat'),send=document.getElementById('send'),chosen=null;
+  function pick(k){chosen=k;[].slice.call(svc.children).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===k)});ow.hidden=k!=='other';other.required=k==='other';if(k==='other')other.focus()}
+  [].slice.call(svc.children).forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.s);stat.textContent=''})});
+  // pre-select from links like contact#s=video&m=...
+  var q=new URLSearchParams((location.hash||'').replace(/^#/,'')+'&'+location.search.replace(/^\?/,''));
+  if(NAMES[q.get('s')])pick(q.get('s'));
+  if(q.get('m'))form.message.value=q.get('m');
+  function bad(el,msg){el.setAttribute('aria-invalid','true');stat.textContent=msg;el.focus();return false}
+  function check(){
+    [].slice.call(form.querySelectorAll('[aria-invalid]')).forEach(function(el){el.removeAttribute('aria-invalid')});
+    if(!chosen){stat.textContent='Choose what you need help with.';svc.firstChild.focus();return false}
+    if(chosen==='other'&&!other.value.trim())return bad(other,'Tell us what you have in mind.');
+    if(!form.name.value.trim())return bad(form.name,'Add your name.');
+    if(!/\S+@\S+\.\S+/.test(form.email.value))return bad(form.email,'Add a valid email.');
+    if(!form.message.value.trim())return bad(form.message,'Add a short message.');
+    return true;
   }
-  mbs.forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.m)})});
-  window.addEventListener('resize',ind);
-  var saved=null;try{saved=localStorage.getItem('format-hero')}catch(e){}
-  ind();
-
-  // hero video: pause control, and stay still for reduced-motion visitors
-  var hv=document.getElementById('heroVid'),vp=document.getElementById('vp');
-  function vpSync(){var p=hv.paused;vp.textContent=p?'Play':'Pause';vp.setAttribute('aria-pressed',p)}
-  vp.addEventListener('click',function(){if(hv.paused){var r=hv.play();if(r&&r.catch)r.catch(function(){})}else hv.pause()});
-  hv.addEventListener('play',vpSync);hv.addEventListener('pause',vpSync);
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){hv.removeAttribute('autoplay');hv.pause()}
-  vpSync();
-  if(saved==='still')setMode('still',true);
-
-  // ratio buttons reframe the hero
-  var frame=document.getElementById('frame'),vf=document.getElementById('vf'),btns=frame.querySelectorAll('.ratios button'),ar=null;
-  function fit(){if(!ar)return;var p=ar.split(':'),r=p[0]/p[1],W=frame.clientWidth-80,H=frame.clientHeight-80,w=W,h=w/r;if(h>H){h=H;w=h*r}vf.style.width=w+'px';vf.style.height=h+'px'}
-  btns.forEach(function(b){b.addEventListener('click',function(){
-    if(ar===b.dataset.ar){ar=null;frame.removeAttribute('data-ar');b.setAttribute('aria-pressed','false');return}
-    ar=b.dataset.ar;frame.setAttribute('data-ar',ar);btns.forEach(function(x){x.setAttribute('aria-pressed',x===b)});fit();
-  })});
-  window.addEventListener('resize',fit);
-
+  form.addEventListener('submit',function(e){
+    e.preventDefault();if(!check())return;
+    var d={service:chosen==='other'?'Something else: '+other.value.trim():NAMES[chosen],name:form.name.value.trim(),email:form.email.value.trim(),phone:form.phone.value.trim(),timeline:form.timeline.value.trim(),message:form.message.value.trim(),website:form.website.value,page:'contact'};
+    if(!ENDPOINT){stat.textContent='The form isn\u2019t connected yet. Please email afleming888@gmail.com for now.';return}
+    send.disabled=true;stat.textContent='Sending\u2026';
+    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
+      .then(function(){form.hidden=true;var dn=document.getElementById('done');document.getElementById('doneP').textContent='Thanks, '+d.name.split(' ')[0]+'. We\u2019ll reply to '+d.email+' soon.';dn.hidden=false;dn.focus()})
+      .catch(function(){send.disabled=false;stat.textContent='That didn\u2019t send. Please try again, or email afleming888@gmail.com.'});
+  });
 })();
 </script>
 </body>
