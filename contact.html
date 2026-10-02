@@ -338,7 +338,7 @@ legend{padding:0;margin-bottom:14px}
     <div class="cgrid">
       <div class="cinfo">
         <h2 style="margin:0;font-size:clamp(26px,3.2vw,42px);letter-spacing:.12em">Same world.<br>Different format.</h2>
-        <div class="lbl m">Email</div><p class="em"><span id="emAddr">afleming888@gmail.com</span><button class="cpy lbl" id="cpy" type="button">Copy</button></p>
+        <div class="lbl m">Email</div><p class="em"><span id="emAddr">info@madebyformat.com</span><button class="cpy lbl" id="cpy" type="button">Copy</button></p>
         <div class="lbl m">Studio</div><p>Houston, TX</p>
       </div>
       <div>
@@ -426,11 +426,11 @@ legend{padding:0;margin-bottom:14px}
   form.addEventListener('submit',function(e){
     e.preventDefault();if(!check())return;
     var d={service:chosen==='other'?'Something else: '+other.value.trim():NAMES[chosen],name:form.name.value.trim(),email:form.email.value.trim(),phone:form.phone.value.trim(),timeline:form.timeline.value.trim(),message:form.message.value.trim(),website:form.website.value,page:'contact'};
-    if(!ENDPOINT){stat.textContent='The form isn\u2019t connected yet. Please email afleming888@gmail.com for now.';return}
+    if(!ENDPOINT){stat.textContent='The form isn\u2019t connected yet. Please email info@madebyformat.com for now.';return}
     send.disabled=true;stat.textContent='Sending\u2026';
     fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
       .then(function(){if(window.track)track('contact-form-sent','Contact form: '+d.service);form.hidden=true;var dn=document.getElementById('done');document.getElementById('doneP').textContent='Thanks, '+d.name.split(' ')[0]+'. We\u2019ll reply to '+d.email+' soon.';dn.hidden=false;dn.focus()})
-      .catch(function(){send.disabled=false;stat.textContent='That didn\u2019t send. Please try again, or email afleming888@gmail.com.'});
+      .catch(function(){send.disabled=false;stat.textContent='That didn\u2019t send. Please try again, or email info@madebyformat.com.'});
   });
 })();
 </script>

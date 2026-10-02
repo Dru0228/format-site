@@ -3,10 +3,11 @@
  *
  * Receives the JSON the contact page sends, adds a row to the "Leads" tab
  * of the spreadsheet this script is attached to, and emails the details to
- * the account that deployed it. Replying to that email replies to the visitor.
+ * NOTIFY_EMAIL. Replying to that email replies to the visitor.
  * Setup steps are in README.md under "Contact form".
  */
 
+var NOTIFY_EMAIL = 'info@madebyformat.com';  // where new messages are emailed
 var SHEET_NAME = 'Leads';
 var HEADERS = ['Received', 'Service', 'Name', 'Email', 'Phone', 'Timeline', 'Message', 'Page'];
 var MAX_PER_SENDER = 5;           // messages allowed per email address...
@@ -63,7 +64,7 @@ function sendEmail_(lead) {
   lines.push('', lead.message, '', '(Sent from the ' + (lead.page || 'contact') + ' page. Reply to this email to answer ' + lead.name + '.)');
 
   MailApp.sendEmail({
-    to: Session.getEffectiveUser().getEmail(),
+    to: NOTIFY_EMAIL,
     replyTo: lead.email,
     name: 'FORMAT website',
     subject: 'FORMAT: ' + lead.service + ' from ' + lead.name,

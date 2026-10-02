@@ -40,7 +40,7 @@ Then add your custom domain in the host's settings and update DNS at your regist
 
 ## Contact form
 
-`apps-script/Code.gs` emails you every message and logs it to a Google Sheet.
+`apps-script/Code.gs` emails every message to `NOTIFY_EMAIL` (info@madebyformat.com) and logs it to a Google Sheet.
 
 1. Create a Google Sheet named **FORMAT leads**.
 2. In the sheet, open **Extensions → Apps Script**, delete the sample code, paste in `apps-script/Code.gs` and save.
