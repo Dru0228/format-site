@@ -6,10 +6,11 @@ Static site: plain HTML, CSS and JS. No build step.
 index.html     Home
 studio.html    FORMAT / Studio
 archive.html   FORMAT / Archive (gallery)
-fablab.html    FORMAT / FabLab (store)
+fablab.html    FORMAT / FabLab (store, current live version)
+fablab-v2.html FabLab Drop: pre-order + concepts, voting, waitlist, stock countdown (preview, noindex)
 contact.html   Contact
 audio.html     FORMAT / Audio (tracks, licensing, Blind Drive)
-apps-script/   Contact form backend (Google Apps Script)
+apps-script/   Backends (Google Apps Script): Code.gs = contact form, FabLab.gs = FabLab votes / waitlist / stock
 analytics.js   Visitor analytics (GoatCounter), loaded by every page
 stats.html     Private stats dashboard (not linked, not indexed)
 assets/        Images and the hero video
@@ -65,3 +66,26 @@ What it records:
 **Phone-friendly dashboard:** open https://madebyformat.com/stats. The first time on each device it asks for a GoatCounter API token (open https://madebyformat.goatcounter.com/user/api, under the account menu at the top right, then New API token, tick only **Read statistics**). The token is kept in that browser only; tap **Disconnect this device** to remove it. On iPhone, Share → Add to Home Screen makes it an app icon.
 
 Visits from `localhost` aren't counted. To leave out your own visits, open the dashboard's **Settings → Ignore IPs** and add yours. To track another click, call `track('name')` from a page script.
+
+## FabLab Drop (fablab-v2.html)
+
+`fablab.html` is untouched. `fablab-v2.html` is the new version and is hidden from search engines (noindex) until you swap it in. To go live, rename `fablab.html` to `fablab-v1.html` and `fablab-v2.html` to `fablab.html`, and delete the `robots` meta line. To go back, rename them back.
+
+**Layout:** a Pre-order section (3 pieces, 50 units each, live "X of 50 left" countdown, waitlist) and a Concepts section (everything else: vote for the piece and for a color, waitlist, "on the board" age, and a Most wanted top 3 by day / week / month / year).
+
+### Set up the sheet (once)
+
+1. Create a Google Sheet named **FORMAT FabLab**.
+2. **Extensions → Apps Script**, delete the sample code, paste in `apps-script/FabLab.gs`, save.
+3. Reload the sheet, then use the new **FabLab → Set up / refresh dashboard** menu (approve the permissions). This creates the Items, Votes, Waitlist, Orders and Dashboard tabs.
+4. **Deploy → New deployment → Web app**, Execute as **Me**, access **Anyone**. Copy the URL.
+5. In `fablab-v2.html` set `ENDPOINT` (top of the script) to that URL. The "Preview" banner disappears once it is set.
+
+### Running a drop
+
+- **Items tab** is the roster. `Status` (Pre-order / Concept) decides which section a piece appears in, `Cap` is the unit limit (blank = 50), `Listed` is the date used for "on the board". Change a status and the site follows within about a minute.
+- **Orders tab:** every "Request to order" click is logged as `Requested`. When you confirm a sale by email, set `Status` to `Confirmed` (dropdown). Only confirmed units count the stock down, and the date is stamped automatically. You can also add offline sales by hand.
+- **Dashboard tab:** sell-through, days to sell out, units/day, votes, favorite colors, waitlist size, and charts. It updates itself.
+- **Waitlist tab:** emails with the piece and whether it came from a concept or a pre-order.
+- Votes are one piece vote and one color vote per browser per concept. This is a popularity signal, not an election; a determined person can vote again from another device or browser.
+- To change the drop name, edit the "FabLab Drop, 2026 Q4" text in `fablab-v2.html`.

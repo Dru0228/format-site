@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FORMAT / FabLab</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="apple-mobile-web-app-title" content="FORMAT">
+<meta name="theme-color" content="#000000">
+<meta name="robots" content="noindex">
+<meta name="description" content="FORMAT FabLab: limited-run apparel from the Houston creative studio. Shirts, hoodies, sweaters, jackets and jerseys.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F1F0ED; --ink:#161616; --mute:#6E6D69; --line:#D9D7D2; --accent:#E3124B;
+  --sans:"Barlow","DIN Alternate","Helvetica Neue",Arial,sans-serif;
+  --pad:clamp(20px,4vw,56px);
+  --hh:64px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121212;--ink:#ECEBE7;--mute:#8E8D89;--line:#2A2A2A;--accent:#FF2A63}}
+:root[data-theme="dark"]{--paper:#121212;--ink:#ECEBE7;--mute:#8E8D89;--line:#2A2A2A;--accent:#FF2A63}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--hh))}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--sans)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad)}
+.lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500}
+.m{color:var(--mute)}
+.tick{display:block;width:32px;height:3px;background:var(--accent)}
+html.theming,html.theming *{transition:background-color .35s,color .35s,border-color .35s!important}
+
+/* header (matches the main site) */
+header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo img{height:17px;width:auto}
+.logo .lp{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .logo .li{display:none}:root:not([data-theme="light"]) .logo .lp{display:block}}
+:root[data-theme="dark"] .logo .li{display:none}:root[data-theme="dark"] .logo .lp{display:block}
+.pnav{display:flex;align-items:center;gap:clamp(18px,3vw,40px)}
+.pnav a{position:relative;padding:6px 0;transition:color .3s}
+.pnav .sl{color:var(--mute);margin-right:.5em;transition:color .3s}
+.pnav a:hover,.pnav a[aria-current="page"]{color:var(--ink)}
+.pnav a:hover .sl,.pnav a[aria-current="page"] .sl{color:var(--accent)}
+.pnav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.77,0,.18,1)}
+.pnav a[aria-current="page"]::after{transform:scaleX(1)}
+.pnav a:not([aria-current]){color:var(--mute)}
+.hr{display:flex;align-items:center;gap:clamp(16px,2.4vw,28px)}
+.cta{border-bottom:1px solid var(--accent);padding:4px 0}
+.cta:hover{color:var(--accent)}
+.sl{color:var(--accent)}
+.brk{white-space:nowrap;border:0;background:none;color:inherit;font:300 20px var(--sans);letter-spacing:.3em;padding:4px 0 4px .3em;cursor:pointer}
+.brk:hover{color:var(--accent)}
+
+/* page head */
+.shop{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.ghead{margin-bottom:clamp(32px,5vw,64px)}
+.back{display:inline-flex;gap:10px;align-items:center}
+.back:hover{color:var(--accent)}
+h2{margin:28px 0 10px;font-size:clamp(40px,6vw,88px);line-height:1.05;font-weight:400;letter-spacing:.06em;text-transform:uppercase}
+.ghead p{max-width:44ch;margin:18px 0 22px}
+
+/* filter bar */
+.gbar{position:sticky;top:var(--hh);z-index:10;background:var(--paper);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;margin-bottom:clamp(18px,2.4vw,32px);border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:clamp(16px,3vw,32px);overflow-x:auto;scrollbar-width:none;margin:-4px 0;padding:4px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;background:none;border:0;border-bottom:1px solid transparent;color:var(--mute);padding:4px 0;cursor:pointer}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.gbar .lbl{white-space:nowrap}
+
+/* product grid */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,3.4vw,48px) clamp(14px,2vw,28px)}
+.pc{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+.pc[hidden]{display:none}
+.ph{position:relative;overflow:hidden;background:#0E0E0E;aspect-ratio:4/5}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.pc:hover .ph img{transform:scale(1.03)}
+.pcap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:14px}
+.pn{font-size:15px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.pc:hover .pn{color:var(--accent)}
+.sw{display:flex;gap:6px;margin-top:8px}
+.sw i{width:10px;height:10px;border-radius:50%;border:1px solid var(--line)}
+
+/* product sheet */
+.sh{position:fixed;inset:0;z-index:50;background:var(--paper);display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,440px)}
+.sh[hidden]{display:none}
+.shv{position:relative;background:#0E0E0E;display:flex;flex-direction:column;min-height:0;padding-top:env(safe-area-inset-top,0px)}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:clamp(16px,3vw,40px)}
+.stage img{max-width:100%;max-height:100%;object-fit:contain}
+.thumbs{display:flex;gap:8px;padding:0 clamp(16px,3vw,40px) calc(clamp(16px,3vw,32px) + env(safe-area-inset-bottom,0px));overflow-x:auto}
+.thumbs button{flex:none;width:64px;height:64px;padding:0;border:1px solid rgba(255,255,255,.2);background:#000;cursor:pointer;opacity:.6;transition:opacity .3s,border-color .3s}
+.thumbs button img{width:100%;height:100%;object-fit:cover}
+.thumbs button:hover{opacity:1}
+.thumbs button[aria-pressed="true"]{opacity:1;border-color:var(--accent)}
+.shi{overflow-y:auto;padding:calc(24px + env(safe-area-inset-top,0px)) clamp(24px,3vw,44px) calc(40px + env(safe-area-inset-bottom,0px));border-left:1px solid var(--line)}
+.shtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:clamp(28px,5vh,56px)}
+.x{background:none;border:0;color:inherit;cursor:pointer;padding:8px 0}
+.x:hover{color:var(--accent)}
+.shi h3{margin:14px 0 12px;font-size:clamp(28px,2.6vw,38px);line-height:1.1;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.shi .t{margin:0 0 28px;color:var(--mute);max-width:36ch}
+.opt{border-top:1px solid var(--line);padding:18px 0}
+.opt .lbl{display:flex;justify-content:space-between;margin-bottom:12px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.o{display:inline-flex;align-items:center;gap:8px;min-width:48px;justify-content:center;background:none;border:1px solid var(--line);color:inherit;padding:10px 12px;cursor:pointer;font-size:13px;letter-spacing:.06em}
+.o i{width:12px;height:12px;border-radius:50%;border:1px solid var(--line)}
+.o:hover{border-color:var(--ink)}
+.o[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);box-shadow:inset 0 0 0 1px var(--accent)}
+.buy{display:flex;width:100%;justify-content:space-between;align-items:center;gap:16px;margin-top:8px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:16px 22px;cursor:pointer}
+.buy:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.note{margin:14px 0 0;font-size:14px;max-width:38ch}
+.specs{list-style:none;margin:32px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
+.specs li{padding:7px 0;border-bottom:1px solid var(--line)}
+body.lock{overflow:hidden}
+
+/* footer */
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:32px;padding-bottom:32px}
+footer .links{display:flex;gap:28px}
+footer a:hover{color:var(--accent)}
+
+@media (max-width:820px){
+  .pgrid{grid-template-columns:1fr 1fr}
+  .pcap{flex-direction:column;gap:2px}
+  .pn{font-size:13px}
+  .sh{display:block;overflow-y:auto}
+  .shv{height:68svh}
+  .shi{border-left:0;overflow:visible;padding-top:24px}
+  .shtop{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;margin:0;z-index:2}
+  .shtop .lbl.m{display:none}
+  .x{color:#EDECE8;background:rgba(0,0,0,.45);padding:10px 14px}
+}
+@media (max-width:640px){
+  :root{--hh:108px}
+  .bar{flex-wrap:wrap;height:auto}
+  .bar>.logo{height:60px;display:flex;align-items:center}
+  .hr{height:60px}
+  .pnav{order:3;width:100%;justify-content:space-between;height:48px;border-top:1px solid var(--line)}
+  #count{display:none}
+  .chips{flex-wrap:wrap;gap:6px 16px;overflow:visible}.chip{letter-spacing:.1em}
+}
+@media (max-width:480px){.logo img{height:13px}.brk{font-size:17px;letter-spacing:.2em}.pgrid{gap:28px 10px}}
+/* closing line, links to Contact */
+.closer{padding:clamp(64px,10vw,128px) 0;border-top:1px solid var(--line)}
+.closer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
+.closer .ch{margin:0 0 18px;font-size:clamp(26px,3.2vw,42px);line-height:1.1;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
+.gt{display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:14px 22px;color:inherit}
+.gt:hover{background:var(--ink);color:var(--paper)}
+footer{border-top:0}
+
+/* ---- v2: drop sections, stock, voting ---- */
+.pv{margin:0 0 24px;padding:10px 14px;border:1px dashed var(--accent);color:var(--accent)}
+.pv[hidden]{display:none}
+.jump{display:flex;gap:28px;margin-top:6px}
+.jump a{border-bottom:1px solid var(--accent);padding:4px 0}
+.jump a:hover{color:var(--accent)}
+.sec{padding-top:clamp(8px,2vw,24px)}
+.sec+.sec{margin-top:clamp(56px,8vw,112px);padding-top:clamp(40px,6vw,72px);border-top:1px solid var(--line)}
+.sech{margin-bottom:clamp(24px,3vw,40px)}
+.sech h3{margin:10px 0 8px;font-size:clamp(28px,3.4vw,46px);line-height:1.1;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.sech p{max-width:52ch;margin:0 0 6px}
+.pgrid.pre .pc[hidden]{display:none}
+.stock{margin-top:10px}
+.stock .lbl{display:flex;justify-content:space-between;gap:12px}
+.stock .low{color:var(--accent)}
+.sbar{height:3px;margin-top:8px;background:var(--line)}
+.sbar i{display:block;height:100%;width:100%;background:var(--accent);transition:width .6s}
+.age{display:block;margin-top:8px}
+.vd{color:var(--accent)}
+.top3{margin:0 0 clamp(24px,3vw,40px);padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.top3 .hd{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;margin-bottom:18px}
+.per{display:flex;gap:clamp(14px,2.4vw,26px)}
+.per button{background:none;border:0;border-bottom:1px solid transparent;color:var(--mute);padding:4px 0;cursor:pointer}
+.per button:hover{color:var(--ink)}
+.per button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.t3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,28px);list-style:none;margin:0;padding:0}
+.t3 button{display:flex;gap:14px;align-items:center;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+.t3 img{width:64px;height:80px;flex:none;object-fit:cover;background:#0E0E0E}
+.t3 .rk{font-size:30px;font-weight:300;line-height:1;color:var(--accent);min-width:1.4em}
+.t3 .nm{display:block;font-size:14px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.t3 button:hover .nm{color:var(--accent)}
+.t3msg{margin:0}
+.shs{margin:0 0 24px}
+.shs[hidden]{display:none}
+.opt[hidden],.buy[hidden]{display:none}
+.opts button:disabled{opacity:.4;cursor:default}
+.vote{margin-top:0}
+.vote[aria-pressed="true"]{background:transparent;border-color:var(--accent);color:var(--ink)}
+.buy:disabled{opacity:.5;cursor:default;background:transparent;color:var(--mute);border-color:var(--line)}
+.wl{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.wl .lbl{display:block;margin-bottom:10px}
+.wl .row{display:flex;gap:8px}
+.wl input[type=email]{flex:1;min-width:0;background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px;font:400 16px var(--sans);border-radius:0}
+.wl input[type=email]:focus{border-color:var(--ink);outline:0}
+.wl button{flex:none;border:1px solid var(--ink);background:none;color:inherit;padding:0 16px;cursor:pointer}
+.wl button:hover{background:var(--ink);color:var(--paper)}
+.wl .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.wl .ok{margin:10px 0 0;font-size:14px}
+@media (max-width:820px){.t3{grid-template-columns:1fr}.pgrid.pre{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.pgrid.pre{grid-template-columns:1fr}.pgrid.pre .ph{aspect-ratio:1/1}.wl .row{flex-direction:column}.wl button{padding:12px 16px}}
+</style>
+<script src="/analytics.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="#top" aria-current="page"><span class="sl">/</span>FabLab</a><a href="audio.html"><span class="sl">/</span>Audio</a></nav>
+    <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
+  </div>
+</header>
+
+<main class="shop" id="top">
+  <div class="wrap">
+    <div class="pv lbl" id="pv" hidden>Preview: voting, the waitlist and live stock aren't connected yet.</div>
+    <div class="ghead">
+      <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
+      <h2>Format <span class="sl">/</span> FabLab</h2>
+      <div class="lbl m">FabLab Drop, 2026 Q4</div>
+      <p class="m">Limited-run apparel, made in small batches. Three pieces are in production now. Vote on what we make next.</p>
+      <span class="tick"></span>
+      <nav class="jump lbl" aria-label="Sections"><a href="#preorder">Pre-order</a><a href="#concepts">Concepts</a></nav>
+    </div>
+
+    <section class="sec" id="preorder" aria-labelledby="preH">
+      <div class="sech">
+        <div class="lbl m">FabLab Drop, 2026 Q4 / Now in production</div>
+        <h3 id="preH">Pre-order</h3>
+        <p class="m">Limited to 50 per piece. When a piece sells out, it's gone until the next drop.</p>
+      </div>
+      <div class="pgrid pre" id="pgridPre"></div>
+    </section>
+
+    <section class="sec" id="concepts" aria-labelledby="conH">
+      <div class="sech">
+        <div class="lbl m">Not produced yet</div>
+        <h3 id="conH">Concepts</h3>
+        <p class="m">Open any concept to vote for the piece and for the color you'd wear. The most wanted ones get made.</p>
+      </div>
+      <div class="top3" id="top3">
+        <div class="hd"><span class="lbl">Most wanted</span><div class="per lbl" id="per" role="group" aria-label="Time period"></div></div>
+        <ol class="t3" id="t3"></ol>
+        <p class="t3msg m" id="t3msg" role="status" hidden></p>
+      </div>
+      <div class="gbar">
+        <div class="chips" role="group" aria-label="Filter by category" id="chips"></div>
+        <span class="lbl m" id="count" role="status"></span>
+      </div>
+      <div class="pgrid" id="pgrid"></div>
+    </section>
+  </div>
+</main>
+
+<section class="closer" aria-label="Contact"><div class="wrap"><div><h2 class="ch">Same world.<br>Different format.</h2><span class="tick"></span></div><a class="gt lbl" href="contact.html">Get in touch <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></a></div></section>
+
+<div class="sh" id="sh" role="dialog" aria-modal="true" aria-labelledby="shN" hidden>
+  <div class="shv">
+    <div class="stage"><img id="shImg" alt=""></div>
+    <div class="thumbs" id="thumbs" role="group" aria-label="Images"></div>
+  </div>
+  <div class="shi">
+    <div class="shtop"><span class="lbl m" id="shIdx"></span><button class="x lbl" id="shX" type="button">Close</button></div>
+    <div class="lbl m" id="shC"></div>
+    <h3 id="shN"></h3>
+    <p class="t" id="shT"></p>
+    <div class="shs stock" id="shStock" hidden><div class="lbl"><span id="shStockT"></span></div><div class="sbar"><i id="shStockB"></i></div></div>
+    <div class="lbl m age" id="shAge" hidden style="margin:-14px 0 24px"></div>
+    <div class="opt"><div class="lbl"><span id="colLbl">Color</span><span class="m" id="shCol"></span></div><div class="opts" id="cols" role="group" aria-label="Color"></div></div>
+    <div class="opt" id="sizeOpt"><div class="lbl"><span>Size</span><span class="m" id="shSize">Choose a size</span></div><div class="opts" id="sizes" role="group" aria-label="Size"></div></div>
+    <button class="buy lbl vote" id="vote" type="button" aria-pressed="false" hidden><span id="voteT">Vote for this piece</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+    <button class="buy lbl" id="buy" type="button">Request to order <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+    <p class="note m" id="note"></p>
+    <form class="wl" id="wl" novalidate>
+      <label class="lbl" for="wlE" id="wlL"></label>
+      <div class="row"><input type="email" id="wlE" name="email" placeholder="you@email.com" autocomplete="email" inputmode="email" required><input class="hp" type="text" id="wlH" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="lbl" type="submit" id="wlB">Join</button></div>
+      <p class="ok m" id="wlS" role="status" hidden></p>
+    </form>
+    <ul class="specs lbl" id="specs"></ul>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap lbl">
+    <span class="m">© 2026 FORMAT, Houston, TX</span>
+    <div class="links">
+      <a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">Instagram</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var DATA=[{"k": "grid-tee", "n": "Grid Tee", "c": "Shirts", "t": "Oversized tee with the full FORMAT grid printed front and back.", "col": ["Off-white"], "sp": ["Oversized fit", "Heavyweight cotton", "Screen print", "Unisex"], "b": ["1"], "sz": true}, {"k": "frame-tee", "n": "Frame Tee", "c": "Shirts", "t": "A quieter take on the grid: one frame, one logo, pink registration marks.", "col": ["Off-white"], "sp": ["Oversized fit", "Heavyweight cotton", "Screen print", "Unisex"], "b": ["2"], "sz": true}, {"k": "signal-tee", "n": "Signal Tee", "c": "Shirts", "t": "Big chest logo, the signal mark, and a framed back print.", "col": ["Off-white", "Black", "Charcoal", "Hot pink"], "sp": ["Oversized fit", "Heavyweight cotton", "Print + woven label", "Four colors"], "b": ["5", "6"], "sz": true}, {"k": "polo", "n": "Field Polo", "c": "Shirts", "t": "A technical uniform for creative operators.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Premium piqué", "Relaxed fit", "Embroidered logo", "Technical details", "S–XXL"], "b": ["12"], "sz": true}, {"k": "blueprint-ls", "n": "Blueprint L/S", "c": "Shirts", "t": "Long sleeve covered in the Blueprint all-over graphic.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Heavyweight cotton", "Oversized fit", "All-over graphic", "Print + embroidery", "S–XXL"], "b": ["14"], "sz": true}, {"k": "core-hoodie", "n": "Core Hoodie", "c": "Hoodies", "t": "The everyday hoodie. Pillars on the sleeve, logo on the back.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Embroidered detail", "Premium finish", "Custom label", "Three colors"], "b": ["3"], "sz": true}, {"k": "signal-sweater", "n": "Signal Sweater", "c": "Sweaters", "t": "The signal mark knitted in, with white piping down the sleeves.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Heavyweight knit", "Oversized fit", "Intarsia graphic", "Ribbed details", "480 GSM"], "b": ["10r1", "9"], "sz": true}, {"k": "archive-sweater", "n": "Archive Sweater", "c": "Sweaters", "t": "Panelled crew with an embroidered logo and globe patch.", "col": ["Black", "Off-white", "Charcoal"], "sp": ["Heavyweight fleece", "Oversized fit", "Panel construction", "Embroidery + patch", "420 GSM"], "b": ["10r2", "9"], "sz": true}, {"k": "blueprint-sweater", "n": "Blueprint Sweater", "c": "Sweaters", "t": "The Blueprint graphic, front, back and both sleeves.", "col": ["Black", "Stone", "Hot pink"], "sp": ["Heavyweight fleece", "Oversized fit", "All-over graphic print", "Print + embroidery", "450 GSM"], "b": ["10r3", "11", "16"], "sz": true}, {"k": "track-jacket", "n": "Track Jacket", "c": "Jackets", "t": "Motorsport-cut jacket with a quilted lining and sleeve pocket.", "col": ["Off-white"], "sp": ["Quilted lining", "Sleeve zip pocket", "Adjustable cuffs", "Embroidery + print"], "b": ["4"], "sz": true}, {"k": "field-shell", "n": "Field Shell", "c": "Jackets", "t": "A packable shell built to shoot in.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Water resistant", "Lightweight", "Breathable", "Packable", "Shoot ready"], "b": ["7"], "sz": true}, {"k": "archive-jacket", "n": "Archive Jacket", "c": "Jackets", "t": "Technical shell with pink-lined zips and the globe on the sleeve.", "col": ["Stone", "Black", "Hot pink"], "sp": ["Technical shell", "Water resistant", "Breathable", "Embroidery + print", "Multiple pockets", "S–XXL"], "b": ["17"], "sz": true}, {"k": "workshirt", "n": "Workshirt", "c": "Jackets", "t": "Heavy twill overshirt with utility pockets. Wear it open.", "col": ["Black", "Off-white", "Hot pink"], "sp": ["Heavyweight twill", "Oversized fit", "Utility pockets", "Embroidery + print", "S–XXL"], "b": ["13"], "sz": true}, {"k": "soccer-jersey", "n": "Soccer Jersey", "c": "Jerseys", "t": "Clean lines for everyday wear.", "col": ["Black"], "sp": ["Performance fabric", "Embroidered details", "Custom neck taping", "Number 01"], "b": ["18"], "sz": true}, {"k": "hockey-jersey", "n": "Hockey Jersey", "c": "Jerseys", "t": "Bold silhouette, premium construction.", "col": ["Black", "White", "Hot pink"], "sp": ["Performance fabric", "Embroidered logo", "Stitched numbers", "Custom collar"], "b": ["20", "18"], "sz": true}, {"k": "rugby-jersey", "n": "Rugby Jersey", "c": "Jerseys", "t": "Refined, timeless, versatile.", "col": ["Black"], "sp": ["Woven + print", "Embroidered details", "Custom labeling", "Number 01"], "b": ["18"], "sz": true}, {"k": "motorsport-jersey", "n": "Motorsport Jersey", "c": "Jerseys", "t": "Technical and aggressive. Built for creators.", "col": ["Black"], "sp": ["Performance fabric", "Embroidered details", "Layered graphics", "Number 01"], "b": ["18"], "sz": true}, {"k": "field-sling", "n": "Field Sling", "c": "Accessories", "t": "A modular crossbody bag for creative operators. Carry essentials, stay organized.", "col": ["Distressed brown", "Black", "Stone"], "sp": ["Modular system", "Padded camera + drone interior", "H 32 / W 20 / D 12 cm", "About 6 L", "Add-on pouches + key clip"], "b": ["15"], "sz": false}],IMG={"c:grid-tee": "assets/13e725dcf7.jpg", "b:1": "assets/e28057a46d.jpg", "c:frame-tee": "assets/2f2f8e6026.jpg", "b:2": "assets/a67e3af791.jpg", "c:signal-tee": "assets/f4edea60aa.jpg", "b:5": "assets/3b5d03458c.jpg", "b:6": "assets/16eccbcd48.jpg", "c:polo": "assets/636e2ed8c8.jpg", "b:12": "assets/b415278806.jpg", "c:blueprint-ls": "assets/a83991a610.jpg", "b:14": "assets/a1216d75d4.jpg", "c:core-hoodie": "assets/ce3e30460d.jpg", "b:3": "assets/72dcd51bbe.jpg", "c:signal-sweater": "assets/ca441595e8.jpg", "b:10r1": "assets/eda25e5227.jpg", "b:9": "assets/6151c3a3e3.jpg", "c:archive-sweater": "assets/3d1da494b7.jpg", "b:10r2": "assets/74f199b826.jpg", "c:blueprint-sweater": "assets/43ff6a68b2.jpg", "b:10r3": "assets/b06514b23f.jpg", "b:11": "assets/819788d92f.jpg", "b:16": "assets/f11bab7fb4.jpg", "c:track-jacket": "assets/0f8854d9ea.jpg", "b:4": "assets/ac7fb7c0e1.jpg", "c:field-shell": "assets/d41a7bc308.jpg", "b:7": "assets/02a721292a.jpg", "c:archive-jacket": "assets/dbc2f1a6e7.jpg", "b:17": "assets/92125fc57b.jpg", "c:workshirt": "assets/17cc66cf00.jpg", "b:13": "assets/dd26cf5553.jpg", "c:soccer-jersey": "assets/c68ca5d43b.jpg", "b:18": "assets/0a56879030.jpg", "c:hockey-jersey": "assets/b6abe1d183.jpg", "b:20": "assets/cf8535549a.jpg", "c:rugby-jersey": "assets/42e6c357c2.jpg", "c:motorsport-jersey": "assets/e1a7b98637.jpg", "c:field-sling": "assets/e41af0ee4e.jpg", "b:15": "assets/edc93dd8cf.jpg"},COL={"Black": "#141414", "Off-white": "#ECE8DF", "Stone": "#D6CFC2", "Charcoal": "#3B3B3B", "Hot pink": "#E3125E", "White": "#F7F7F5", "Distressed brown": "#5A3D2B"};
+
+  // ---- settings you edit ----
+  var ENDPOINT='';                              // FabLab Apps Script web app URL (see README)
+  var PRE=['signal-tee','polo','core-hoodie'];  // pre-order pieces until the sheet says otherwise
+  var CAP=50;                                   // units per pre-order piece until the sheet says otherwise
+  var SINCE='2026-10-02';                       // "on the board since" until the sheet says otherwise
+  var SIZES=['S','M','L','XL','XXL'];
+  var PERIODS=[['day','Day'],['week','Week'],['month','Month'],['year','Year']];
+
+  function go(url){try{window.top.location.href=url}catch(e){window.open(url,'_blank','noopener')}}
+  [].slice.call(document.querySelectorAll('[data-ext]')).forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.href)})});
+
+  // [ ] toggles light / dark and remembers the choice
+  var root=document.documentElement,tb=document.getElementById('themeBtn'),mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function themeNow(){return root.getAttribute('data-theme')||(mq.matches?'dark':'light')}
+  function label(){tb.setAttribute('aria-label','Switch to '+(themeNow()==='dark'?'light':'dark')+' theme')}
+  try{var s=localStorage.getItem('format-theme');if(s)root.setAttribute('data-theme',s)}catch(e){}
+  label();
+  tb.addEventListener('click',function(){
+    var next=themeNow()==='dark'?'light':'dark';
+    root.classList.add('theming');root.setAttribute('data-theme',next);label();
+    try{localStorage.setItem('format-theme',next)}catch(e){}
+    setTimeout(function(){root.classList.remove('theming')},400);
+  });
+  if(mq.addEventListener)mq.addEventListener('change',label);
+
+  function $(id){return document.getElementById(id)}
+  function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.textContent=h;return e}
+  function dot(name){var i=el('i');i.style.background=COL[name]||'#888';return i}
+  function track(n){try{if(window.track)window.track(n)}catch(e){}}
+
+  // what this browser has already done (votes, waitlist) and a random visitor id
+  function rd(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+  function wr(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  var mine=rd('format-votes',{}),joined=rd('format-waitlist',{});
+  var cid=(function(){
+    var c=null;try{c=localStorage.getItem('format-cid')}catch(e){}
+    if(!c){
+      var a=new Uint8Array(12);
+      if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(var i=0;i<12;i++)a[i]=Math.random()*256;
+      c=[].map.call(a,function(b){return('0'+b.toString(16)).slice(-2)}).join('');
+      try{localStorage.setItem('format-cid',c)}catch(e){}
+    }
+    return c;
+  })();
+  function send(o){
+    if(!ENDPOINT)return;
+    o.client=cid;
+    try{fetch(ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(o)}).catch(function(){})}catch(e){}
+  }
+
+  // live numbers from the sheet: stock, top 3, status, listed dates
+  var live={stock:{},top:null,status:{},since:{}};
+  function isPre(p){var s=live.status[p.k];return s?s==='Pre-order':PRE.indexOf(p.k)>-1}
+  function capOf(k){return(live.stock[k]&&live.stock[k].cap)||CAP}
+  function left(k){var s=live.stock[k];return s?Math.max(0,capOf(k)-(s.sold||0)):null}
+  function stockInfo(k){
+    var l=left(k),cap=capOf(k);
+    if(l===null)return{t:'Limited to '+cap,pct:100,low:false,out:false};
+    if(l===0)return{t:'Sold out',pct:0,low:true,out:true};
+    return{t:l<=10?'Only '+l+' left':l+' of '+cap+' left',pct:l/cap*100,low:l<=10,out:false};
+  }
+  function ageText(p){
+    var d=Math.floor((Date.now()-new Date((live.since[p.k]||SINCE)+'T00:00:00').getTime())/864e5);
+    if(!(d>=1))return 'New concept';
+    if(d<14)return d+(d===1?' day':' days')+' on the board';
+    if(d<70)return Math.floor(d/7)+' weeks on the board';
+    var m=Math.floor(d/30);return m+(m===1?' month':' months')+' on the board';
+  }
+
+  var byKey={};DATA.forEach(function(p){byKey[p.k]=p});
+  var preCards=[],conCards=[],cat='All';
+
+  // ---- cards and sections ----
+  function card(p){
+    var b=el('button','pc');b.type='button';b.dataset.c=p.c;b.dataset.k=p.k;b.setAttribute('aria-label',p.n+', '+p.c);
+    var ph=el('div','ph'),im=el('img');im.src=IMG['c:'+p.k];im.alt=p.n+' mockup';im.loading='lazy';im.width=600;im.height=750;ph.appendChild(im);b.appendChild(ph);
+    var cap=el('div','pcap');cap.appendChild(el('span','pn',p.n));cap.appendChild(el('span','lbl m',p.c));b.appendChild(cap);
+    var sw=el('div','sw');p.col.forEach(function(c){var i=dot(c);i.title=c;sw.appendChild(i)});b.appendChild(sw);
+    b.addEventListener('click',function(){open(p,b)});
+    return b;
+  }
+  function build(){
+    var gp=$('pgridPre'),gc=$('pgrid');gp.innerHTML='';gc.innerHTML='';preCards=[];conCards=[];
+    DATA.forEach(function(p){
+      var b=card(p);
+      if(isPre(p)){
+        var st=el('div','stock');st.appendChild(el('div','lbl')).appendChild(el('span'));
+        var bar=el('div','sbar');bar.appendChild(el('i'));st.appendChild(bar);b.appendChild(st);
+        gp.appendChild(b);preCards.push(b);
+      }else{
+        var ag=el('span','lbl m age');b.appendChild(ag);
+        gc.appendChild(b);conCards.push(b);
+      }
+    });
+    refreshCards();buildChips();renderTop();
+  }
+  function refreshCards(){
+    preCards.forEach(function(b){
+      var i=stockInfo(b.dataset.k),st=b.querySelector('.stock');
+      var t=st.querySelector('span');t.textContent=i.t;t.className=i.low?'low':'';
+      st.querySelector('i').style.width=i.pct+'%';
+    });
+    conCards.forEach(function(b){
+      var p=byKey[b.dataset.k],ag=b.querySelector('.age');
+      ag.textContent=ageText(p);
+      if(mine[p.k]&&mine[p.k].item){var v=el('span','vd',' / Voted');ag.appendChild(v)}
+    });
+  }
+
+  // concept category filter
+  var chipsEl=$('chips'),count=$('count'),chips=[];
+  function buildChips(){
+    var cats=['All'];conCards.forEach(function(b){if(cats.indexOf(b.dataset.c)<0)cats.push(b.dataset.c)});
+    var sc=null;try{sc=localStorage.getItem('format-cat')}catch(e){}
+    cat=cats.indexOf(sc)>-1?sc:'All';
+    chipsEl.innerHTML='';chips=[];
+    cats.forEach(function(c){var b=el('button','chip lbl',c);b.type='button';b.addEventListener('click',function(){setCat(c)});chipsEl.appendChild(b);chips.push(b)});
+    setCat(cat);
+  }
+  function setCat(c){
+    cat=c;var v=0;
+    conCards.forEach(function(b){var on=c==='All'||b.dataset.c===c;b.hidden=!on;if(on)v++});
+    chips.forEach(function(b){b.setAttribute('aria-pressed',b.textContent===c)});
+    count.textContent=v+(v===1?' concept':' concepts');
+    try{localStorage.setItem('format-cat',c)}catch(e){}
+  }
+
+  // most wanted: top 3 only, by day / week / month / year
+  var period='month',perEl=$('per'),perBtns=[];
+  PERIODS.forEach(function(x){var b=el('button','lbl',x[1]);b.type='button';b.addEventListener('click',function(){period=x[0];renderTop()});perEl.appendChild(b);perBtns.push(b)});
+  function renderTop(){
+    perBtns.forEach(function(b,i){b.setAttribute('aria-pressed',PERIODS[i][0]===period)});
+    var ol=$('t3'),msg=$('t3msg');ol.innerHTML='';
+    var keys=((live.top&&live.top[period])||[]).filter(function(k){return byKey[k]});
+    if(keys.length){msg.hidden=true}
+    else{
+      msg.hidden=false;
+      msg.textContent=!ENDPOINT?'Voting opens soon.':!live.top?'Loading votes…':'No votes this '+period+' yet. Be the first.';
+    }
+    keys.forEach(function(k,i){
+      var p=byKey[k],li=el('li'),b=el('button');b.type='button';b.setAttribute('aria-label','Number '+(i+1)+': '+p.n);
+      b.appendChild(el('span','rk','0'+(i+1)));
+      var im=el('img');im.src=IMG['c:'+k];im.alt='';im.loading='lazy';b.appendChild(im);
+      var w=el('span');w.appendChild(el('span','nm',p.n));w.appendChild(el('span','lbl m',p.c));b.appendChild(w);
+      b.addEventListener('click',function(){open(p,b)});
+      li.appendChild(b);ol.appendChild(li);
+    });
+  }
+
+  // ---- product sheet ----
+  var sh=$('sh'),shImg=$('shImg'),thumbs=$('thumbs'),colsEl=$('cols'),sizesEl=$('sizes');
+  var cur=null,color=null,size=null,last=null,pics=[];
+  function setPic(i){shImg.src=IMG[pics[i]];shImg.alt=cur.n+(i?' detail board '+i:' mockup');[].slice.call(thumbs.children).forEach(function(t,k){t.setAttribute('aria-pressed',k===i)})}
+  function pick(box,val){[].slice.call(box.children).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===val)})}
+  function sizeNote(){$('note').textContent=stockInfo(cur.k).out?'This run is sold out. Join the waitlist below.':'FW26 pre-order. We confirm price, fit and timing by email.'}
+  function stockBlock(){
+    var i=stockInfo(cur.k),box=$('shStock');
+    box.hidden=false;$('shStockT').textContent=i.t;$('shStockT').className=i.low?'low':'';$('shStockB').style.width=i.pct+'%';
+    var buy=$('buy');buy.disabled=i.out;
+    sizeNote();
+  }
+  function colorVoted(){return mine[cur.k]&&mine[cur.k].color}
+  function paintVote(){
+    var v=!!(mine[cur.k]&&mine[cur.k].item),b=$('vote');
+    b.setAttribute('aria-pressed',v);$('voteT').textContent=v?'Voted. Thanks':'Vote for this piece';
+    var c=colorVoted();
+    $('shCol').textContent=c?'Your pick: '+c:'Tap one to vote';
+    [].slice.call(colsEl.children).forEach(function(x){
+      x.setAttribute('aria-pressed',c===x.dataset.v);x.disabled=!!c&&c!==x.dataset.v;
+    });
+    $('note').textContent=ENDPOINT?'':'Preview only: this vote is kept on this device.';
+  }
+  function open(p,btn){
+    cur=p;last=btn;var pre=isPre(p);
+    color=pre?p.col[0]:null;size=p.sz?null:'One size';
+    var grp=(pre?preCards:conCards).filter(function(b){return !b.hidden});
+    var ix=grp.map(function(b){return b.dataset.k}).indexOf(p.k);
+    $('shIdx').textContent=ix>-1?String(ix+1).padStart(2,'0')+' / '+String(grp.length).padStart(2,'0'):'';
+    $('shC').textContent=p.c+' / '+(pre?'Pre-order':'Concept');
+    $('shN').textContent=p.n;
+    $('shT').textContent=p.t;
+    pics=['c:'+p.k].concat(p.b.map(function(b){return 'b:'+b}));
+    thumbs.innerHTML='';
+    pics.forEach(function(k,i){var t=el('button');t.type='button';t.setAttribute('aria-label','Image '+(i+1));var im=el('img');im.src=IMG[k];im.alt='';t.appendChild(im);t.addEventListener('click',function(){setPic(i)});thumbs.appendChild(t)});
+    setPic(0);
+
+    $('shStock').hidden=!pre;$('shAge').hidden=pre;if(!pre)$('shAge').textContent=ageText(p);
+    $('colLbl').textContent=pre?'Color':'Favorite color';
+    colsEl.innerHTML='';
+    p.col.forEach(function(c){
+      var b=el('button','o');b.type='button';b.dataset.v=c;b.appendChild(dot(c));b.appendChild(document.createTextNode(c));
+      b.addEventListener('click',function(){
+        if(isPre(cur)){color=c;pick(colsEl,c);$('shCol').textContent=c;return}
+        if(colorVoted())return;
+        mine[cur.k]=mine[cur.k]||{};mine[cur.k].color=c;wr('format-votes',mine);
+        send({action:'vote',item:cur.k,kind:'color',value:c});track('fablab/vote-color/'+cur.k);paintVote();
+      });
+      colsEl.appendChild(b);
+    });
+    $('sizeOpt').hidden=!(pre&&p.sz);
+    sizesEl.innerHTML='';
+    SIZES.forEach(function(s){var b=el('button','o',s);b.type='button';b.dataset.v=s;b.addEventListener('click',function(){size=s;pick(sizesEl,s);$('shSize').textContent=s;sizeNote()});sizesEl.appendChild(b)});
+    pick(sizesEl,size||'');$('shSize').textContent='Choose a size';
+    $('buy').hidden=!pre;$('vote').hidden=pre;
+    if(pre){pick(colsEl,color);$('shCol').textContent=color;stockBlock()}else paintVote();
+
+    // waitlist
+    var wl=joined[p.k];
+    $('wlL').textContent=pre?'Waitlist: email me when more drop':'Waitlist: email me when this gets dropped';
+    $('wlB').textContent='Join';
+    $('wlE').value='';$('wlE').disabled=!!wl;$('wlB').disabled=!!wl;
+    $('wlS').hidden=!wl;if(wl)$('wlS').textContent='You’re on the list for '+p.n+'.';
+
+    var sp=$('specs');sp.innerHTML='';p.sp.forEach(function(x){sp.appendChild(el('li','',x))});
+    sh.hidden=false;sh.scrollTop=0;document.querySelector('.shi').scrollTop=0;document.body.classList.add('lock');
+    $('shX').focus();
+  }
+  function close(){sh.hidden=true;document.body.classList.remove('lock');if(dirty){dirty=false;build()}else refreshCards();if(last&&document.body.contains(last))last.focus()}
+  $('shX').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(!sh.hidden&&e.key==='Escape')close()});
+
+  $('vote').addEventListener('click',function(){
+    if(mine[cur.k]&&mine[cur.k].item)return;
+    mine[cur.k]=mine[cur.k]||{};mine[cur.k].item=1;wr('format-votes',mine);
+    send({action:'vote',item:cur.k,kind:'item'});track('fablab/vote/'+cur.k);paintVote();
+  });
+  $('wl').addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=$('wlE').value.trim(),st=$('wlS');
+    if($('wlH').value)return;
+    if(!/^\S+@\S+\.\S+$/.test(em)){st.hidden=false;st.textContent='Enter a valid email address.';$('wlE').focus();return}
+    send({action:'waitlist',item:cur.k,email:em,website:$('wlH').value});
+    joined[cur.k]=1;wr('format-waitlist',joined);track('fablab/waitlist/'+cur.k);
+    $('wlE').disabled=true;$('wlB').disabled=true;st.hidden=false;
+    st.textContent=isPre(cur)?'You’re on the list. We’ll email you when more drop.':'You’re on the list. We’ll email you when '+cur.n+' gets dropped.';
+  });
+  $('buy').addEventListener('click',function(){
+    if(stockInfo(cur.k).out)return;
+    if(!size){$('note').textContent='Choose a size first.';sizesEl.firstChild.focus();return}
+    send({action:'order',item:cur.k,color:color,size:size,qty:1});track('fablab/order/'+cur.k);
+    go('contact.html#s=fablab&m='+encodeURIComponent('Order request: '+cur.n+'\nColor: '+color+'\nSize: '+size+'\nQuantity: 1\n\n'));
+    $('note').textContent='Opening the order form…';
+  });
+
+  // ---- go ----
+  $('pv').hidden=!!ENDPOINT;
+  build();
+  var dirty=false;
+  function pull(){
+    if(!ENDPOINT)return;
+    fetch(ENDPOINT+'?action=summary').then(function(r){return r.json()}).then(function(d){
+      if(!d||!d.ok)return;
+      var was=DATA.map(isPre).join();
+      live={stock:d.stock||{},top:d.top||{},status:d.status||{},since:d.since||{}};
+      if(DATA.map(isPre).join()!==was){if(sh.hidden)build();else dirty=true}
+      else{refreshCards();renderTop()}
+      if(!sh.hidden&&isPre(cur))stockBlock();
+    }).catch(function(){});
+  }
+  pull();
+  setInterval(function(){if(!document.hidden)pull()},60000);
+})();
+</script>
+</body>
+</html>
