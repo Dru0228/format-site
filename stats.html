@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>FORMAT Stats</title>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="apple-mobile-web-app-title" content="FORMAT Stats">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<!-- Private stats dashboard. Not linked from the site and not counted in analytics.
+     Reads GoatCounter's API with a key that is stored only in this browser (localStorage). -->
+<style>
+:root{
+  --paper:#F1F0ED; --card:#FFFFFF; --ink:#161616; --mute:#67665F; --line:#D9D7D2; --track:#E6E4DF; --accent:#D0103F;
+  --good:#1F7A4D; --bad:#B4232C;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --sans:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#121212;--card:#1B1B1B;--ink:#ECEBE7;--mute:#9A9994;--line:#2C2C2C;--track:#262626;--accent:#FF2A63;--good:#4CC38A;--bad:#FF6B72;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:620px;margin:0 auto;padding-inline:20px;padding-block:24px 56px;display:grid;gap:32px}
+h1,h2{font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:.02em;margin:0;text-wrap:balance}
+h1{font-size:30px;line-height:1}
+h2{font-size:22px;line-height:1.1}
+p{margin:0}
+.m{color:var(--mute)}
+.lbl{font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header .brand{display:grid;gap:8px}
+.tick{display:block;width:32px;height:3px;background:var(--accent)}
+.iconbtn{background:none;border:1px solid var(--line);padding:8px 12px;cursor:pointer;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.ranges{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ranges button{background:var(--card);border:1px solid var(--line);padding:12px 4px;cursor:pointer;font-weight:500;font-size:15px}
+.ranges button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+section{display:grid;gap:14px}
+.hero{display:grid;gap:6px}
+.hero b{font:600 72px/0.9 var(--display);font-variant-numeric:tabular-nums}
+.delta{font-weight:500}
+.delta.up{color:var(--good)} .delta.down{color:var(--bad)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);padding:14px 12px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile b{font:600 40px/1 var(--display);font-variant-numeric:tabular-nums}
+.tile b.word{font-size:28px;line-height:1.15;overflow-wrap:anywhere}
+.tile span{font-size:14px;line-height:1.3;color:var(--mute)}
+.chart{display:grid;gap:8px}
+.cols{height:140px;display:flex;align-items:flex-end;gap:2px;border-bottom:1px solid var(--line);position:relative}
+.cols button{flex:1 1 0;min-width:0;height:100%;background:none;border:0;padding:0;display:flex;align-items:flex-end;cursor:pointer}
+.cols button i{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px;opacity:.9}
+.cols button[aria-pressed="true"] i{opacity:1;outline:2px solid var(--ink);outline-offset:1px}
+.cols button.zero i{background:var(--track)}
+.axis{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.readout{font-size:15px;min-height:1.5em}
+.bars{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.bars li{display:grid;gap:6px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.row strong{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.row em{font-style:normal;font-variant-numeric:tabular-nums;font-weight:600;flex:none}
+.track{height:10px;background:var(--track);border-radius:0 4px 4px 0}
+.fill{height:100%;background:var(--accent);border-radius:0 4px 4px 0;min-width:2px}
+.empty{color:var(--mute);font-style:italic}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:520px){.split{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);padding:20px;display:grid;gap:14px}
+.card ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.card input{width:100%;padding:12px;border:1px solid var(--line);background:var(--paper);font-family:ui-monospace,Menlo,monospace;font-size:16px}
+.primary{background:var(--accent);color:#fff;border:0;padding:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.err{color:var(--bad);font-weight:500}
+footer{font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer button{background:none;border:0;padding:0;color:var(--mute);text-decoration:underline;cursor:pointer;font-size:14px}
+.loading{opacity:.5;transition:opacity .2s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="tick"></span><h1>FORMAT Stats</h1></div>
+    <button class="iconbtn" id="refresh" type="button" hidden>Refresh</button>
+  </header>
+
+  <!-- First visit on a device: ask for a read-only GoatCounter key -->
+  <section id="setup" hidden>
+    <div class="card">
+      <h2>Connect GoatCounter</h2>
+      <p>This page needs a key that lets it read your visitor numbers. You only do this once on each phone or computer.</p>
+      <ol>
+        <li>Open <b>madebyformat.goatcounter.com</b> and tap <b>Settings</b>, then <b>API</b>.</li>
+        <li>Tap <b>New API token</b>. Name it <b>Stats page</b> and tick only <b>Read statistics</b>.</li>
+        <li>Copy the token and paste it below.</li>
+      </ol>
+      <form id="keyform">
+        <label class="lbl" for="key">API token</label>
+        <input id="key" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste token here" required>
+      </form>
+      <button class="primary" id="save" type="submit" form="keyform">Show my stats</button>
+      <p class="err" id="keyerr" role="alert"></p>
+      <p class="m">The token is saved only in this browser. It isn't sent anywhere except GoatCounter.</p>
+    </div>
+  </section>
+
+  <main id="dash" hidden>
+    <div style="display:grid;gap:32px">
+      <div class="ranges" role="group" aria-label="Time period">
+        <button type="button" data-r="1">Today</button>
+        <button type="button" data-r="7">7 days</button>
+        <button type="button" data-r="30">30 days</button>
+        <button type="button" data-r="90">90 days</button>
+      </div>
+
+      <section class="hero" aria-live="polite">
+        <p class="lbl" id="periodLbl">Visits</p>
+        <b id="visits">–</b>
+        <p><span class="delta" id="delta"></span></p>
+      </section>
+
+      <section aria-label="Key numbers">
+        <div class="tiles">
+          <div class="tile"><b id="leads">–</b><span>contact form messages</span></div>
+          <div class="tile"><b id="outbound">–</b><span>clicks to other sites</span></div>
+          <div class="tile"><b class="word" id="topPage">–</b><span id="topPageLbl">most viewed page</span></div>
+        </div>
+      </section>
+
+      <section class="chart">
+        <h2 id="chartTitle">Visits by day</h2>
+        <div class="cols" id="cols" role="group" aria-label="Visits chart"></div>
+        <div class="axis"><span id="axL"></span><span id="axR"></span></div>
+        <p class="readout m" id="readout">Tap a bar to see its number.</p>
+      </section>
+
+      <section>
+        <h2>Pages people looked at</h2>
+        <ul class="bars" id="pages"></ul>
+      </section>
+
+      <section>
+        <h2>What people did</h2>
+        <ul class="bars" id="events"></ul>
+      </section>
+
+      <section>
+        <h2>Where they came from</h2>
+        <ul class="bars" id="refs"></ul>
+        <p class="m" style="font-size:15px"><b>Direct or app</b> means they typed the address, tapped a link in a text or email, or came from an app like Instagram that hides where the click came from.</p>
+      </section>
+
+      <div class="split">
+        <section><h2>Devices</h2><ul class="bars" id="systems"></ul></section>
+        <section><h2>Locations</h2><ul class="bars" id="locations"></ul></section>
+      </div>
+
+      <p class="err" id="err" role="alert"></p>
+    </div>
+  </main>
+
+  <footer id="foot" hidden>
+    <span id="updated"></span>
+    <button type="button" id="forget">Disconnect this device</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var API='https://madebyformat.goatcounter.com/api/v0';
+  var KEY_NAME='format-gc-token', RANGE_NAME='format-stats-range';
+  var PAGES={'/':'Home','/index':'Home','/studio':'Studio','/archive':'Archive','/fablab':'FabLab','/contact':'Contact','/audio':'Audio'};
+  var $=function(id){return document.getElementById(id)};
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
+  var token=store(KEY_NAME), days=+(store(RANGE_NAME)||7);
+  if([1,7,30,90].indexOf(days)<0)days=7;
+
+  function iso(d){return d.toISOString().replace(/\.\d{3}Z$/,'Z')}
+  function startOfDay(d){var x=new Date(d);x.setHours(0,0,0,0);return x}
+  function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+  function fmt(n){return (n||0).toLocaleString()}
+  function plural(n,one,many){return fmt(n)+' '+(n===1?one:many)}
+  function pageName(p){
+    var k=p.replace(/\.html$/,'').replace(/\/$/,'')||'/';
+    return PAGES[k]||k;
+  }
+
+  function get(path,params){
+    var q=Object.keys(params||{}).map(function(k){return k+'='+encodeURIComponent(params[k])}).join('&');
+    return fetch(API+path+(q?'?'+q:''),{headers:{'Authorization':'Bearer '+token}}).then(function(r){
+      if(r.status===401||r.status===403)throw {auth:true};
+      if(r.status===429)throw new Error('GoatCounter says too many requests. Wait a minute and tap Refresh.');
+      if(!r.ok)throw new Error('GoatCounter returned an error ('+r.status+'). Try Refresh.');
+      return r.json();
+    });
+  }
+
+  // a labelled bar list; text always goes in via textContent because paths and referrers come from visitors
+  function bars(el,items,emptyText){
+    el.textContent='';
+    if(!items.length){var li=document.createElement('li');li.className='empty';li.textContent=emptyText;el.appendChild(li);return}
+    var max=Math.max.apply(null,items.map(function(i){return i.n}))||1;
+    items.forEach(function(i){
+      var li=document.createElement('li'),row=document.createElement('div'),s=document.createElement('strong'),e=document.createElement('em'),t=document.createElement('div'),f=document.createElement('div');
+      row.className='row';t.className='track';f.className='fill';
+      s.textContent=i.name;e.textContent=fmt(i.n);f.style.width=(i.n/max*100)+'%';
+      row.appendChild(s);row.appendChild(e);t.appendChild(f);li.appendChild(row);li.appendChild(t);el.appendChild(li);
+    });
+  }
+
+  function chart(points){
+    var cols=$('cols');cols.textContent='';
+    var max=Math.max.apply(null,points.map(function(p){return p.n}))||1;
+    points.forEach(function(p){
+      var b=document.createElement('button'),i=document.createElement('i');
+      b.type='button';b.setAttribute('aria-label',p.label+': '+plural(p.n,'visit','visits'));
+      if(!p.n)b.className='zero';
+      i.style.height=Math.max(p.n/max*100,1.5)+'%';
+      b.appendChild(i);
+      b.addEventListener('click',function(){
+        [].forEach.call(cols.children,function(c){c.setAttribute('aria-pressed',c===b)});
+        $('readout').textContent=p.label+': '+plural(p.n,'visit','visits');
+      });
+      cols.appendChild(b);
+    });
+    $('axL').textContent=points.length?points[0].short:'';
+    $('axR').textContent=points.length?points[points.length-1].short:'';
+    var top=Math.max.apply(null,points.map(function(p){return p.n}).concat(0));
+    $('readout').textContent=top?'Tap a bar to see its number. Busiest: '+plural(top,'visit','visits')+'.':'No visits yet in this period.';
+  }
+
+  function load(){
+    $('err').textContent='';$('dash').classList.add('loading');
+    [].forEach.call(document.querySelectorAll('.ranges button'),function(b){b.setAttribute('aria-pressed',+b.dataset.r===days)});
+    var now=new Date(),end=new Date(now);end.setMinutes(0,0,0);end.setHours(end.getHours()+1);
+    var start=startOfDay(addDays(now,-(days-1))),prevStart=addDays(start,-days);
+    var range={start:iso(start),end:iso(end)};
+    $('periodLbl').textContent=days===1?'Visits today':'Visits, last '+days+' days';
+    $('chartTitle').textContent=days===1?'Visits by hour':'Visits by day';
+
+    Promise.all([
+      get('/stats/total',range),
+      get('/stats/total',{start:iso(prevStart),end:iso(start)}),
+      get('/stats/hits',{start:range.start,end:range.end,limit:100}),
+      get('/stats/toprefs',{start:range.start,end:range.end,limit:6}),
+      get('/stats/systems',{start:range.start,end:range.end,limit:5}),
+      get('/stats/locations',{start:range.start,end:range.end,limit:5})
+    ]).then(function(r){
+      var tot=r[0],prev=r[1],hits=r[2].hits||[];
+      var visits=tot.total-(tot.total_events||0),prevVisits=prev.total-(prev.total_events||0);
+      $('visits').textContent=fmt(visits);
+      var d=$('delta');d.className='delta';
+      if(!prevVisits){d.textContent=visits?'No visits in the '+(days===1?'day':days+' days')+' before':'No visits yet in this period';}
+      else{var pct=Math.round((visits-prevVisits)/prevVisits*100);
+        var before=' the '+(days===1?'day':days+' days')+' before ('+fmt(prevVisits)+')';
+        if(!pct)d.textContent='Same as'+before;
+        else{d.textContent=(pct>0?'↑ ':'↓ ')+Math.abs(pct)+'% vs'+before;d.classList.add(pct>0?'up':'down')}}
+
+      // pages: merge old ".html" paths with the new clean ones
+      var pages={},leads=0,out={},outTotal=0,other=[];
+      hits.forEach(function(h){
+        if(h.event){
+          if(h.path==='contact-form-sent')leads+=h.count;
+          else if(h.path.indexOf('outbound/')===0){var s=h.path.slice(9);out[s]=(out[s]||0)+h.count;outTotal+=h.count}
+          else other.push({name:h.title||h.path,n:h.count});
+          return;
+        }
+        var n=pageName(h.path);pages[n]=(pages[n]||0)+h.count;
+      });
+      var pageList=Object.keys(pages).map(function(k){return {name:k,n:pages[k]}}).sort(function(a,b){return b.n-a.n});
+      bars($('pages'),pageList,'No page visits in this period.');
+      $('leads').textContent=fmt(leads);$('outbound').textContent=fmt(outTotal);
+      $('topPage').textContent=pageList.length?pageList[0].name:'–';
+      var ev=[];
+      if(leads)ev.push({name:'Sent a contact form message',n:leads});
+      Object.keys(out).sort(function(a,b){return out[b]-out[a]}).forEach(function(k){ev.push({name:'Clicked through to '+k,n:out[k]})});
+      bars($('events'),ev.concat(other),'No form messages or link clicks in this period.');
+
+      bars($('refs'),(r[3].stats||[]).map(function(s){return {name:s.name||'Direct or app',n:s.count}}),'No visits in this period.');
+      bars($('systems'),(r[4].stats||[]).map(function(s){return {name:s.name||'Unknown',n:s.count}}),'No data yet.');
+      bars($('locations'),(r[5].stats||[]).map(function(s){return {name:s.name||'Unknown',n:s.count}}),'No data yet.');
+
+      // chart: hours of today, or one bar per day
+      var st=tot.stats||[],pts=[];
+      if(days===1){
+        var today=st.length?st[st.length-1].hourly||[]:[],h=now.getHours();
+        for(var i=0;i<=h;i++){var lab=new Date(2000,0,1,i).toLocaleTimeString([], {hour:'numeric'});pts.push({n:today[i]||0,label:lab,short:lab})}
+      }else{
+        st.forEach(function(s){var dt=new Date(s.day+'T12:00:00');pts.push({n:s.daily,label:dt.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'}),short:dt.toLocaleDateString([], {month:'short',day:'numeric'})})});
+      }
+      chart(pts);
+      $('updated').textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+      $('dash').classList.remove('loading');
+    }).catch(function(e){
+      $('dash').classList.remove('loading');
+      if(e&&e.auth){store(KEY_NAME,null);token=null;show();$('keyerr').textContent='GoatCounter didn’t accept that token. Check it has “Read statistics” ticked and paste it again.';return}
+      $('err').textContent=(e&&e.message&&e.message.indexOf('GoatCounter')===0)?e.message:'Couldn’t reach GoatCounter. Check your connection and tap Refresh.';
+    });
+  }
+
+  function show(){
+    var on=!!token;
+    $('setup').hidden=on;$('dash').hidden=!on;$('foot').hidden=!on;$('refresh').hidden=!on;
+    if(on)load();
+  }
+
+  $('keyform').addEventListener('submit',function(e){
+    e.preventDefault();var v=$('key').value.trim();
+    if(!v){$('keyerr').textContent='Paste your token first.';return}
+    token=v;store(KEY_NAME,v);$('key').value='';$('keyerr').textContent='';show();
+  });
+  [].forEach.call(document.querySelectorAll('.ranges button'),function(b){
+    b.addEventListener('click',function(){days=+b.dataset.r;store(RANGE_NAME,String(days));load()});
+  });
+  $('refresh').addEventListener('click',load);
+  $('forget').addEventListener('click',function(){store(KEY_NAME,null);token=null;show()});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&token)load()});
+  show();
+})();
+</script>
+</body>
+</html>
