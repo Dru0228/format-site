@@ -33,7 +33,6 @@ Then add your custom domain in the host's settings and update DNS at your regist
 
 ## Still to wire up
 
-- **Contact form:** `ENDPOINT` in `contact.html` is empty until the Apps Script below is deployed.
 - **Audio:** fill in `TRACKS`, `TIERS` (prices and checkout links) and `DRIVE` at the top of the script in `audio.html`. Only tracks that aren't on Spotify go on this page or the Blind Drive.
 - **FabLab checkout:** "Request to order" sends people to the contact form; there is no payment checkout yet.
 - **Footer:** the Facebook link still points to facebook.com (marked `data-todo="facebook-profile-url"`).
