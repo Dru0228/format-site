@@ -10,6 +10,7 @@ fablab.html    FORMAT / FabLab (store)
 contact.html   Contact
 audio.html     FORMAT / Audio (tracks, licensing, Blind Drive)
 apps-script/   Contact form backend (Google Apps Script)
+analytics.js   Visitor analytics (GoatCounter), loaded by every page
 assets/        Images and the hero video
 ```
 
@@ -47,3 +48,18 @@ Then add your custom domain in the host's settings and update DNS at your regist
 4. Copy the **Web app URL** and set it as `ENDPOINT` in `contact.html`.
 
 Open the URL in a browser to check it: it should say "FORMAT contact form is running." Replying to one of the emails replies to the visitor. If you change the script later, use **Deploy → Manage deployments → Edit → New version** so the URL stays the same.
+
+## Analytics
+
+Every page loads `analytics.js`, which sends visits to [GoatCounter](https://www.goatcounter.com) (free, no cookies, so no consent banner). The dashboard is at **https://madebyformat.goatcounter.com**.
+
+One-time setup: sign up at https://www.goatcounter.com/signup with the code **madebyformat**. Counting starts as soon as that account exists. (To use a different code, change `CODE` at the top of `analytics.js`.)
+
+What it records:
+
+- **Page views:** visitors, pages, referrers (Instagram, Google…), countries, browsers, screen sizes.
+- **Events** (shown in the same list, marked as events):
+  - `outbound/<site>`: clicks on links to other sites (Instagram, checkout links…)
+  - `contact-form-sent`: a contact form message went through; the title names the service picked.
+
+Visits from `localhost` aren't counted. To leave out your own visits, open the dashboard's **Settings → Ignore IPs** and add yours. To track another click, call `track('name')` from a page script.

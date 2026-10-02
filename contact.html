@@ -313,6 +313,7 @@ legend{padding:0;margin-bottom:14px}
 @media (max-width:820px){.cgrid{grid-template-columns:1fr}.cinfo{order:2}}
 @media (max-width:480px){.row2{grid-template-columns:1fr}}
 </style>
+<script src="/analytics.js" defer></script>
 </head>
 <body>
 
@@ -428,7 +429,7 @@ legend{padding:0;margin-bottom:14px}
     if(!ENDPOINT){stat.textContent='The form isn\u2019t connected yet. Please email afleming888@gmail.com for now.';return}
     send.disabled=true;stat.textContent='Sending\u2026';
     fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
-      .then(function(){form.hidden=true;var dn=document.getElementById('done');document.getElementById('doneP').textContent='Thanks, '+d.name.split(' ')[0]+'. We\u2019ll reply to '+d.email+' soon.';dn.hidden=false;dn.focus()})
+      .then(function(){if(window.track)track('contact-form-sent','Contact form: '+d.service);form.hidden=true;var dn=document.getElementById('done');document.getElementById('doneP').textContent='Thanks, '+d.name.split(' ')[0]+'. We\u2019ll reply to '+d.email+' soon.';dn.hidden=false;dn.focus()})
       .catch(function(){send.disabled=false;stat.textContent='That didn\u2019t send. Please try again, or email afleming888@gmail.com.'});
   });
 })();
