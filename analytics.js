@@ -3,6 +3,8 @@
 // No cookies, so no consent banner is needed. Visits from localhost are not counted.
 (function(){
   var CODE='madebyformat';
+  // count "/" and "/index.html" as one home page, and show "/fablab" rather than "/fablab.html"
+  window.goatcounter={path:function(p){return p.replace(/(^|\/)index\.html$/,'/').replace(/\.html$/,'')||'/'}};
   var s=document.createElement('script');
   s.async=true;
   s.src='https://gc.zgo.at/count.js';
