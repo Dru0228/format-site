@@ -39,24 +39,17 @@ var HEADERS = {
 // Starting roster for the Items tab: key, name, category, status, colors.
 // After setup you manage this in the sheet, not here.
 var SEED = [
-  ["grid-tee", "Grid Tee", "Shirts", "Concept", "Off-white"],
   ["frame-tee", "Frame Tee", "Shirts", "Concept", "Off-white"],
   ["signal-tee", "Signal Tee", "Shirts", "Pre-order", "Off-white, Black, Charcoal, Hot pink"],
   ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink"],
-  ["blueprint-ls", "Blueprint L/S", "Shirts", "Concept", "Black, Off-white, Hot pink"],
   ["core-hoodie", "Core Hoodie", "Hoodies", "Pre-order", "Black, Off-white, Hot pink"],
-  ["signal-sweater", "Signal Sweater", "Sweaters", "Concept", "Black, Off-white, Hot pink"],
   ["archive-sweater", "Archive Sweater", "Sweaters", "Concept", "Black, Off-white, Charcoal"],
   ["blueprint-sweater", "Blueprint Sweater", "Sweaters", "Concept", "Black, Stone, Hot pink"],
-  ["track-jacket", "Track Jacket", "Jackets", "Concept", "Off-white"],
   ["field-shell", "Field Shell", "Jackets", "Concept", "Black, Off-white, Hot pink"],
   ["archive-jacket", "Archive Jacket", "Jackets", "Concept", "Stone, Black, Hot pink"],
   ["workshirt", "Workshirt", "Jackets", "Concept", "Black, Off-white, Hot pink"],
-  ["soccer-jersey", "Soccer Jersey", "Jerseys", "Concept", "Black"],
   ["hockey-jersey", "Hockey Jersey", "Jerseys", "Concept", "Black, White, Hot pink"],
-  ["rugby-jersey", "Rugby Jersey", "Jerseys", "Concept", "Black"],
-  ["motorsport-jersey", "Motorsport Jersey", "Jerseys", "Concept", "Black"],
-  ["field-sling", "Field Sling", "Accessories", "Concept", "Distressed brown, Black, Stone"]
+  ["rugby-jersey", "Rugby Jersey", "Jerseys", "Concept", "Black"]
 ];
 
 // ---------- web app ----------
