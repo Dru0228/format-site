@@ -192,14 +192,25 @@ footer button{background:none;border:0;padding:0;color:var(--mute);text-decorati
     return PAGES[k]||k;
   }
 
-  function get(path,params){
+  // GoatCounter rate-limits its API, and a refused request often shows up in the browser as a
+  // plain network failure, so requests go one at a time and a failed one is retried after a pause
+  function wait(ms){return new Promise(function(res){setTimeout(res,ms)})}
+  function get(path,params,tries){
+    tries=tries||0;
     var q=Object.keys(params||{}).map(function(k){return k+'='+encodeURIComponent(params[k])}).join('&');
     return fetch(API+path+(q?'?'+q:''),{headers:{'Authorization':'Bearer '+token}}).then(function(r){
       if(r.status===401||r.status===403)throw {auth:true};
-      if(r.status===429)throw new Error('GoatCounter says too many requests. Wait a minute and tap Refresh.');
-      if(!r.ok)throw new Error('GoatCounter returned an error ('+r.status+'). Try Refresh.');
+      if(r.status===429){if(tries<3)return wait(1500*(tries+1)).then(function(){return get(path,params,tries+1)});throw new Error('GoatCounter says too many requests. Wait a minute and tap Refresh.')}
+      if(!r.ok)return r.text().then(function(t){throw new Error('GoatCounter returned an error ('+r.status+(t?': '+t.slice(0,160):'')+'). Try Refresh.')});
       return r.json();
+    },function(e){
+      if(tries<3)return wait(1500*(tries+1)).then(function(){return get(path,params,tries+1)});
+      var err=new Error('Couldn\u2019t reach GoatCounter ('+(e&&e.message||'network error')+'). Check your connection and tap Refresh.');err.net=true;throw err;
     });
+  }
+  function inOrder(calls){
+    var out=[];
+    return calls.reduce(function(p,c){return p.then(function(){return get(c[0],c[1]).then(function(v){out.push(v)})})},Promise.resolve()).then(function(){return out});
   }
 
   // a labelled bar list; text always goes in via textContent because paths and referrers come from visitors
@@ -236,7 +247,9 @@ footer button{background:none;border:0;padding:0;color:var(--mute);text-decorati
     $('readout').textContent=top?'Tap a bar to see its number. Busiest: '+plural(top,'visit','visits')+'.':'No visits yet in this period.';
   }
 
+  var busy=false;
   function load(){
+    if(busy)return;busy=true;
     $('err').textContent='';$('dash').classList.add('loading');
     [].forEach.call(document.querySelectorAll('.ranges button'),function(b){b.setAttribute('aria-pressed',+b.dataset.r===days)});
     var now=new Date(),end=new Date(now);end.setMinutes(0,0,0);end.setHours(end.getHours()+1);
@@ -245,13 +258,13 @@ footer button{background:none;border:0;padding:0;color:var(--mute);text-decorati
     $('periodLbl').textContent=days===1?'Visits today':'Visits, last '+days+' days';
     $('chartTitle').textContent=days===1?'Visits by hour':'Visits by day';
 
-    Promise.all([
-      get('/stats/total',range),
-      get('/stats/total',{start:iso(prevStart),end:iso(start)}),
-      get('/stats/hits',{start:range.start,end:range.end,limit:100}),
-      get('/stats/toprefs',{start:range.start,end:range.end,limit:6}),
-      get('/stats/systems',{start:range.start,end:range.end,limit:5}),
-      get('/stats/locations',{start:range.start,end:range.end,limit:5})
+    inOrder([
+      ['/stats/total',range],
+      ['/stats/total',{start:iso(prevStart),end:iso(start)}],
+      ['/stats/hits',{start:range.start,end:range.end,limit:100}],
+      ['/stats/toprefs',{start:range.start,end:range.end,limit:6}],
+      ['/stats/systems',{start:range.start,end:range.end,limit:5}],
+      ['/stats/locations',{start:range.start,end:range.end,limit:5}]
     ]).then(function(r){
       var tot=r[0],prev=r[1],hits=r[2].hits||[];
       var visits=tot.total-(tot.total_events||0),prevVisits=prev.total-(prev.total_events||0);
@@ -297,11 +310,12 @@ footer button{background:none;border:0;padding:0;color:var(--mute);text-decorati
       }
       chart(pts);
       $('updated').textContent='Updated '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
-      $('dash').classList.remove('loading');
+      $('dash').classList.remove('loading');busy=false;
     }).catch(function(e){
-      $('dash').classList.remove('loading');
+      $('dash').classList.remove('loading');busy=false;
       if(e&&e.auth){store(KEY_NAME,null);token=null;show();$('keyerr').textContent='GoatCounter didn’t accept that token. Check it has “Read statistics” ticked and paste it again.';return}
-      $('err').textContent=(e&&e.message&&e.message.indexOf('GoatCounter')===0)?e.message:'Couldn’t reach GoatCounter. Check your connection and tap Refresh.';
+      // show the real reason so a problem can be pinned down from a screenshot
+      $('err').textContent=(e&&e.message&&/GoatCounter/.test(e.message))?e.message:'Something went wrong showing the stats ('+(e&&e.message||e)+'). Tap Refresh.';
     });
   }
 
