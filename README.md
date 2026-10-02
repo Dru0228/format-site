@@ -62,6 +62,6 @@ What it records:
   - `outbound/<site>`: clicks on links to other sites (Instagram, checkout links…)
   - `contact-form-sent`: a contact form message went through; the title names the service picked.
 
-**Phone-friendly dashboard:** open https://madebyformat.com/stats. The first time on each device it asks for a GoatCounter API token (Settings → API → New API token, tick only **Read statistics**). The token is kept in that browser only; tap **Disconnect this device** to remove it. On iPhone, Share → Add to Home Screen makes it an app icon.
+**Phone-friendly dashboard:** open https://madebyformat.com/stats. The first time on each device it asks for a GoatCounter API token (open https://madebyformat.goatcounter.com/user/api, under the account menu at the top right, then New API token, tick only **Read statistics**). The token is kept in that browser only; tap **Disconnect this device** to remove it. On iPhone, Share → Add to Home Screen makes it an app icon.
 
 Visits from `localhost` aren't counted. To leave out your own visits, open the dashboard's **Settings → Ignore IPs** and add yours. To track another click, call `track('name')` from a page script.
