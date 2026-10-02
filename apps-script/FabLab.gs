@@ -39,7 +39,7 @@ var HEADERS = {
 // Starting roster for the Items tab: key, name, category, status, colors.
 // After setup you manage this in the sheet, not here.
 var SEED = [
-  ["frame-tee", "Frame Tee", "Shirts", "Concept", "Off-white"],
+  ["frame-tee", "Frame Tee", "Shirts", "Concept", "Off-white, Black"],
   ["signal-tee", "Signal Tee", "Shirts", "Pre-order", "Off-white, Black, Charcoal, Hot pink"],
   ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink"],
   ["core-hoodie", "Core Hoodie", "Hoodies", "Pre-order", "Black, Off-white, Hot pink"],
