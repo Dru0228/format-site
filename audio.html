@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FORMAT / Contact</title>
-<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, FabLab apparel, and Format / Audio.">
+<title>FORMAT / Audio</title>
+<meta name="description" content="Format / Audio: unreleased tracks from the Houston studio FORMAT. Preview, license or download a track, or order a Blind Drive of five random songs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
@@ -266,45 +266,81 @@ body.sub main{display:none}
 .closer .ch{margin:0 0 18px;font-size:clamp(26px,3.2vw,42px);line-height:1.1;font-weight:400;letter-spacing:.12em;text-transform:uppercase}
 .gt{display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:14px 22px;color:inherit}
 .gt:hover{background:var(--ink);color:var(--paper)}
-/* contact page */
-.cpage{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
-.cpage .ghead h2{margin-bottom:10px}.cpage .ghead p{max-width:44ch;margin:18px 0 22px}.cpage .ghead .p2{margin-top:-8px}
-.cgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(40px,7vw,112px);align-items:start}
-.cinfo .lbl{margin-top:28px}
-.cinfo p{margin:6px 0 0}
-.dmtop{padding-bottom:28px;margin-bottom:32px;border-bottom:1px solid var(--line)}
-.dmtop .dm{margin:0;color:var(--mute)}
-.dmtop .igl{margin:6px 0 0;font-size:18px}
-.dmtop .igl a{border-bottom:1px solid var(--accent);padding-bottom:2px}
-.dmtop .igl a:hover{color:var(--accent)}
-.cinfo .lbl:first-of-type{margin-top:32px}
-.cinfo a:hover{color:var(--accent)}
-.em{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
-#emAddr{user-select:all;overflow-wrap:anywhere}
-.cpy{background:none;border:0;border-bottom:1px solid var(--accent);color:inherit;padding:2px 0;cursor:pointer;font-family:var(--sans)}
-.cpy:hover{color:var(--accent)}
-.cform{display:grid;gap:22px}
-fieldset{border:0;margin:0;padding:0;min-width:0}
-legend{padding:0;margin-bottom:14px}
-.svc{display:flex;flex-wrap:wrap;gap:8px}
-.svc button{background:none;border:1px solid var(--line);color:var(--ink);padding:11px 14px;cursor:pointer;font:400 14px var(--sans);letter-spacing:.04em}
-.svc button:hover{border-color:var(--ink)}
-.svc button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.other[hidden]{display:none}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.cform input,.cform textarea{width:100%;font:400 16px var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 0;border-radius:0}
-.cform textarea{min-height:120px;resize:vertical}
-.cform input:focus,.cform textarea:focus{outline:none;border-bottom-color:var(--accent)}
-.cform [aria-invalid="true"]{border-bottom-color:var(--accent)}
-.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.send{justify-self:start;display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:15px 24px;cursor:pointer}
-.send:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-.send:disabled{opacity:.5;cursor:default}
-.cstat{min-height:1.4em;margin:0;max-width:44ch}
-.done h3{margin:0 0 12px;font-size:clamp(26px,3vw,40px);font-weight:400;letter-spacing:.08em;text-transform:uppercase}
-.done p{margin:0;color:var(--mute);max-width:40ch}
-@media (max-width:820px){.cgrid{grid-template-columns:1fr}.cinfo{order:2}}
-@media (max-width:480px){.row2{grid-template-columns:1fr}}
+/* audio page: catalog list, three license tiers, Blind Drive product */
+.apage{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
+.apage .ghead h2{margin:28px 0 10px;font-size:clamp(40px,6vw,88px);letter-spacing:.06em}
+.apage .ghead p{max-width:44ch;margin:18px 0 22px}
+.apage section{margin-top:clamp(48px,7vw,96px)}
+.apage section:first-of-type{margin-top:0}
+.shead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--ink)}
+.shead h3{margin:0}
+.tlist{list-style:none;margin:0;padding:0}
+.trow{position:relative;display:grid;grid-template-columns:44px 72px minmax(0,1fr) auto auto;align-items:center;gap:8px clamp(12px,2vw,28px);padding:16px 0;border-bottom:1px solid var(--line)}
+.trow .ref{font-variant-numeric:tabular-nums}
+.trow .tt{min-width:0}
+.trow .tn{font-size:17px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;overflow-wrap:anywhere}
+.trow .tm{font-variant-numeric:tabular-nums;white-space:nowrap}
+.trow.soon .tn{color:var(--mute);font-weight:400}
+.pl{width:40px;height:40px;border-radius:50%;border:1px solid var(--ink);background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.pl:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+.pl:disabled{border-color:var(--line);color:var(--line);cursor:default}
+.pl[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tl2{background:none;border:0;border-bottom:1px solid currentColor;color:inherit;padding:3px 0;cursor:pointer;font-family:var(--sans)}
+.tl2:hover:not(:disabled){color:var(--accent)}
+.tl2:disabled{color:var(--mute);border-bottom-color:transparent;cursor:default}
+.prog{position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--accent)}
+.tnote{margin:16px 0 0;font-size:14px;max-width:60ch}
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-left:1px solid var(--line)}
+.tier{display:flex;flex-direction:column;gap:12px;padding:24px clamp(16px,2vw,28px) 28px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tier h4{margin:0;font-size:18px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.tier .pr{font-size:clamp(26px,2.6vw,34px);font-weight:300;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.tier .pr.tbd{font-size:15px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);padding:10px 0 9px}
+.tier ul{list-style:none;margin:0;padding:0;font-size:15px;line-height:1.5;color:var(--mute)}
+.tier li{padding:7px 0;border-top:1px solid var(--line)}
+.tier .gt{margin-top:auto;justify-content:space-between}
+.tier.sel{box-shadow:inset 0 3px 0 var(--accent)}
+.excl{margin:18px 0 0;font-size:15px}
+.excl a{color:var(--ink);border-bottom:1px solid var(--accent)}
+.excl a:hover{color:var(--accent)}
+.drive{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:stretch;padding-top:clamp(28px,4vw,48px);border-top:1px solid var(--ink)}
+.dvis{position:relative;min-height:420px;background:#0E0E0E;display:grid;place-items:center;overflow:hidden}
+.dvis::before,.dvis::after{content:"";position:absolute;width:22px;height:22px;border:0 solid rgba(255,255,255,.6)}
+.dvis::before{top:18px;left:18px;border-top-width:1px;border-left-width:1px}
+.dvis::after{bottom:18px;right:18px;border-bottom-width:1px;border-right-width:1px}
+.dtag{position:absolute;left:24px;bottom:22px;color:rgba(255,255,255,.6)}
+.obj{position:relative}
+.usb{display:flex;align-items:center;transform:rotate(-14deg)}
+.usb .cap{width:46px;height:44px;background:linear-gradient(#cfcfcc,#8d8d8a);border-radius:3px 0 0 3px}
+.usb .body{width:190px;height:66px;background:#1b1b1b;border:1px solid #2e2e2e;border-radius:4px 12px 12px 4px;display:flex;justify-content:space-between;align-items:center;padding:0 18px;color:#EDECE8;font-style:normal}
+.usb .body b{font:500 14px var(--sans);letter-spacing:.32em}
+.usb .body span{font:500 11px var(--sans);letter-spacing:.18em;color:#FF2A63}
+.cd{width:230px;height:230px}
+.cd .case{position:absolute;inset:0;border:1px solid rgba(255,255,255,.28);background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%)}
+.cd .disc{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,#0E0E0E 0 13%,#3a3a3a 13.5% 15%,#d9d8d4 15.5% 60%,#bdbcb8 60.5% 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:58px;color:#161616;font-style:normal;animation:spin 14s linear infinite}
+.cd .disc b{font:500 12px var(--sans);letter-spacing:.32em}
+.cd .disc span{font:500 10px var(--sans);letter-spacing:.18em;color:#E3124B}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dinfo{display:flex;flex-direction:column;min-width:0}
+.dinfo h3{margin:14px 0 12px;font-size:clamp(32px,3.6vw,52px);line-height:1.05;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.dlede{margin:0 0 28px;font-size:18px;line-height:1.55;max-width:38ch}
+.opt{border-top:1px solid var(--line);padding:18px 0}
+.opt>.lbl{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.o{background:none;border:1px solid var(--line);color:inherit;padding:11px 14px;cursor:pointer;font:400 14px var(--sans);letter-spacing:.04em}
+.o:hover{border-color:var(--ink)}
+.o[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.specs{list-style:none;margin:0 0 22px;padding:0;border-top:1px solid var(--line)}
+.specs li{padding:9px 0;border-bottom:1px solid var(--line)}
+.buy{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:16px 22px}
+.buy:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.note{margin:14px 0 0;font-size:14px;max-width:40ch}
+@media (max-width:900px){.tiers{grid-template-columns:minmax(0,1fr)}.drive{grid-template-columns:minmax(0,1fr)}.dvis{min-height:320px}}
+@media (max-width:640px){
+  .trow{grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"pl tt lic" "pl ref tm"}
+  .trow .pl{grid-area:pl}.trow .tt{grid-area:tt}.trow .ref{grid-area:ref}.trow .tm{grid-area:tm;justify-self:end}.trow .tl2{grid-area:lic;justify-self:end}
+  .usb{transform:rotate(-14deg) scale(.82)}.cd{transform:scale(.85)}
+}
+@media (prefers-reduced-motion:reduce){.cd .disc{animation:none}}
 </style>
 </head>
 <body>
@@ -312,51 +348,55 @@ legend{padding:0;margin-bottom:14px}
 <header>
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a><a href="audio.html"><span class="sl">/</span>Audio</a></nav>
-    <div class="hr"><a class="lbl cta" href="#top" aria-current="page">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a><a href="#top" aria-current="page"><span class="sl">/</span>Audio</a></nav>
+    <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
 
-<main id="top" class="cpage">
+<main id="top" class="apage">
   <div class="wrap">
     <div class="ghead">
       <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
-      <h2>Format <span class="sl">/</span> Contact</h2>
-      <div class="lbl m">Studio / Archive / FabLab / Audio</div>
-      <p class="m">Tell us what you're working on. Pick a service, add a few details, and we'll reply by email.</p>
-      <p class="m p2">Prefer a call or text? Leave your number and we'll reach out that way.</p>
+      <h2>Format <span class="sl">/</span> Audio</h2>
+      <div class="lbl m">Tracks / Licensing / Blind Drive</div>
+      <p class="m">Unreleased music made at FORMAT. Preview a track, license it for your project, or download it to keep.</p>
       <span class="tick"></span>
     </div>
-    <div class="cgrid">
-      <div class="cinfo">
-        <h2 style="margin:0;font-size:clamp(26px,3.2vw,42px);letter-spacing:.12em">Same world.<br>Different format.</h2>
-        <div class="lbl m">Email</div><p class="em"><span id="emAddr">afleming888@gmail.com</span><button class="cpy lbl" id="cpy" type="button">Copy</button></p>
-        <div class="lbl m">Studio</div><p>Houston, TX</p>
+
+    <section class="tracks" aria-labelledby="tracksH">
+      <div class="shead"><h3 id="tracksH" class="lbl">Tracks</h3><span class="lbl m" id="tCount"></span></div>
+      <ol class="tlist" id="tlist"></ol>
+      <p class="tnote m" id="tnote">Previews are 30-second clips. Full-quality WAV and MP3 files are delivered after purchase.</p>
+    </section>
+
+    <section class="lic" id="license" aria-labelledby="licH">
+      <div class="shead"><h3 id="licH" class="lbl">Licensing</h3><span class="lbl m">Per track</span></div>
+      <div class="tiers" id="tiers"></div>
+      <p class="excl m">Need exclusive rights, a custom edit or stems? <a href="contact.html#s=audio">Ask about it</a>.</p>
+    </section>
+
+    <section class="drive" id="blind-drive" aria-labelledby="driveH">
+      <div class="dvis" aria-hidden="true">
+        <div class="obj usb" id="objUsb"><i class="cap"></i><i class="body"><b>FORMAT</b><span>05</span></i></div>
+        <div class="obj cd" id="objCd" hidden><i class="case"></i><i class="disc"><b>FORMAT</b><span>05 / ?</span></i></div>
+        <div class="dtag lbl">Contents unknown</div>
       </div>
-      <div>
-        <div class="dmtop"><p class="dm">For direct contact, DM me on Instagram</p><p class="igl"><a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">@andrewlfleming</a></p></div>
-        <form class="cform" id="cform" novalidate>
-          <fieldset>
-            <legend class="lbl">What can we help with? <span class="m">Required</span></legend>
-            <div class="svc" id="svc" role="group" aria-label="Service"><button type="button" data-s="photo" aria-pressed="false">Photo</button><button type="button" data-s="video" aria-pressed="false">Video</button><button type="button" data-s="fpv" aria-pressed="false">FPV</button><button type="button" data-s="advisory" aria-pressed="false">Advisory</button><button type="button" data-s="prints" aria-pressed="false">Prints + licensing</button><button type="button" data-s="fablab" aria-pressed="false">FabLab</button><button type="button" data-s="audio" aria-pressed="false">Audio</button><button type="button" data-s="other" aria-pressed="false">Something else…</button></div>
-          </fieldset>
-          <div class="other" id="otherWrap" hidden><input id="other" name="other" placeholder="What do you have in mind?" aria-label="What do you have in mind?" maxlength="120"></div>
-          <div class="row2">
-            <input name="name" placeholder="Name" autocomplete="name" aria-label="Name" required>
-            <input name="email" type="email" placeholder="Email" autocomplete="email" aria-label="Email" required>
+      <div class="dinfo">
+        <div class="lbl m">Physical / Limited</div>
+        <h3 id="driveH">Blind Drive</h3>
+        <p class="dlede">Five unreleased tracks, picked at random. Some hit. Some don't. You won't know which five until you press play.</p>
+        <div class="opt">
+          <div class="lbl">Format <span class="m" id="fmtName">USB flash drive</span></div>
+          <div class="opts" id="fmtOpts" role="group" aria-label="Format">
+            <button class="o" type="button" data-f="usb" aria-pressed="true">USB flash drive</button>
+            <button class="o" type="button" data-f="cd" aria-pressed="false">CD with case</button>
           </div>
-          <div class="row2">
-            <input name="phone" type="tel" placeholder="Phone (optional)" autocomplete="tel" aria-label="Phone, optional">
-            <input name="timeline" placeholder="Timeline (optional)" aria-label="Timeline, optional">
-          </div>
-          <textarea name="message" placeholder="Tell us about the project" aria-label="Message" required></textarea>
-          <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
-          <button class="send lbl" type="submit" id="send">Send message <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
-          <p class="cstat m" id="cstat" role="status"></p>
-        </form>
-        <div class="done" id="done" hidden tabindex="-1"><h3>Message sent.</h3><p id="doneP">Thanks. We'll be in touch soon.</p></div>
+        </div>
+        <ul class="specs lbl m" id="dspecs"></ul>
+        <a class="buy lbl" id="driveBuy" href="contact.html#s=audio"><span id="driveBuyT">Request a Blind Drive</span> <span id="drivePrice">Price soon</span></a>
+        <p class="note m" id="driveNote">Ships from Houston, TX. No two drives are guaranteed to match.</p>
       </div>
-    </div>
+    </section>
   </div>
 </main>
 
@@ -366,6 +406,7 @@ legend{padding:0;margin-bottom:14px}
     <div class="links">
       <a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.facebook.com/" target="_blank" rel="noopener" data-todo="facebook-profile-url">Facebook</a>
+      <a href="contact.html">Contact</a>
     </div>
   </div>
 </footer>
@@ -389,41 +430,75 @@ legend{padding:0;margin-bottom:14px}
   // links to the other FORMAT pages open at the top level
   function go(u){try{window.top.location.href=u}catch(e){window.open(u,'_blank','noopener')}}
   [].slice.call(document.querySelectorAll('a[data-ext]')).forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();go(a.href)})});
-  // email address: copy button, no mail app
-  var cpy=document.getElementById('cpy'),em=document.getElementById('emAddr');
-  function sel(){var r=document.createRange();r.selectNodeContents(em);var w=getSelection();w.removeAllRanges();w.addRange(r)}
-  cpy.addEventListener('click',function(){var t=em.textContent;function ok(){cpy.textContent='Copied';setTimeout(function(){cpy.textContent='Copy'},1800)}
-    try{navigator.clipboard.writeText(t).then(ok,function(){sel();cpy.textContent='Selected'})}catch(e){sel();cpy.textContent='Selected'}});
-  // contact form: sends in the background to the lead sheet + email, never opens a mail app
-  var ENDPOINT="";
-  var NAMES={photo:'Photo',video:'Video',fpv:'FPV',advisory:'Advisory',prints:'Prints + licensing',fablab:'FabLab',audio:'Audio',other:'Something else'};
-  var form=document.getElementById('cform'),svc=document.getElementById('svc'),ow=document.getElementById('otherWrap'),other=document.getElementById('other');
-  var stat=document.getElementById('cstat'),send=document.getElementById('send'),chosen=null;
-  function pick(k){chosen=k;[].slice.call(svc.children).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.s===k)});ow.hidden=k!=='other';other.required=k==='other';if(k==='other')other.focus()}
-  [].slice.call(svc.children).forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.s);stat.textContent=''})});
-  // pre-select from links like contact#s=video&m=...
-  var q=new URLSearchParams((location.hash||'').replace(/^#/,'')+'&'+location.search.replace(/^\?/,''));
-  if(NAMES[q.get('s')])pick(q.get('s'));
-  if(q.get('m'))form.message.value=q.get('m');
-  function bad(el,msg){el.setAttribute('aria-invalid','true');stat.textContent=msg;el.focus();return false}
-  function check(){
-    [].slice.call(form.querySelectorAll('[aria-invalid]')).forEach(function(el){el.removeAttribute('aria-invalid')});
-    if(!chosen){stat.textContent='Choose what you need help with.';svc.firstChild.focus();return false}
-    if(chosen==='other'&&!other.value.trim())return bad(other,'Tell us what you have in mind.');
-    if(!form.name.value.trim())return bad(form.name,'Add your name.');
-    if(!/\S+@\S+\.\S+/.test(form.email.value))return bad(form.email,'Add a valid email.');
-    if(!form.message.value.trim())return bad(form.message,'Add a short message.');
-    return true;
+  // ---- Format / Audio: fill these in as tracks, prices and checkout links are ready ----
+  var CONTACT='contact.html#s=audio';
+  // preview: a short MP3 clip (data: URI or an uploaded asset URL). Leave '' until the clip exists.
+  var TRACKS=[
+    // {ref:'A01', title:'Track title', bpm:'92', key:'F min', len:'3:41', preview:''},
+  ];
+  var SLOTS=3; // placeholder rows shown while TRACKS is empty
+  // price: '$25' etc. checkout: a Gumroad or Stripe link. Empty values show "Price soon" and send buyers to Contact.
+  var TIERS=[
+    {id:'download',name:'Download',price:'',checkout:'',points:['Full track, WAV + MP3','Personal listening','No use in published content']},
+    {id:'creator',name:'Creator license',price:'',checkout:'',points:['Download included','YouTube, socials, podcasts, streams','One channel or creator, monetized OK']},
+    {id:'commercial',name:'Commercial license',price:'',checkout:'',points:['Download included','Ads, brand films, client work','Paid media and broadcast']}
+  ];
+  var DRIVE={
+    usb:{name:'USB flash drive',price:'',checkout:'',specs:['5 unreleased tracks, picked at random','WAV + MP3 on a FORMAT drive','Plays on any computer']},
+    cd:{name:'CD with case',price:'',checkout:'',specs:['5 unreleased tracks, picked at random','Audio CD in a clear jewel case','Plays in CD players and cars']}
+  };
+
+  var tl=document.getElementById('tlist'),PLAY='<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2.5 1.2v9.6L10.5 6z"/></svg>',PAUSE='<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2.5 1.5h2.6v9H2.5zM6.9 1.5h2.6v9H6.9z"/></svg>';
+  var audio=new Audio(),playing=null;
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+  function stop(){if(!playing)return;audio.pause();playing.btn.setAttribute('aria-pressed','false');playing.btn.innerHTML=PLAY;playing.btn.setAttribute('aria-label','Play preview of '+playing.t.title);playing.bar.style.width='0';playing=null}
+  audio.addEventListener('timeupdate',function(){if(playing&&audio.duration)playing.bar.style.width=(audio.currentTime/audio.duration*100)+'%'});
+  audio.addEventListener('ended',stop);
+  function row(t,i){
+    var li=el('li','trow'+(t?'':' soon')),btn=el('button','pl'),bar=el('i','prog');
+    btn.type='button';btn.innerHTML=PLAY;
+    var ref=el('span','lbl m ref','FMT-'+(t?t.ref:'A'+String(i+1).padStart(2,'0')));
+    var tt=el('div','tt'),tn=el('div','tn',t?t.title:'Coming soon');tt.appendChild(tn);
+    var tm=el('span','lbl m tm',t?[t.bpm&&t.bpm+' BPM',t.key,t.len].filter(Boolean).join(' / '):'Unreleased');
+    var lic=el('button','tl2 lbl',t?'License':'Soon');lic.type='button';
+    if(t&&t.preview){btn.setAttribute('aria-label','Play preview of '+t.title);btn.setAttribute('aria-pressed','false');
+      btn.addEventListener('click',function(){var same=playing&&playing.btn===btn;stop();if(same)return;audio.src=t.preview;var r=audio.play();if(r&&r.catch)r.catch(function(){});playing={btn:btn,bar:bar,t:t};btn.setAttribute('aria-pressed','true');btn.innerHTML=PAUSE;btn.setAttribute('aria-label','Pause preview of '+t.title)})}
+    else{btn.disabled=true;btn.setAttribute('aria-label','Preview not available yet')}
+    if(t)lic.addEventListener('click',function(){picked(t)});else lic.disabled=true;
+    [btn,ref,tt,tm,lic,bar].forEach(function(n){li.appendChild(n)});return li;
   }
-  form.addEventListener('submit',function(e){
-    e.preventDefault();if(!check())return;
-    var d={service:chosen==='other'?'Something else: '+other.value.trim():NAMES[chosen],name:form.name.value.trim(),email:form.email.value.trim(),phone:form.phone.value.trim(),timeline:form.timeline.value.trim(),message:form.message.value.trim(),website:form.website.value,page:'contact'};
-    if(!ENDPOINT){stat.textContent='The form isn\u2019t connected yet. Please email afleming888@gmail.com for now.';return}
-    send.disabled=true;stat.textContent='Sending\u2026';
-    fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d)})
-      .then(function(){form.hidden=true;var dn=document.getElementById('done');document.getElementById('doneP').textContent='Thanks, '+d.name.split(' ')[0]+'. We\u2019ll reply to '+d.email+' soon.';dn.hidden=false;dn.focus()})
-      .catch(function(){send.disabled=false;stat.textContent='That didn\u2019t send. Please try again, or email afleming888@gmail.com.'});
+  if(TRACKS.length){TRACKS.forEach(function(t,i){tl.appendChild(row(t,i))});document.getElementById('tCount').textContent=TRACKS.length+(TRACKS.length===1?' track':' tracks')}
+  else{for(var i=0;i<SLOTS;i++)tl.appendChild(row(null,i));document.getElementById('tCount').textContent='First tracks coming soon'}
+
+  // license tiers
+  var tiersEl=document.getElementById('tiers'),cards={};
+  function setBuy(a,checkout,fallbackText,buyText){
+    if(checkout){a.href=checkout;a.target='_blank';a.rel='noopener';a.removeAttribute('data-ext');a.firstChild.textContent=buyText}
+    else{a.href=CONTACT;a.removeAttribute('target');a.setAttribute('data-ext','');a.firstChild.textContent=fallbackText}
+  }
+  TIERS.forEach(function(t){
+    var c=el('div','tier');c.id='tier-'+t.id;
+    c.appendChild(el('h4',null,t.name));
+    c.appendChild(el('div','pr'+(t.price?'':' tbd'),t.price||'Price soon'));
+    var ul=el('ul');t.points.forEach(function(p){ul.appendChild(el('li',null,p))});c.appendChild(ul);
+    var a=el('a','gt lbl');a.appendChild(document.createTextNode(''));a.insertAdjacentHTML('beforeend','<svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg>');
+    setBuy(a,t.checkout,t.id==='download'?'Request download':'Request license',t.id==='download'?'Buy download':'Buy license');
+    c.appendChild(a);tiersEl.appendChild(c);cards[t.id]=c;
   });
+  function picked(t){document.getElementById('licH').textContent='Licensing: '+t.title;var s=document.getElementById('license');s.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+
+  // Blind Drive format switch
+  var fb=[].slice.call(document.querySelectorAll('#fmtOpts .o')),buy=document.getElementById('driveBuy');
+  function fmt(k){var d=DRIVE[k];fb.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.f===k)});
+    document.getElementById('fmtName').textContent=d.name;document.getElementById('objUsb').hidden=k!=='usb';document.getElementById('objCd').hidden=k!=='cd';
+    var sp=document.getElementById('dspecs');sp.innerHTML='';d.specs.forEach(function(s){sp.appendChild(el('li',null,s))});
+    document.getElementById('drivePrice').textContent=d.price||'Price soon';
+    setBuy(buy,d.checkout,'Request a Blind Drive','Order Blind Drive');
+  }
+  fb.forEach(function(b){b.addEventListener('click',function(){fmt(b.dataset.f)})});
+  fmt('usb');
+  // re-bind page links created above
+  [].slice.call(document.querySelectorAll('a[data-ext]')).forEach(function(a){if(a._b)return;a._b=1;a.addEventListener('click',function(e){if(!a.hasAttribute('data-ext'))return;e.preventDefault();go(a.href)})});
 })();
 </script>
 </body>

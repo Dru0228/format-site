@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>FORMAT / Archive</title>
-<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, and FabLab apparel.">
+<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, FabLab apparel, and Format / Audio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
@@ -250,7 +250,7 @@ body.sub main{display:none}
 <header>
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="#top" aria-current="page" data-r="archive"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a></nav>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="#top" aria-current="page" data-r="archive"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a><a href="audio.html"><span class="sl">/</span>Audio</a></nav>
     <div class="hr"><a class="lbl cta" href="index.html#contact">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
@@ -369,7 +369,7 @@ body.sub main{display:none}
     <div class="links">
       <a href="https://www.instagram.com/andrewlfleming/" target="_blank" rel="noopener">Instagram</a>
       <a href="https://www.facebook.com/" target="_blank" rel="noopener" data-todo="facebook-profile-url">Facebook</a>
-      <a href="mailto:afleming888@gmail.com">Email</a>
+      <a href="contact.html">Contact</a>
     </div>
   </div>
 </footer>
@@ -456,10 +456,9 @@ body.sub main{display:none}
   lb.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(idx+(dx<0?1:-1));sx=null});
   lbFav.addEventListener('click',function(){var k=favs.indexOf(cur);if(k>-1)favs.splice(k,1);else favs.push(cur);saveFavs();show(idx)});
 
-  // License / Purchase a print open an email with the photo filled in
+  // License / Purchase a print open the Contact form with the photo filled in
   function request(kind,ask){var t=caps[cur][0],ref='FMT-'+String(cur+1).padStart(3,'0');
-    var url='mailto:afleming888@gmail.com?subject='+encodeURIComponent(kind+': '+t+' ('+ref+')')+'&body='+encodeURIComponent('Photo: '+t+' ('+ref+')\n\n'+ask+'\n\nName:\n');
-    try{window.top.location.href=url}catch(err){window.location.href=url}}
+    go('contact.html#s=prints&m='+encodeURIComponent(kind+': '+t+' ('+ref+')\n\n'+ask+'\n'))}
   document.getElementById('lbLic').addEventListener('click',function(){request('License request','How and where will the photo be used?')});
   document.getElementById('lbPrint').addEventListener('click',function(){request('Print order','Size and finish you have in mind:')});
   applyFilter();
