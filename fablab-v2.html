@@ -208,6 +208,22 @@ footer{border-top:0}
 .wl button:hover{background:var(--ink);color:var(--paper)}
 .wl .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .wl .ok{margin:10px 0 0;font-size:14px}
+
+.announce{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px 32px;margin:0 0 clamp(28px,4vw,48px);padding:20px 22px;border:1px solid var(--accent)}
+.announce[hidden]{display:none}
+.announce .lbl{color:var(--accent)}
+.announce p{margin:8px 0 0;max-width:62ch}
+.run{display:block;margin-top:6px}
+.o small{font-size:11px;letter-spacing:.06em;color:var(--mute)}
+.o.sz{flex-direction:column;gap:2px;min-width:64px}
+.o:disabled{opacity:.45;cursor:not-allowed}
+.o:disabled:hover{border-color:var(--line)}
+.ordf[hidden]{display:none}
+.ordf label.lbl{display:block;margin:16px 0 8px}
+.ordf input[type=text],.ordf input[type=email]{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px;font:400 16px var(--sans);border-radius:0}
+.ordf input:focus{border-color:var(--ink);outline:0}
+.ordf .buy{margin-top:20px}
+.ordf .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 @media (max-width:820px){.t3{grid-template-columns:1fr}.pgrid.pre{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.pgrid.pre{grid-template-columns:1fr}.pgrid.pre .ph{aspect-ratio:1/1}.wl .row{flex-direction:column}.wl button{padding:12px 16px}}
 </style>
@@ -237,10 +253,11 @@ footer{border-top:0}
 
     <section class="sec" id="preorder" aria-labelledby="preH">
       <div class="sech">
-        <div class="lbl m">FabLab Drop, 2026 Q4 / Now in production</div>
+        <div class="lbl m">FabLab Drop, 2026 Q4 / Pre-drop</div>
         <h3 id="preH">Pre-order</h3>
-        <p class="m">Limited to 50 per piece. When a piece sells out, it's gone until the next drop.</p>
+        <p class="m">Small runs. When a piece or a size sells out, it's gone until the next drop.</p>
       </div>
+      <div id="announce" hidden></div>
       <div class="pgrid pre" id="pgridPre"></div>
     </section>
 
@@ -278,11 +295,19 @@ footer{border-top:0}
     <p class="t" id="shT"></p>
     <div class="shs stock" id="shStock" hidden><div class="lbl"><span id="shStockT"></span></div><div class="sbar"><i id="shStockB"></i></div></div>
     <div class="lbl m age" id="shAge" hidden style="margin:-14px 0 24px"></div>
+    <p class="lbl m run" id="shRun" hidden style="margin:-14px 0 24px"></p>
     <div class="opt"><div class="lbl"><span id="colLbl">Color</span><span class="m" id="shCol"></span></div><div class="opts" id="cols" role="group" aria-label="Color"></div></div>
     <div class="opt" id="sizeOpt"><div class="lbl"><span>Size</span><span class="m" id="shSize">Choose a size</span></div><div class="opts" id="sizes" role="group" aria-label="Size"></div></div>
     <button class="buy lbl vote" id="vote" type="button" aria-pressed="false" hidden><span id="voteT">Vote for this piece</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
-    <button class="buy lbl" id="buy" type="button">Request to order <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
-    <p class="note m" id="note"></p>
+    <form class="ordf" id="ordF" novalidate>
+      <label class="lbl" for="ordN">Name</label>
+      <input type="text" id="ordN" name="name" autocomplete="name" maxlength="120">
+      <label class="lbl" for="ordE">Email</label>
+      <input type="email" id="ordE" name="email" autocomplete="email" inputmode="email" placeholder="So we can confirm with you" maxlength="200">
+      <input class="hp" type="text" id="ordH" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="buy lbl" id="buy" type="submit"><span id="buyT">Submit my size</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+    </form>
+    <p class="note m" id="note" role="status"></p>
     <form class="wl" id="wl" novalidate>
       <label class="lbl" for="wlE" id="wlL"></label>
       <div class="row"><input type="email" id="wlE" name="email" placeholder="you@email.com" autocomplete="email" inputmode="email" required><input class="hp" type="text" id="wlH" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="lbl" type="submit" id="wlB">Join</button></div>
@@ -309,6 +334,8 @@ footer{border-top:0}
   // ---- settings you edit ----
   var ENDPOINT='';                              // FabLab Apps Script web app URL (see README)
   var PRE=['signal-tee','polo','core-hoodie'];  // pre-order pieces until the sheet says otherwise
+  var RUN={'core-hoodie':{per:10,sizes:{S:1,M:3,L:3,XL:2,XXL:1}}};  // fixed size runs; the sheet's Sizes tab is the source of truth
+  var MAXP=2;                                   // units one person can hold per piece (matches the sheet script)
   var CAP=50;                                   // units per pre-order piece until the sheet says otherwise
   var SINCE='2026-10-02';                       // "on the board since" until the sheet says otherwise
   var SIZES=['S','M','L','XL','XXL'];
@@ -357,9 +384,12 @@ footer{border-top:0}
   }
 
   // live numbers from the sheet: stock, top 3, status, listed dates
-  var live={stock:{},top:null,status:{},since:{}};
+  var live={stock:{},v:{},top:null,status:{},since:{}};
   function isPre(p){var s=live.status[p.k];return s?s==='Pre-order':PRE.indexOf(p.k)>-1}
-  function capOf(k){return(live.stock[k]&&live.stock[k].cap)||CAP}
+  function capOf(k){return(live.stock[k]&&live.stock[k].cap)||(RUN[k]?RUN[k].per*byKey[k].col.length:CAP)}
+  function vcell(k,c,s){var v=live.v[k];if(!v)return null;var x=v[c]&&v[c][s];return x?Math.max(0,x[0]-x[1]):0}
+  function colLeft(k,c){var v=live.v[k]&&live.v[k][c];if(!v)return null;var n=0;Object.keys(v).forEach(function(s){n+=Math.max(0,v[s][0]-v[s][1])});return n}
+  function rid(){var a=new Uint8Array(10);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(var i=0;i<10;i++)a[i]=Math.random()*256;return[].map.call(a,function(b){return('0'+b.toString(16)).slice(-2)}).join('')}
   function left(k){var s=live.stock[k];return s?Math.max(0,capOf(k)-(s.sold||0)):null}
   function stockInfo(k){
     var l=left(k),cap=capOf(k);
@@ -392,6 +422,7 @@ footer{border-top:0}
     DATA.forEach(function(p){
       var b=card(p);
       if(isPre(p)){
+        if(RUN[p.k])b.appendChild(el('span','lbl m run',RUN[p.k].per*p.col.length+' made. '+RUN[p.k].per+' per color.'));
         var st=el('div','stock');st.appendChild(el('div','lbl')).appendChild(el('span'));
         var bar=el('div','sbar');bar.appendChild(el('i'));st.appendChild(bar);b.appendChild(st);
         gp.appendChild(b);preCards.push(b);
@@ -400,7 +431,19 @@ footer{border-top:0}
         gc.appendChild(b);conCards.push(b);
       }
     });
-    refreshCards();buildChips();renderTop();
+    refreshCards();buildChips();renderTop();renderAnnounce();
+  }
+  function renderAnnounce(){
+    var box=$('announce');box.innerHTML='';var any=false;
+    preCards.forEach(function(b){
+      var p=byKey[b.dataset.k],r=RUN[p.k];if(!r)return;any=true;
+      var wrap=el('div','announce'),txt=el('div'),n=r.per*p.col.length;
+      txt.appendChild(el('span','lbl','Pre-drop / '+p.n));
+      txt.appendChild(el('p','','Only '+n+' '+p.n+'s will be made: '+r.per+' in each color ('+p.col.join(', ')+'). If you need a specific size in a specific color, tell us now or forever hold your peace. When a size is gone, it\u2019s gone.'));
+      var go2=el('button','gt lbl','Pick my size');go2.type='button';go2.addEventListener('click',function(){open(p,b)});
+      wrap.appendChild(txt);wrap.appendChild(go2);box.appendChild(wrap);
+    });
+    box.hidden=!any;
   }
   function refreshCards(){
     preCards.forEach(function(b){
@@ -457,16 +500,36 @@ footer{border-top:0}
 
   // ---- product sheet ----
   var sh=$('sh'),shImg=$('shImg'),thumbs=$('thumbs'),colsEl=$('cols'),sizesEl=$('sizes');
-  var cur=null,color=null,size=null,last=null,pics=[];
+  var cur=null,color=null,size=null,last=null,pics=[],ordRef='';
   function setPic(i){shImg.src=IMG[pics[i]];shImg.alt=cur.n+(i?' detail board '+i:' mockup');[].slice.call(thumbs.children).forEach(function(t,k){t.setAttribute('aria-pressed',k===i)})}
   function showColor(c){if(!cur.cw)return;var k=cur.cw[c],i=k?pics.indexOf(k):0;if(i>-1)setPic(i)}
   function pick(box,val){[].slice.call(box.children).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===val)})}
-  function sizeNote(){$('note').textContent=stockInfo(cur.k).out?'This run is sold out. Join the waitlist below.':'FW26 pre-order. We confirm price, fit and timing by email.'}
+  var NOTE_PRE='No payment now. We confirm price, fit and timing by email.';
   function stockBlock(){
     var i=stockInfo(cur.k),box=$('shStock');
     box.hidden=false;$('shStockT').textContent=i.t;$('shStockT').className=i.low?'low':'';$('shStockB').style.width=i.pct+'%';
-    var buy=$('buy');buy.disabled=i.out;
-    sizeNote();
+    paintPre();
+  }
+  // colors and sizes for a pre-order piece: counts left, sold out ones greyed out
+  function paintPre(){
+    if(!isPre(cur))return;
+    [].slice.call(colsEl.children).forEach(function(b){
+      var l=colLeft(cur.k,b.dataset.v),sm=b.querySelector('small');
+      if(!sm){sm=el('small');b.appendChild(sm)}
+      sm.textContent=l===null?'':(l===0?'Sold out':l+' left');b.disabled=l===0;
+    });
+    if(colLeft(cur.k,color)===0){var f=cur.col.filter(function(c){return colLeft(cur.k,c)!==0})[0];if(f){color=f;showColor(f)}}
+    pick(colsEl,color);$('shCol').textContent=color;
+    [].slice.call(sizesEl.children).forEach(function(b){
+      var l=vcell(cur.k,color,b.dataset.v),sm=b.querySelector('small');
+      if(!sm){sm=el('small');b.appendChild(sm)}
+      sm.textContent=l===null?'':(l===0?'Sold out':l+' left');b.disabled=l===0;
+      if(b.disabled&&size===b.dataset.v){size=null;$('shSize').textContent='Choose a size'}
+    });
+    pick(sizesEl,size||'');
+    var out=stockInfo(cur.k).out||cur.col.every(function(c){return colLeft(cur.k,c)===0});
+    $('buy').disabled=out;$('buyT').textContent=out?'Sold out':'Submit my size';
+    if(out)$('note').textContent='Sold out. Join the waitlist below.';
   }
   function colorVoted(){return mine[cur.k]&&mine[cur.k].color}
   function paintVote(){
@@ -500,7 +563,7 @@ footer{border-top:0}
       var b=el('button','o');b.type='button';b.dataset.v=c;b.appendChild(dot(c));b.appendChild(document.createTextNode(c));
       b.addEventListener('click',function(){
         showColor(c);
-        if(isPre(cur)){color=c;pick(colsEl,c);$('shCol').textContent=c;return}
+        if(isPre(cur)){color=c;$('note').textContent=NOTE_PRE;paintPre();return}
         if(colorVoted())return;
         mine[cur.k]=mine[cur.k]||{};mine[cur.k].color=c;wr('format-votes',mine);
         send({action:'vote',item:cur.k,kind:'color',value:c});track('fablab/vote-color/'+cur.k);paintVote();
@@ -509,10 +572,11 @@ footer{border-top:0}
     });
     $('sizeOpt').hidden=!(pre&&p.sz);
     sizesEl.innerHTML='';
-    SIZES.forEach(function(s){var b=el('button','o',s);b.type='button';b.dataset.v=s;b.addEventListener('click',function(){size=s;pick(sizesEl,s);$('shSize').textContent=s;sizeNote()});sizesEl.appendChild(b)});
+    SIZES.forEach(function(s){var b=el('button','o sz',s);b.type='button';b.dataset.v=s;b.addEventListener('click',function(){size=s;pick(sizesEl,s);$('shSize').textContent=s;$('note').textContent=NOTE_PRE});sizesEl.appendChild(b)});
     pick(sizesEl,size||'');$('shSize').textContent='Choose a size';
-    $('buy').hidden=!pre;$('vote').hidden=pre;
-    if(pre){pick(colsEl,color);$('shCol').textContent=color;stockBlock()}else paintVote();
+    $('ordF').hidden=!pre;$('vote').hidden=pre;ordRef=rid();
+    var run=RUN[p.k];$('shRun').hidden=!(pre&&run);if(pre&&run)$('shRun').textContent=run.per*p.col.length+' made. '+run.per+' per color. Pick a color, then a size.';
+    if(pre){$('note').textContent=NOTE_PRE;pick(colsEl,color);$('shCol').textContent=color;stockBlock()}else paintVote();
 
     // waitlist
     var wl=joined[p.k];
@@ -544,12 +608,31 @@ footer{border-top:0}
     $('wlE').disabled=true;$('wlB').disabled=true;st.hidden=false;
     st.textContent=isPre(cur)?'You’re on the list. We’ll email you when more drop.':'You’re on the list. We’ll email you when '+cur.n+' gets dropped.';
   });
-  $('buy').addEventListener('click',function(){
-    if(stockInfo(cur.k).out)return;
-    if(!size){$('note').textContent='Choose a size first.';sizesEl.firstChild.focus();return}
-    send({action:'order',item:cur.k,color:color,size:size,qty:1});track('fablab/order/'+cur.k);
-    go('contact.html#s=fablab&m='+encodeURIComponent('Order request: '+cur.n+'\nColor: '+color+'\nSize: '+size+'\nQuantity: 1\n\n'));
-    $('note').textContent='Opening the order form…';
+  $('ordF').addEventListener('submit',function(e){
+    e.preventDefault();var n=$('note');
+    if($('ordH').value)return;
+    if(!size){n.textContent='Choose a size first.';sizesEl.firstChild.focus();return}
+    var nm=$('ordN').value.trim(),em=$('ordE').value.trim();
+    if(!nm){n.textContent='Add your name.';$('ordN').focus();return}
+    if(!/^\S+@\S+\.\S+$/.test(em)){n.textContent='Enter a valid email so we can confirm with you.';$('ordE').focus();return}
+    if(!ENDPOINT){n.textContent='Preview only: nothing was sent.';return}
+    var item=cur.k,col=color,sz=size,btn=$('buy');
+    btn.disabled=true;$('buyT').textContent='Submitting\u2026';
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'order',item:item,color:col,size:sz,qty:1,name:nm,email:em,ref:ordRef,client:cid,website:''})})
+    .then(function(r){return r.text()}).then(function(code){
+      code=code.trim();
+      if(code==='ok'){
+        n.textContent='Submitted: '+byKey[item].n+', '+col+', '+sz+'. We\u2019ll email you to confirm.';
+        track('fablab/order/'+item);ordRef=rid();size=null;$('shSize').textContent='Choose a size';
+      }else if(code==='sold_out')n.textContent='Sorry, '+col+' in '+sz+' just sold out. Pick another size.';
+      else if(code==='limit')n.textContent='That\u2019s the limit: '+MAXP+' per person for this piece.';
+      else if(code==='rate_limited')n.textContent='Too many tries. Wait a few minutes and try again.';
+      else n.textContent='Something went wrong. Try again, or email info@madebyformat.com.';
+      return pull();
+    }).catch(function(){
+      n.textContent='We couldn\u2019t confirm that went through. Try again; submitting twice won\u2019t double up.';
+    }).then(function(){if(!sh.hidden&&isPre(cur))paintPre()});
   });
 
   // ---- go ----
@@ -557,11 +640,11 @@ footer{border-top:0}
   build();
   var dirty=false;
   function pull(){
-    if(!ENDPOINT)return;
-    fetch(ENDPOINT+'?action=summary').then(function(r){return r.json()}).then(function(d){
+    if(!ENDPOINT)return Promise.resolve();
+    return fetch(ENDPOINT+'?action=summary').then(function(r){return r.json()}).then(function(d){
       if(!d||!d.ok)return;
       var was=DATA.map(isPre).join();
-      live={stock:d.stock||{},top:d.top||{},status:d.status||{},since:d.since||{}};
+      live={stock:d.stock||{},v:d.variants||{},top:d.top||{},status:d.status||{},since:d.since||{}};
       if(DATA.map(isPre).join()!==was){if(sh.hidden)build();else dirty=true}
       else{refreshCards();renderTop()}
       if(!sh.hidden&&isPre(cur))stockBlock();
