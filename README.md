@@ -78,7 +78,7 @@ The previous page is kept as `fablab-v1.html` (hidden from search engines). To r
 1. Create a Google Sheet named **FORMAT FabLab**.
 2. **Extensions → Apps Script**, delete the sample code, paste in `apps-script/FabLab.gs`, save. Open it from the sheet's own **Extensions** menu, not from script.google.com: a standalone script is not attached to the sheet and every vote and signup fails.
 3. Reload the sheet, then use the new **FabLab → Set up / refresh dashboard** menu (approve the permissions). This creates the Items, Sizes, Votes, Waitlist, Orders and Dashboard tabs. If you already ran setup before the size-run update, paste in the new `FabLab.gs`, run setup again, and deploy a **new version** (Deploy → Manage deployments → Edit → New version) so the URL stays the same.
-Votes, waitlist signups and pre-orders each email `NOTIFY_EMAIL` (top of `FabLab.gs`) and keep the visitor's optional note in a Message column. After pasting the script, run `setup` once so Google asks to approve the mail permission.
+Pre-orders email `NOTIFY_EMAIL` (top of `FabLab.gs`) right away. Votes, color and size picks, notes and waitlist signups are collected into one **daily summary email** (around 8 pm, `DIGEST_HOUR`; nothing is sent on a quiet day), and the sheet records every action, including the visitor's optional note in a Message column. FabLab → Email me the last 24 hours now sends it on demand. After pasting the script, run `setup` once so Google asks to approve the mail and trigger permissions. Setup also installs the daily trigger.
 4. **Deploy → New deployment → Web app**, Execute as **Me**, access **Anyone**. Copy the URL.
 5. In `fablab.html` set `ENDPOINT` (top of the script) to that URL. The "Preview" banner disappears once it is set.
 

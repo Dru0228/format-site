@@ -13,8 +13,8 @@
  *   4. Serves the live numbers the site needs (stock left, top 3 concepts by
  *      day / week / month / year, how long each concept has been listed).
  *
- * Votes, waitlist signups and pre-orders each email NOTIFY_EMAIL and can carry an
- * optional visitor message (saved in a Message column).
+ * Pre-orders email NOTIFY_EMAIL right away. Votes, picks, notes and waitlist signups are collected into one daily summary email. Visitors can also leave
+ * an optional note (saved in a Message column).
  *
  * It also builds the Dashboard tab (tables and charts). Setup steps are in
  * README.md under "FabLab voting, waitlist and stock".
@@ -29,6 +29,7 @@ var TAB_DASH = 'Dashboard';
 
 var DEFAULT_CAP = 50;              // units per pre-order piece when Items > Cap is blank
 var NOTIFY_EMAIL = 'info@madebyformat.com';   // gets an email for every vote, waitlist signup and pre-order
+var DIGEST_HOUR = 20;              // the daily summary email goes out around 8 pm (the script's time zone)
 var MAX_MESSAGE = 1000;            // longest optional visitor note kept
 var MAX_PER_PERSON = 2;            // units one email address can hold per piece
 var SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL', 'One size'];
@@ -40,8 +41,8 @@ var DASH_ROWS = 60;                // how many Items rows the Dashboard table co
 
 var HEADERS = {
   Items: ['Key', 'Name', 'Category', 'Status', 'Cap', 'Listed', 'Colors'],
-  Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message'],
-  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message'],
+  Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message', 'Name'],
+  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message', 'Name'],
   Sizes: ['Item', 'Color', 'Size', 'Cap', 'Taken', 'Left'],
   Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref', 'Message']
 };
@@ -124,6 +125,7 @@ function doPost(e) {
 
 function vote_(key, item, d, client) {
   if (item.status !== 'Concept') return 'invalid';
+  var vname = clean_(d.name, 80);
   var type = d.kind === 'color' ? 'color' : d.kind === 'size' ? 'size' : 'item';
   var color = type === 'item' ? '' : clean_(d.value, 40);   // the Color column holds the picked color or size
   if (type === 'color' && (!color || (item.colors.length && item.colors.indexOf(color) < 0))) return 'invalid';
@@ -140,28 +142,38 @@ function vote_(key, item, d, client) {
         var msg = clean_(d.message, MAX_MESSAGE);
         sh.getRange(i + 2, 4).setValue(noFormula_(color));
         if (msg) sh.getRange(i + 2, 6).setValue(noFormula_(msg));
-        notify_('FORMAT vote: ' + item.name + ' / ' + color + ' (changed)',
-          ['A visitor changed their ' + type + ' pick for ' + item.name + ' to ' + color + '.',
-            msg ? 'Message: ' + msg : ''].join('\n'));
+        if (vname) sh.getRange(i + 2, 7).setValue(noFormula_(vname));
+        nameRows_(sh, key, client, vname);
         return 'ok';
       }
     }
   }
   var message = clean_(d.message, MAX_MESSAGE);
-  sh.appendRow([new Date(), key, type, color, client, message].map(noFormula_));
+  sh.appendRow([new Date(), key, type, color, client, message, vname].map(noFormula_));
+  nameRows_(sh, key, client, vname);
   CacheService.getScriptCache().remove('summary');
-  notify_('FORMAT vote: ' + item.name + (type === 'item' ? '' : ' / ' + color),
-    [type === 'item' ? 'Someone voted for ' + item.name + '.' : (type === 'color' ? 'Color' : 'Size') + ' pick for ' + item.name + ': ' + color,
-      message ? 'Message: ' + message : ''].join('\n'));
   return 'ok';
+}
+
+// Picks made before the visitor typed their name get it filled in once it arrives.
+function nameRows_(sh, key, client, name) {
+  if (!name) return;
+  var n = sh.getLastRow();
+  if (n < 2) return;
+  var rows = sh.getRange(2, 2, n - 1, 6).getValues();   // Item, Type, Color, Visitor, Message, Name
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i][0] === key && rows[i][3] === client && !rows[i][5]) sh.getRange(i + 2, 7).setValue(noFormula_(name));
+  }
 }
 
 // A note sent on its own, without a vote or signup.
 function note_(key, item, d, client) {
   var message = clean_(d.message, MAX_MESSAGE);
   if (!message) return 'invalid';
-  sheet_(TAB_VOTES).appendRow([new Date(), key, 'note', '', client, message].map(noFormula_));
-  notify_('FORMAT note: ' + item.name, 'Note about ' + item.name + ':\n\n' + message);
+  var vname = clean_(d.name, 80);
+  var vsh = sheet_(TAB_VOTES);
+  vsh.appendRow([new Date(), key, 'note', '', client, message, vname].map(noFormula_));
+  nameRows_(vsh, key, client, vname);
   return 'ok';
 }
 
@@ -180,10 +192,9 @@ function waitlist_(key, item, d, client) {
   }
   var list = item.status === 'Pre-order' ? 'Pre-order' : 'Concept';
   var message = clean_(d.message, MAX_MESSAGE);
-  sh.appendRow([new Date(), key, list, email, client, message].map(noFormula_));
-  notify_('FORMAT waitlist: ' + item.name + ' from ' + email,
-    [email + ' joined the ' + list + ' waitlist for ' + item.name + '.',
-      message ? 'Message: ' + message : '', '', '(Reply to this email to answer them.)'].join('\n'), email);
+  var vname = clean_(d.name, 80);
+  sh.appendRow([new Date(), key, list, email, client, message, vname].map(noFormula_));
+  nameRows_(sheet_(TAB_VOTES), key, client, vname);
   return 'ok';
 }
 
@@ -222,13 +233,82 @@ function order_(key, item, d, client) {
   return 'ok';
 }
 
-// Emails NOTIFY_EMAIL. A mail failure (quota, missing permission) never loses the sheet row.
+// Emails NOTIFY_EMAIL right away (used for pre-orders). Votes, picks, notes and waitlist signups go in the daily
+// digest instead. A mail failure (quota, missing permission) never loses the sheet row.
 function notify_(subject, body, replyTo) {
   try {
     var o = { to: NOTIFY_EMAIL, name: 'FORMAT website', subject: subject.replace(/[\r\n]+/g, ' '), body: body };
     if (replyTo) o.replyTo = replyTo;
     MailApp.sendEmail(o);
   } catch (err) { console.error(err); }
+}
+
+// ---------- daily digest ----------
+
+// One email a day (DIGEST_HOUR) with the last 24 hours: votes, color and size picks, notes and waitlist signups.
+// Sends nothing on a quiet day. setup() installs the daily trigger; you can also run this from the FabLab menu.
+function sendDigest_() {
+  var items = readItems_();
+  var since = Date.now() - 24 * 3600 * 1000;
+  var perItem = {}, notes = [], waits = [];
+  function slot(k) { return perItem[k] = perItem[k] || { votes: 0, who: [], colors: {}, sizes: {} }; }
+  function when(v) { return v instanceof Date ? v.getTime() : Date.parse(v); }
+
+  var vs = sheet_(TAB_VOTES), n = vs.getLastRow();
+  if (n >= 2) {
+    vs.getRange(2, 1, n - 1, 7).getValues().forEach(function (r) {
+      if (!(when(r[0]) >= since)) return;
+      var name = items[r[1]] ? items[r[1]].name : r[1], t = r[2], v = r[3], who = r[6] || 'no name';
+      if (t === 'note') notes.push(name + ': ' + r[5] + ' (' + who + ')');
+      else {
+        var o = slot(name);
+        if (t === 'item') { o.votes++; o.who.push(who); }
+        else if (t === 'color') o.colors[v] = (o.colors[v] || 0) + 1;
+        else if (t === 'size') o.sizes[v] = (o.sizes[v] || 0) + 1;
+        if (r[5]) notes.push(name + ': ' + r[5] + ' (' + who + ')');
+      }
+    });
+  }
+  var ws = sheet_(TAB_WAIT), m = ws.getLastRow();
+  if (m >= 2) {
+    ws.getRange(2, 1, m - 1, 7).getValues().forEach(function (r) {
+      if (!(when(r[0]) >= since)) return;
+      var name = items[r[1]] ? items[r[1]].name : r[1];
+      waits.push(name + ': ' + (r[6] || 'no name') + ', ' + r[3]);
+      if (r[5]) notes.push(name + ': ' + r[5] + ' (' + (r[6] || 'no name') + ')');
+    });
+  }
+
+  function tally(o) { return Object.keys(o).map(function (k) { return k + ' x' + o[k]; }).join(', '); }
+  var lines = [];
+  Object.keys(perItem).forEach(function (k) {
+    var o = perItem[k], bits = [];
+    if (o.votes) bits.push(o.votes + (o.votes === 1 ? ' vote' : ' votes') + ' (' + o.who.join(', ') + ')');
+    if (Object.keys(o.colors).length) bits.push('colors: ' + tally(o.colors));
+    if (Object.keys(o.sizes).length) bits.push('sizes: ' + tally(o.sizes));
+    lines.push(k + ' - ' + bits.join('; '));
+  });
+  if (!lines.length && !waits.length && !notes.length) return;
+
+  var body = ['FORMAT FabLab, last 24 hours', '',
+    lines.length ? 'VOTES AND PICKS\n' + lines.join('\n') : '',
+    waits.length ? '\nWAITLIST (' + waits.length + ')\n' + waits.join('\n') : '',
+    notes.length ? '\nNOTES (' + notes.length + ')\n' + notes.join('\n') : '',
+    '\nPre-orders email you right away. Full detail is in the sheet.'].filter(function (x) { return x !== ''; }).join('\n');
+  MailApp.sendEmail({ to: NOTIFY_EMAIL, name: 'FORMAT website', subject: 'FORMAT FabLab daily summary', body: body });
+}
+
+// Run by the daily trigger.
+function sendDigest() {
+  try { sendDigest_(); } catch (err) { console.error(err); }
+}
+
+// Replaces any old digest trigger with one that runs every day around DIGEST_HOUR.
+function installDigestTrigger_() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'sendDigest') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('sendDigest').timeBased().everyDays(1).atHour(DIGEST_HOUR).create();
 }
 
 // Units held per size / piece / email, from every Orders row that is not Cancelled.
@@ -265,6 +345,7 @@ function onEdit(e) {
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('FabLab')
     .addItem('Set up / refresh dashboard', 'setup')
+    .addItem('Email me the last 24 hours now', 'sendDigest')
     .addToUi();
 }
 
@@ -439,6 +520,7 @@ function setup() {
   ss.getSheetByName(TAB_VOTES).getRange(2, 1, 5000, 1).setNumberFormat('yyyy-mm-dd hh:mm');
   ss.getSheetByName(TAB_WAIT).getRange(2, 1, 5000, 1).setNumberFormat('yyyy-mm-dd hh:mm');
 
+  installDigestTrigger_();
   buildDashboard_(ss);
   CacheService.getScriptCache().removeAll(['items', 'sizes', 'summary']);
 }
