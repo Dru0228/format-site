@@ -13,7 +13,7 @@
  *   4. Serves the live numbers the site needs (stock left, top 3 concepts by
  *      day / week / month / year, how long each concept has been listed).
  *
- * Votes, waitlist signups and pre-orders each email NOTIFY_EMAIL and can carry an
+ * Votes, waitlist signups and pre-orders email NOTIFY_EMAIL (one email per visitor per 10 minutes, pre-orders always) and can carry an
  * optional visitor message (saved in a Message column).
  *
  * It also builds the Dashboard tab (tables and charts). Setup steps are in
@@ -29,6 +29,7 @@ var TAB_DASH = 'Dashboard';
 
 var DEFAULT_CAP = 50;              // units per pre-order piece when Items > Cap is blank
 var NOTIFY_EMAIL = 'info@madebyformat.com';   // gets an email for every vote, waitlist signup and pre-order
+var MAIL_WINDOW_SECONDS = 10 * 60;   // one notification email per visitor in this time (pre-orders always send)
 var MAX_MESSAGE = 1000;            // longest optional visitor note kept
 var MAX_PER_PERSON = 2;            // units one email address can hold per piece
 var SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL', 'One size'];
@@ -142,7 +143,7 @@ function vote_(key, item, d, client) {
         if (msg) sh.getRange(i + 2, 6).setValue(noFormula_(msg));
         notify_('FORMAT vote: ' + item.name + ' / ' + color + ' (changed)',
           ['A visitor changed their ' + type + ' pick for ' + item.name + ' to ' + color + '.',
-            msg ? 'Message: ' + msg : ''].join('\n'));
+            msg ? 'Message: ' + msg : ''].join('\n'), '', client, key);
         return 'ok';
       }
     }
@@ -152,7 +153,7 @@ function vote_(key, item, d, client) {
   CacheService.getScriptCache().remove('summary');
   notify_('FORMAT vote: ' + item.name + (type === 'item' ? '' : ' / ' + color),
     [type === 'item' ? 'Someone voted for ' + item.name + '.' : (type === 'color' ? 'Color' : 'Size') + ' pick for ' + item.name + ': ' + color,
-      message ? 'Message: ' + message : ''].join('\n'));
+      message ? 'Message: ' + message : ''].join('\n'), '', client, key);
   return 'ok';
 }
 
@@ -161,7 +162,7 @@ function note_(key, item, d, client) {
   var message = clean_(d.message, MAX_MESSAGE);
   if (!message) return 'invalid';
   sheet_(TAB_VOTES).appendRow([new Date(), key, 'note', '', client, message].map(noFormula_));
-  notify_('FORMAT note: ' + item.name, 'Note about ' + item.name + ':\n\n' + message);
+  notify_('FORMAT note: ' + item.name, 'Note about ' + item.name + ':\n\n' + message, '', client, key);
   return 'ok';
 }
 
@@ -183,7 +184,7 @@ function waitlist_(key, item, d, client) {
   sh.appendRow([new Date(), key, list, email, client, message].map(noFormula_));
   notify_('FORMAT waitlist: ' + item.name + ' from ' + email,
     [email + ' joined the ' + list + ' waitlist for ' + item.name + '.',
-      message ? 'Message: ' + message : '', '', '(Reply to this email to answer them.)'].join('\n'), email);
+      message ? 'Message: ' + message : '', '', '(Reply to this email to answer them.)'].join('\n'), email, client, key);
   return 'ok';
 }
 
@@ -218,17 +219,49 @@ function order_(key, item, d, client) {
   notify_('FORMAT pre-order: ' + item.name + ' / ' + color + ' / ' + size + ' from ' + name,
     [item.name + ', ' + color + ', size ' + size, 'Name: ' + name, 'Email: ' + email,
       message ? 'Message: ' + message : '', '',
-      '(Reply to this email to answer ' + name + '. Set the row to Cancelled in the Orders tab to free the unit.)'].join('\n'), email);
+      '(Reply to this email to answer ' + name + '. Set the row to Cancelled in the Orders tab to free the unit.)'].join('\n'), email, client, key, true);
   return 'ok';
 }
 
-// Emails NOTIFY_EMAIL. A mail failure (quota, missing permission) never loses the sheet row.
-function notify_(subject, body, replyTo) {
+// Emails NOTIFY_EMAIL, at most one email per visitor per MAIL_WINDOW_SECONDS so one visit is not a flood
+// (pre-orders always send). Every email lists what that visitor has done on the piece. The sheet row is
+// always written first, and a mail failure (quota, missing permission) never loses it.
+function notify_(subject, body, replyTo, client, key, always) {
   try {
-    var o = { to: NOTIFY_EMAIL, name: 'FORMAT website', subject: subject.replace(/[\r\n]+/g, ' '), body: body };
+    var cache = CacheService.getScriptCache();
+    var seen = client ? 'm:' + client : '';
+    if (!always && seen && cache.get(seen)) return;
+    if (seen) cache.put(seen, '1', MAIL_WINDOW_SECONDS);
+    var o = { to: NOTIFY_EMAIL, name: 'FORMAT website', subject: subject.replace(/[\r\n]+/g, ' '), body: body + activity_(client, key) };
     if (replyTo) o.replyTo = replyTo;
     MailApp.sendEmail(o);
   } catch (err) { console.error(err); }
+}
+
+// What one visitor has recorded on one piece: votes, picks, notes and waitlist (from the last rows of each tab).
+function activity_(client, key) {
+  try {
+    if (!client || !key) return '';
+    var lines = [];
+    var vs = sheet_(TAB_VOTES), n = vs.getLastRow();
+    if (n >= 2) {
+      var from = Math.max(2, n - 299);
+      vs.getRange(from, 1, n - from + 1, 6).getValues().forEach(function (r) {
+        if (r[1] !== key || r[4] !== client) return;
+        var t = r[2];
+        lines.push(t === 'item' ? 'Voted for the piece' : t === 'color' ? 'Color pick: ' + r[3] : t === 'size' ? 'Size pick: ' + r[3] : 'Note: ' + r[5]);
+        if (t !== 'note' && r[5]) lines.push('Message: ' + r[5]);
+      });
+    }
+    var ws = sheet_(TAB_WAIT), m = ws.getLastRow();
+    if (m >= 2) {
+      var f = Math.max(2, m - 299);
+      ws.getRange(f, 1, m - f + 1, 5).getValues().forEach(function (r) {
+        if (r[1] === key && r[4] === client) lines.push('On the waitlist: ' + r[3]);
+      });
+    }
+    return lines.length ? '\n\n--- Everything this visitor did on this piece ---\n' + lines.join('\n') : '';
+  } catch (err) { console.error(err); return ''; }
 }
 
 // Units held per size / piece / email, from every Orders row that is not Cancelled.
