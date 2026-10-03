@@ -199,6 +199,9 @@ footer{border-top:0}
 .msg textarea:focus{border-color:var(--ink);outline:0}
 .tcap{position:absolute;left:50%;bottom:calc(clamp(16px,3vw,32px) + 84px);transform:translateX(-50%);padding:6px 12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;white-space:nowrap}
 .stage{transition:background .45s}
+.nm input{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px;font:400 16px var(--sans);border-radius:0}
+.nm input:focus{border-color:var(--ink);outline:0}
+.nm .ok{margin:8px 0 0;font-size:14px}
 .mrow{display:flex;align-items:center;gap:12px;margin-top:10px}
 .mrow button{border:1px solid var(--ink);background:none;color:inherit;padding:10px 16px;cursor:pointer}
 .mrow button:hover{background:var(--ink);color:var(--paper)}
@@ -310,6 +313,7 @@ footer{border-top:0}
     <div class="shs stock" id="shStock" hidden><div class="lbl"><span id="shStockT"></span></div><div class="sbar"><i id="shStockB"></i></div></div>
     <div class="lbl m age" id="shAge" hidden style="margin:-14px 0 24px"></div>
     <p class="lbl m run" id="shRun" hidden style="margin:-14px 0 24px"></p>
+    <div class="opt nm"><label class="lbl" for="vname">Your name <span class="m">So we know who voted</span></label><input type="text" id="vname" maxlength="80" autocomplete="name" placeholder="First name is fine"><p class="ok m" id="nmS" role="status" hidden></p></div>
     <div class="opt"><div class="lbl"><span id="colLbl">Color</span><span class="m" id="shCol"></span></div><div class="opts" id="cols" role="group" aria-label="Color"></div></div>
     <div class="opt" id="sizeOpt"><div class="lbl"><span id="sizeLbl">Size</span><span class="m" id="shSize">Choose a size</span></div><div class="opts" id="sizes" role="group" aria-label="Size"></div></div>
     <div class="opt msg"><label class="lbl" for="msg">Leave a note about this piece <span class="m">Optional</span></label><textarea id="msg" maxlength="1000" rows="3" placeholder="Let’s hear what you think..."></textarea><div class="mrow"><button class="lbl" id="msgB" type="button">Send note</button><span class="ok m" id="msgS" role="status" hidden></span></div></div>
@@ -545,10 +549,18 @@ footer{border-top:0}
   }
   function pop(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
   var NOTE_OK=['Sent. Thank you, we read every note.','Got it. This helps decide what gets made.','Thanks. Your note is on its way to us.'];
+  // The name box is shared by votes, picks, notes and waitlist signups; it is remembered on this device.
+  function nm(){return $('vname').value.trim()}
+  function needName(){
+    if(nm())return true;
+    var s=$('nmS');s.hidden=false;s.textContent='Add your name first.';$('vname').focus();return false;
+  }
+  $('vname').addEventListener('input',function(){$('nmS').hidden=true;try{localStorage.setItem('format-name',this.value)}catch(e){}});
   function sendNote(){
     var m=$('msg').value.trim(),s=$('msgS');
     if(!m){s.hidden=false;s.textContent='Write a note first.';$('msg').focus();return}
-    send({action:'note',item:cur.k,message:m});track('fablab/note/'+cur.k);
+    if(!needName())return;
+    send({action:'note',item:cur.k,message:m,name:nm()});track('fablab/note/'+cur.k);
     $('msg').value='';s.hidden=false;s.textContent=NOTE_OK[Math.floor(Math.random()*NOTE_OK.length)];pop(s);
   }
   function noteSent(had){if(!had)return;var s=$('msgS');s.hidden=false;s.textContent='Your note went with it.'}
@@ -626,7 +638,7 @@ footer{border-top:0}
         if(colorVoted()===c)return;
         var m=$('msg').value.trim();
         mine[cur.k]=mine[cur.k]||{};mine[cur.k].color=c;wr('format-votes',mine);
-        send({action:'vote',item:cur.k,kind:'color',value:c,message:m});track('fablab/vote-color/'+cur.k);
+        send({action:'vote',item:cur.k,kind:'color',value:c,message:m,name:nm()});track('fablab/vote-color/'+cur.k);
         if(m){$('msg').value='';noteSent(1)}
         paintVote();pop($('rw'));
       });
@@ -639,7 +651,7 @@ footer{border-top:0}
       if(!isPre(cur)){
         if(sizeVoted()===s)return;
         mine[cur.k]=mine[cur.k]||{};mine[cur.k].size=s;wr('format-votes',mine);
-        send({action:'vote',item:cur.k,kind:'size',value:s});track('fablab/vote-size/'+cur.k);
+        send({action:'vote',item:cur.k,kind:'size',value:s,name:nm()});track('fablab/vote-size/'+cur.k);
         pick(sizesEl,s);$('shSize').textContent='You wear '+s;paintVote();pop($('rw'));return;
       }
       size=s;pick(sizesEl,s);$('shSize').textContent=s;$('note').textContent=NOTE_PRE});sizesEl.appendChild(b)});
@@ -655,7 +667,9 @@ footer{border-top:0}
     $('wlL').textContent=pre?'Waitlist: email me when more drop':'Waitlist: email me when this gets dropped';
     $('wlB').textContent='Join';
     $('wlE').value='';$('wlS').hidden=true;showWl(!!wl);
-    $('msg').value='';$('msgS').hidden=true;tint(null);
+    $('msg').value='';$('msgS').hidden=true;$('nmS').hidden=true;tint(null);
+    if(!$('vname').value){try{$('vname').value=localStorage.getItem('format-name')||''}catch(e){}}
+    if(!$('ordN').value)$('ordN').value=$('vname').value;
     var vc=mine[p.k]&&mine[p.k].color;if(vc&&!pre)showColor(vc);
 
     var sp=$('specs');sp.innerHTML='';p.sp.forEach(function(x){sp.appendChild(el('li','',x))});
@@ -668,9 +682,10 @@ footer{border-top:0}
 
   $('vote').addEventListener('click',function(){
     if(mine[cur.k]&&mine[cur.k].item)return;
+    if(!needName())return;
     mine[cur.k]=mine[cur.k]||{};mine[cur.k].item=1;wr('format-votes',mine);
     var m=$('msg').value.trim();
-    send({action:'vote',item:cur.k,kind:'item',message:m});track('fablab/vote/'+cur.k);
+    send({action:'vote',item:cur.k,kind:'item',message:m,name:nm()});track('fablab/vote/'+cur.k);
     if(m){$('msg').value='';noteSent(1)}
     paintVote();pop($('vote'));pop($('rw'));
   });
@@ -679,7 +694,8 @@ footer{border-top:0}
     var em=$('wlE').value.trim(),st=$('wlS');
     if($('wlH').value)return;
     if(!/^\S+@\S+\.\S+$/.test(em)){st.hidden=false;st.textContent='Enter a valid email address.';$('wlE').focus();return}
-    send({action:'waitlist',item:cur.k,email:em,message:$('msg').value.trim(),website:$('wlH').value});
+    if(!needName())return;
+    send({action:'waitlist',item:cur.k,email:em,message:$('msg').value.trim(),name:nm(),website:$('wlH').value});
     joined[cur.k]=1;wr('format-waitlist',joined);track('fablab/waitlist/'+cur.k);
     var had=$('msg').value.trim();$('msg').value='';
     $('wlE').value='';showWl(true);noteSent(had);

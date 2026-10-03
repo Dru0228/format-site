@@ -41,8 +41,8 @@ var DASH_ROWS = 60;                // how many Items rows the Dashboard table co
 
 var HEADERS = {
   Items: ['Key', 'Name', 'Category', 'Status', 'Cap', 'Listed', 'Colors'],
-  Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message'],
-  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message'],
+  Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message', 'Name'],
+  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message', 'Name'],
   Sizes: ['Item', 'Color', 'Size', 'Cap', 'Taken', 'Left'],
   Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref', 'Message']
 };
@@ -125,6 +125,7 @@ function doPost(e) {
 
 function vote_(key, item, d, client) {
   if (item.status !== 'Concept') return 'invalid';
+  var vname = clean_(d.name, 80);
   var type = d.kind === 'color' ? 'color' : d.kind === 'size' ? 'size' : 'item';
   var color = type === 'item' ? '' : clean_(d.value, 40);   // the Color column holds the picked color or size
   if (type === 'color' && (!color || (item.colors.length && item.colors.indexOf(color) < 0))) return 'invalid';
@@ -141,21 +142,38 @@ function vote_(key, item, d, client) {
         var msg = clean_(d.message, MAX_MESSAGE);
         sh.getRange(i + 2, 4).setValue(noFormula_(color));
         if (msg) sh.getRange(i + 2, 6).setValue(noFormula_(msg));
+        if (vname) sh.getRange(i + 2, 7).setValue(noFormula_(vname));
+        nameRows_(sh, key, client, vname);
         return 'ok';
       }
     }
   }
   var message = clean_(d.message, MAX_MESSAGE);
-  sh.appendRow([new Date(), key, type, color, client, message].map(noFormula_));
+  sh.appendRow([new Date(), key, type, color, client, message, vname].map(noFormula_));
+  nameRows_(sh, key, client, vname);
   CacheService.getScriptCache().remove('summary');
   return 'ok';
+}
+
+// Picks made before the visitor typed their name get it filled in once it arrives.
+function nameRows_(sh, key, client, name) {
+  if (!name) return;
+  var n = sh.getLastRow();
+  if (n < 2) return;
+  var rows = sh.getRange(2, 2, n - 1, 6).getValues();   // Item, Type, Color, Visitor, Message, Name
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i][0] === key && rows[i][3] === client && !rows[i][5]) sh.getRange(i + 2, 7).setValue(noFormula_(name));
+  }
 }
 
 // A note sent on its own, without a vote or signup.
 function note_(key, item, d, client) {
   var message = clean_(d.message, MAX_MESSAGE);
   if (!message) return 'invalid';
-  sheet_(TAB_VOTES).appendRow([new Date(), key, 'note', '', client, message].map(noFormula_));
+  var vname = clean_(d.name, 80);
+  var vsh = sheet_(TAB_VOTES);
+  vsh.appendRow([new Date(), key, 'note', '', client, message, vname].map(noFormula_));
+  nameRows_(vsh, key, client, vname);
   return 'ok';
 }
 
@@ -174,7 +192,9 @@ function waitlist_(key, item, d, client) {
   }
   var list = item.status === 'Pre-order' ? 'Pre-order' : 'Concept';
   var message = clean_(d.message, MAX_MESSAGE);
-  sh.appendRow([new Date(), key, list, email, client, message].map(noFormula_));
+  var vname = clean_(d.name, 80);
+  sh.appendRow([new Date(), key, list, email, client, message, vname].map(noFormula_));
+  nameRows_(sheet_(TAB_VOTES), key, client, vname);
   return 'ok';
 }
 
@@ -231,31 +251,31 @@ function sendDigest_() {
   var items = readItems_();
   var since = Date.now() - 24 * 3600 * 1000;
   var perItem = {}, notes = [], waits = [];
-  function slot(k) { return perItem[k] = perItem[k] || { votes: 0, colors: {}, sizes: {} }; }
+  function slot(k) { return perItem[k] = perItem[k] || { votes: 0, who: [], colors: {}, sizes: {} }; }
   function when(v) { return v instanceof Date ? v.getTime() : Date.parse(v); }
 
   var vs = sheet_(TAB_VOTES), n = vs.getLastRow();
   if (n >= 2) {
-    vs.getRange(2, 1, n - 1, 6).getValues().forEach(function (r) {
+    vs.getRange(2, 1, n - 1, 7).getValues().forEach(function (r) {
       if (!(when(r[0]) >= since)) return;
-      var name = items[r[1]] ? items[r[1]].name : r[1], t = r[2], v = r[3];
-      if (t === 'note') notes.push(name + ': ' + r[5]);
+      var name = items[r[1]] ? items[r[1]].name : r[1], t = r[2], v = r[3], who = r[6] || 'no name';
+      if (t === 'note') notes.push(name + ': ' + r[5] + ' (' + who + ')');
       else {
         var o = slot(name);
-        if (t === 'item') o.votes++;
+        if (t === 'item') { o.votes++; o.who.push(who); }
         else if (t === 'color') o.colors[v] = (o.colors[v] || 0) + 1;
         else if (t === 'size') o.sizes[v] = (o.sizes[v] || 0) + 1;
-        if (r[5]) notes.push(name + ': ' + r[5]);
+        if (r[5]) notes.push(name + ': ' + r[5] + ' (' + who + ')');
       }
     });
   }
   var ws = sheet_(TAB_WAIT), m = ws.getLastRow();
   if (m >= 2) {
-    ws.getRange(2, 1, m - 1, 6).getValues().forEach(function (r) {
+    ws.getRange(2, 1, m - 1, 7).getValues().forEach(function (r) {
       if (!(when(r[0]) >= since)) return;
       var name = items[r[1]] ? items[r[1]].name : r[1];
-      waits.push(name + ': ' + r[3]);
-      if (r[5]) notes.push(name + ': ' + r[5]);
+      waits.push(name + ': ' + (r[6] || 'no name') + ', ' + r[3]);
+      if (r[5]) notes.push(name + ': ' + r[5] + ' (' + (r[6] || 'no name') + ')');
     });
   }
 
@@ -263,7 +283,7 @@ function sendDigest_() {
   var lines = [];
   Object.keys(perItem).forEach(function (k) {
     var o = perItem[k], bits = [];
-    if (o.votes) bits.push(o.votes + (o.votes === 1 ? ' vote' : ' votes'));
+    if (o.votes) bits.push(o.votes + (o.votes === 1 ? ' vote' : ' votes') + ' (' + o.who.join(', ') + ')');
     if (Object.keys(o.colors).length) bits.push('colors: ' + tally(o.colors));
     if (Object.keys(o.sizes).length) bits.push('sizes: ' + tally(o.sizes));
     lines.push(k + ' - ' + bits.join('; '));
