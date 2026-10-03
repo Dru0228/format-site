@@ -14,7 +14,7 @@
 <meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, FabLab apparel, and Format // Audio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F1F0ED; --ink:#161616; --mute:#6E6D69; --line:#D9D7D2; --accent:#E3124B;
@@ -250,6 +250,69 @@ body.sub main{display:none}
 .advl li span:first-child{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding-top:2px}
 .advl li .m{font-size:15px;line-height:1.55}
 @media (max-width:820px){.adv{grid-template-columns:1fr}.advl li{grid-template-columns:1fr}}
+
+/* filing system */
+.fs{--mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;font-family:var(--mono);font-size:12px;line-height:1.5;letter-spacing:.04em;border:1px solid var(--line)}
+.fs *{font-family:inherit}
+.fsbar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line);color:var(--mute);text-transform:uppercase;letter-spacing:.14em;font-size:10px}
+.fsbar b{color:var(--accent);font-weight:500}
+.fsbar .dot{display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:8px;animation:blink 1.6s steps(2,start) infinite}
+@keyframes blink{50%{opacity:.15}}
+.fsd{border-bottom:1px solid var(--line)}
+.fsd:last-child{border-bottom:0}
+.fsd>summary{list-style:none;display:grid;grid-template-columns:28px 1fr auto 24px;gap:12px;align-items:center;padding:18px 16px;cursor:pointer;text-transform:uppercase;letter-spacing:.16em;transition:background .3s}
+.fsd>summary::-webkit-details-marker{display:none}
+.fsd>summary:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.fsd>summary .ix{color:var(--mute)}
+.fsd>summary .nm{font-size:15px;font-weight:400}
+.fsd>summary .nm i{font-style:normal;color:var(--accent);margin-right:.4em}
+.fsd>summary .ct{color:var(--mute);font-size:10px}
+.fsd>summary .cv{width:10px;height:10px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(-45deg);transition:transform .35s cubic-bezier(.77,0,.18,1);justify-self:end;margin-right:4px}
+.fsd[open]>summary .cv{transform:rotate(45deg);color:var(--accent)}
+.fsd[open]>summary{border-bottom:1px solid var(--line)}
+.fsl{list-style:none;margin:0;padding:0}
+.fsl li{border-bottom:1px solid var(--line);position:relative}
+.fsl li:last-child{border-bottom:0}
+.fsl li::before{content:"";position:absolute;left:27px;top:0;bottom:0;width:1px;background:var(--line)}
+.fr{display:grid;grid-template-columns:28px 64px 1fr minmax(0,160px) 56px;gap:12px;align-items:center;width:100%;padding:10px 16px 10px 16px;background:none;border:0;color:inherit;text-align:left;cursor:pointer;position:relative;text-transform:none;letter-spacing:.04em;font-size:12px}
+.fr:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.fr:hover .rn{color:var(--accent)}
+.fr .ri{color:var(--mute);font-size:10px;text-transform:uppercase;letter-spacing:.14em}
+.fr .rn{font-size:13px;transition:color .25s}
+.fr .rm{color:var(--mute);font-size:10px;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr .rl{color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
+.fr .rg{width:20px;height:20px;border:1px solid var(--mute);display:grid;place-items:center;color:var(--ink);transition:border-color .25s,color .25s,background .25s}
+.fr:hover .rg{border-color:var(--accent);color:var(--accent)}
+.fr .rg svg{width:8px;height:8px;fill:currentColor}
+.fr .rg .ps{display:none}
+li.on .fr .rg{background:var(--accent);border-color:var(--accent);color:#fff}
+li.on .fr .rg .pl{display:none}li.on .fr .rg .ps{display:block}
+li.on .rn{color:var(--accent)}
+.fr .th{width:64px;height:40px;object-fit:cover;background:#0E0E0E}
+.fp{height:2px;background:var(--line);margin:0 16px 0 52px}
+.fp i{display:block;height:100%;width:0;background:var(--accent)}
+.fv{padding:10px 16px 18px 52px}
+.fv video{width:100%;max-height:70vh;background:#0E0E0E;display:block}
+.fvh{display:none}
+li.on .fvh{display:block}
+.fsfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);color:var(--mute);text-transform:uppercase;letter-spacing:.14em;font-size:10px}
+.fsfoot a:hover,.fsd .lk:hover{color:var(--accent)}
+.fsnote{padding:12px 16px 14px 52px;color:var(--mute);font-size:11px;border-bottom:1px solid var(--line)}
+.fsd .lk{display:inline-block;border-bottom:1px solid currentColor;color:var(--ink);text-transform:uppercase;letter-spacing:.14em;font-size:10px;margin-top:6px}
+.fsx{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.fsx a{display:flex;justify-content:space-between;gap:12px;padding:16px;text-transform:uppercase;letter-spacing:.16em;font-size:11px;transition:background .3s}
+.fsx a+a{border-left:1px solid var(--line)}
+.fsx a:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.fsx a span:last-child{color:var(--mute)}
+.fsx a:hover span:last-child{color:var(--accent)}
+@media (max-width:640px){
+  .fr{grid-template-columns:24px 1fr 44px;gap:10px}
+  .fr .ri,.fr .rm{display:none}
+  .fr .th{width:44px;height:32px}
+  .fp,.fv,.fsnote{margin-left:0;margin-right:0;padding-left:16px}
+  .fp{margin-left:16px}
+  .fsx{grid-template-columns:1fr}.fsx a+a{border-left:0;border-top:1px solid var(--line)}
+}
 </style>
 <script src="/analytics.js" defer></script>
 </head>
@@ -273,7 +336,30 @@ body.sub main{display:none}
       <p class="m">A growing archive of people, places, things, and ideas.</p>
       <span class="tick"></span>
     </div>
-    <div class="grid3 div"><a href="#gallery"><div class="ph"><img data-from="gi:18" alt="Red-roofed cabin in snow under a starry sky" loading="lazy"></div><h3>Gallery</h3><div class="lbl m">Photographs</div><p>The full photo archive, filterable by format.</p><div class="lbl act">Open gallery <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="#ai"><div class="ph"><div class="slot"><span><b class="sl">//</b></span></div></div><h3>Format // AI</h3><div class="lbl m">Generated work</div><p>Experiments in generated imagery, kept apart from the photo archive.</p><div class="lbl act">Enter FORMAT // AI <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="#gallery"><div class="ph"><img data-from="gi:6" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></div><h3>Prints &amp; Licensing</h3><div class="lbl m">Order // License</div><p>Open any photo in the gallery to order a print or request a license.</p><div class="lbl act">Choose a photo <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a></div>
+    <div class="fs" id="fs">
+      <div class="fsbar"><span><span class="dot"></span>Index <b>/ARCHIVE</b></span><span id="fsTot">3 folders</span></div>
+
+      <details class="fsd" id="fAudio">
+        <summary><span class="ix">01</span><span class="nm"><i>/</i>Audio</span><span class="ct" id="fAudioCt"></span><span class="cv" aria-hidden="true"></span></summary>
+        <ul class="fsl" id="fAudioL"></ul>
+        <div class="fsnote">Previews only. Licensing and downloads on the Audio page.<br><a class="lk" href="audio.html">Open Audio &rarr;</a></div>
+      </details>
+
+      <details class="fsd" id="fVideo">
+        <summary><span class="ix">02</span><span class="nm"><i>/</i>Videos</span><span class="ct" id="fVideoCt"></span><span class="cv" aria-hidden="true"></span></summary>
+        <ul class="fsl" id="fVideoL"></ul>
+        <div class="fsnote">Video licensing by request.<br><a class="lk" href="contact.html">Request a license &rarr;</a></div>
+      </details>
+
+      <details class="fsd" id="fPhoto">
+        <summary><span class="ix">03</span><span class="nm"><i>/</i>Photos</span><span class="ct" id="fPhotoCt"></span><span class="cv" aria-hidden="true"></span></summary>
+        <ul class="fsl" id="fPhotoL"></ul>
+        <div class="fsnote">Open any photo to order a print or request a license.<br><a class="lk" href="#gallery">Open gallery view &rarr;</a></div>
+      </details>
+
+      <div class="fsx"><a href="#ai"><span>/ Format // AI</span><span>Generated &rarr;</span></a><a href="#gallery"><span>/ Prints &amp; Licensing</span><span>Order &rarr;</span></a></div>
+      <div class="fsfoot"><span>Houston, TX</span><span id="fsSum"></span></div>
+    </div>
     <div class="pfoot"></div>
   </div>
 </section>
@@ -470,6 +556,70 @@ body.sub main{display:none}
   document.getElementById('lbLic').addEventListener('click',function(){request('License request','How and where will the photo be used?')});
   document.getElementById('lbPrint').addEventListener('click',function(){request('Print order','Size and finish you have in mind:')});
   applyFilter();
+
+  // filing system: /Audio, /Videos, /Photos
+  (function(){
+    var PL='<svg class="pl" viewBox="0 0 8 8"><path d="M1 0l7 4-7 4z"/></svg><svg class="ps" viewBox="0 0 8 8"><path d="M0 0h3v8H0zM5 0h3v8H5z"/></svg>';
+    var pad=function(n){return String(n).padStart(2,'0')};
+    function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+    var AUDIO=[
+      ['A01','Don\u2019t You Know','2026','3:18','assets/audio/dont-you-know.mp3'],
+      ['A02','I Loved You Once','2026','5:06','assets/audio/i-loved-you-once.mp3'],
+      ['A03','That\u2019s Love','2024','2:48','assets/audio/thats-love.mp3'],
+      ['A04','VOX 4 Fire','2025','4:11','assets/audio/vox-4-fire.mp3'],
+      ['A05','Rough Boi','2022','1:55','assets/audio/rough-boi.mp3']
+    ];
+    var VIDEO=[['V01','Texas Motor Speedway','FPV // Motorsport','assets/f27790ee67.mp4','assets/15090d0f12.jpg']];
+    function el(h){var d=document.createElement('div');d.innerHTML=h;return d.firstChild}
+
+    // audio: one player shared by every row
+    var au=new Audio(),curLi=null;au.preload='none';
+    var aL=document.getElementById('fAudioL');
+    AUDIO.forEach(function(t){
+      var li=el('<li><button class="fr" type="button" aria-label="Play '+esc(t[1])+'"><span class="rg">'+PL+'</span><span class="ri">'+t[0]+'</span><span class="rn">'+esc(t[1])+'</span><span class="rm">MP3 // '+t[2]+'</span><span class="rl">'+t[3]+'</span></button><div class="fp fvh"><i></i></div></li>');
+      li.querySelector('button').addEventListener('click',function(){
+        if(curLi===li){if(au.paused)au.play();else au.pause();return}
+        if(curLi)curLi.classList.remove('on');
+        curLi=li;au.src=t[4];au.play();li.classList.add('on');
+      });
+      li.querySelector('.fp').addEventListener('click',function(e){if(curLi!==li||!au.duration)return;var r=this.getBoundingClientRect();au.currentTime=au.duration*Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))});
+      li._bar=li.querySelector('.fp i');aL.appendChild(li);
+    });
+    au.addEventListener('timeupdate',function(){if(curLi&&au.duration)curLi._bar.style.width=(au.currentTime/au.duration*100)+'%'});
+    au.addEventListener('pause',function(){if(curLi)curLi.classList.remove('on')});
+    au.addEventListener('play',function(){if(curLi)curLi.classList.add('on')});
+    au.addEventListener('ended',function(){if(curLi){curLi.classList.remove('on');curLi._bar.style.width='0'}});
+
+    // videos: open the player under the row
+    var vL=document.getElementById('fVideoL');
+    VIDEO.forEach(function(v){
+      var li=el('<li><button class="fr" type="button" aria-expanded="false"><span class="rg">'+PL+'</span><span class="ri">'+v[0]+'</span><span class="rn">'+esc(v[1])+'</span><span class="rm">MP4 // '+esc(v[2])+'</span><span class="rl"></span></button><div class="fv fvh"></div></li>');
+      var b=li.querySelector('button'),box=li.querySelector('.fv'),vid=null;
+      b.addEventListener('click',function(){
+        var on=li.classList.toggle('on');b.setAttribute('aria-expanded',on);
+        if(on&&!vid){vid=document.createElement('video');vid.controls=true;vid.playsInline=true;vid.preload='metadata';vid.poster=v[4];vid.src=v[3];box.appendChild(vid)}
+        if(vid&&!on)vid.pause();
+      });
+      vL.appendChild(li);
+    });
+
+    // photos: list the gallery images, open the existing viewer
+    var pL=document.getElementById('fPhotoL');
+    items.forEach(function(b,n){
+      var im=b.querySelector('img'),c=caps[n];
+      var li=el('<li><button class="fr" type="button" aria-label="Open '+esc(c[0])+'"><img class="th" alt="" loading="lazy" src="'+im.getAttribute('src')+'"><span class="ri">P'+pad(n+1)+'</span><span class="rn">'+esc(c[0])+'</span><span class="rm">'+esc(c[1])+'</span><span class="rl">'+(b.dataset.o==='landscape'?'LND':'PRT')+'</span></button></li>');
+      li.querySelector('button').addEventListener('click',function(){applyFilterReset();open(b)});
+      pL.appendChild(li);
+    });
+    function applyFilterReset(){if(filter){filter=null;applyFilter()}}
+    document.getElementById('fAudioCt').textContent=pad(AUDIO.length)+' files';
+    document.getElementById('fVideoCt').textContent=pad(VIDEO.length)+' files';
+    document.getElementById('fPhotoCt').textContent=pad(items.length)+' files';
+    document.getElementById('fsSum').textContent=(AUDIO.length+VIDEO.length+items.length)+' files // 3 folders';
+    // deep links: archive.html#audio / #videos / #photos open that folder
+    function openF(){var m={audio:'fAudio',videos:'fVideo',photos:'fPhoto'}[location.hash.slice(1)];if(m){var d=document.getElementById(m);d.open=true;setTimeout(function(){d.scrollIntoView({block:'start'})},0)}}
+    window.addEventListener('hashchange',openF);openF();
+  })();
 
 })();
 </script>
