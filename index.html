@@ -266,17 +266,22 @@ body.sub main{display:none}
 .bl{list-style:none;margin:0;padding:0}
 .bl details{border-bottom:1px solid var(--line)}
 .bl details:last-child{border-bottom:0}
-.bl summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto 14px;gap:16px;align-items:center;padding:20px 0;cursor:pointer}
+.bl summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 14px;gap:16px;align-items:center;min-height:96px;padding:18px 0;cursor:pointer}
 .bl summary::-webkit-details-marker{display:none}
-.bl .bn{font-size:clamp(18px,2.2vw,26px);letter-spacing:.1em;text-transform:uppercase;font-weight:400;transition:color .3s}
-.bl summary:hover .bn{color:var(--accent)}
-.bl .bt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);text-align:right}
+.bl [hidden]{display:none!important}
+.bl .bn{display:flex;align-items:center;min-height:56px}
+.bl .bg{height:clamp(36px,5vw,56px);width:auto;max-width:min(220px,60%);object-fit:contain;object-position:left center;filter:grayscale(1);opacity:.85;transition:opacity .3s,filter .3s}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bl .bg{filter:grayscale(1) invert(1)}}
+:root[data-theme="dark"] .bl .bg{filter:grayscale(1) invert(1)}
+.bl summary:hover .bg{opacity:1}
+.bl .bw{font-size:clamp(18px,2.2vw,26px);letter-spacing:.1em;text-transform:uppercase;transition:color .3s}
+.bl summary:hover .bw{color:var(--accent)}
 .bl .bc{width:9px;height:9px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .35s cubic-bezier(.77,0,.18,1)}
 .bl details[open] .bc{transform:rotate(-135deg);color:var(--accent)}
-.bl .bd{padding:0 0 24px;max-width:58ch;color:var(--mute);font-size:15px;line-height:1.6}
-.bl .bd p{margin:0 0 10px}
-.bl .bd .lbl{display:block;margin-top:4px}
-@media (max-width:640px){.by{grid-template-columns:1fr}.by>.yr{padding:18px 0 0}.bl summary{grid-template-columns:minmax(0,1fr) 14px}.bl .bt{display:none}}
+.bl .bd{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px 32px;margin:0;padding:0 0 26px}
+.bl .bd dt{margin:0 0 4px}
+.bl .bd dd{margin:0;font-size:15px;line-height:1.5}
+@media (max-width:640px){.by{grid-template-columns:1fr}.by>.yr{padding:18px 0 0}}
 /* closing line on every page, links to Contact */
 .closer{padding:clamp(64px,10vw,128px) 0;border-top:1px solid var(--line)}
 .closer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
@@ -347,19 +352,22 @@ body.sub main{display:none}
 
 <section class="block brands" id="clients" aria-labelledby="clientsH">
   <div class="wrap">
-    <div class="head"><h2 id="clientsH">Brands we’ve<br>worked with</h2><p>Newest first. Open a name to see what we made for them.</p></div>
+    <div class="head"><h2 id="clientsH">Brands we’ve<br>worked with</h2><p>Newest first. Open a logo for the details.</p></div>
       <div class="by"><div class="yr lbl"><b>//</b>2026</div><div class="bl">
-        <details><summary><span class="bn">Ran Exotics</span><span class="bt">Automotive</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">Lone Star Drifts</span><span class="bt">Motorsport</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">The George at Clear Fork</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">Heights House Hotel</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">Machine Elves</span><span class="bt">Brand</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/ran-exotics.png" alt="Ran Exotics" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Ran Exotics</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Automotive</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/lone-star-drifts.png" alt="Lone Star Drifts" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Lone Star Drifts</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Motorsports</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/the-george-at-clear-fork.png" alt="The George at Clear Fork" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>The George at Clear Fork</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Hospitality</dd></div><div><dt class="lbl m">Location</dt><dd>Fort Worth, TX</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/heights-house-hotel.png" alt="Heights House Hotel" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Heights House Hotel</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Hospitality</dd></div><div><dt class="lbl m">Location</dt><dd>Houston, TX</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/machine-elves.png" alt="Machine Elves" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Machine Elves</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Music + Arts Collective</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/urban-racing.png" alt="Urban Racing" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Urban Racing</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Motorsports</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/texas-motor-speedway.png" alt="Texas Motor Speedway" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Texas Motor Speedway</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Motorsports</dd></div><div><dt class="lbl m">Location</dt><dd>Fort Worth, TX</dd></div></dl></details>
       </div></div>
       <div class="by"><div class="yr lbl"><b>//</b>2025</div><div class="bl">
-        <details><summary><span class="bn">F1 Vegas</span><span class="bt">Motorsport // Events</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">The Venetian</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">Flight Club</span><span class="bt">Retail</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
-        <details><summary><span class="bn">XS Nightclub</span><span class="bt">Nightlife</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/f1-vegas.png" alt="F1 Vegas" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>F1 Vegas</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Motorsports</dd></div><div><dt class="lbl m">Location</dt><dd>Las Vegas, NV</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/the-venetian.png" alt="The Venetian" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>The Venetian</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Hospitality</dd></div><div><dt class="lbl m">Location</dt><dd>Las Vegas, NV</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/flight-club.png" alt="Flight Club" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Flight Club</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>FPV Community</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/xs-nightclub.png" alt="XS Nightclub" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>XS Nightclub</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dt class="lbl m">Industry</dt><dd>Entertainment</dd></div><div><dt class="lbl m">Location</dt><dd>Las Vegas, NV</dd></div></dl></details>
+        <details><summary><span class="bn"><img class="bg" src="assets/logos/global-media-group.png" alt="Global Media Group" loading="lazy" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="bw" hidden>Global Media Group</span></span><span class="bc" aria-hidden="true"></span></summary><dl class="bd"><div><dd class="m">Details coming soon.</dd></div></dl></details>
       </div></div>
   </div>
 </section>
