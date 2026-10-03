@@ -197,6 +197,20 @@ footer{border-top:0}
 .buy:disabled{opacity:.5;cursor:default;background:transparent;color:var(--mute);border-color:var(--line)}
 .msg textarea{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px;font:400 16px var(--sans);border-radius:0;resize:vertical}
 .msg textarea:focus{border-color:var(--ink);outline:0}
+.tcap{position:absolute;left:50%;bottom:calc(clamp(16px,3vw,32px) + 84px);transform:translateX(-50%);padding:6px 12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;white-space:nowrap}
+.stage{transition:background .45s}
+.mrow{display:flex;align-items:center;gap:12px;margin-top:10px}
+.mrow button{border:1px solid var(--ink);background:none;color:inherit;padding:10px 16px;cursor:pointer}
+.mrow button:hover{background:var(--ink);color:var(--paper)}
+.rw{margin:14px 0 0;padding:12px 14px;border-left:2px solid var(--accent);font-size:14px;animation:rise .4s ease}
+.rw[hidden],.wlok[hidden],.tcap[hidden],.wl[hidden]{display:none}
+.pop{animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.wlok{display:flex;gap:14px;align-items:flex-start;margin-top:28px;padding:18px;border:1px solid var(--accent);animation:rise .4s ease}
+.wlok svg{flex:none;color:var(--accent)}
+.wlok p{margin:6px 0 10px;font-size:14px}
+.wlok button{background:none;border:0;border-bottom:1px solid currentColor;padding:0;color:var(--mute);cursor:pointer}
 .wl{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
 .wl .lbl{display:block;margin-bottom:10px}
 .wl .row{display:flex;gap:8px}
@@ -285,7 +299,7 @@ footer{border-top:0}
 
 <div class="sh" id="sh" role="dialog" aria-modal="true" aria-labelledby="shN" hidden>
   <div class="shv">
-    <div class="stage"><img id="shImg" alt=""></div>
+    <div class="stage" id="stage"><img id="shImg" alt=""><span class="tcap lbl" id="tCap" hidden></span></div>
     <div class="thumbs" id="thumbs" role="group" aria-label="Images"></div>
   </div>
   <div class="shi">
@@ -298,8 +312,9 @@ footer{border-top:0}
     <p class="lbl m run" id="shRun" hidden style="margin:-14px 0 24px"></p>
     <div class="opt"><div class="lbl"><span id="colLbl">Color</span><span class="m" id="shCol"></span></div><div class="opts" id="cols" role="group" aria-label="Color"></div></div>
     <div class="opt" id="sizeOpt"><div class="lbl"><span>Size</span><span class="m" id="shSize">Choose a size</span></div><div class="opts" id="sizes" role="group" aria-label="Size"></div></div>
-    <div class="opt msg"><label class="lbl" for="msg">Leave a note about this piece <span class="m">Optional</span></label><textarea id="msg" maxlength="1000" rows="3" placeholder="What would make it better? Fit, color, price, anything."></textarea></div>
+    <div class="opt msg"><label class="lbl" for="msg">Leave a note about this piece <span class="m">Optional</span></label><textarea id="msg" maxlength="1000" rows="3" placeholder="Let’s hear what you think..."></textarea><div class="mrow"><button class="lbl" id="msgB" type="button">Send note</button><span class="ok m" id="msgS" role="status" hidden></span></div></div>
     <button class="buy lbl vote" id="vote" type="button" aria-pressed="false" hidden><span id="voteT">Vote for this piece</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
+    <p class="rw" id="rw" role="status" hidden></p>
     <form class="ordf" id="ordF" novalidate>
       <label class="lbl" for="ordN">Name</label>
       <input type="text" id="ordN" name="name" autocomplete="name" maxlength="120">
@@ -309,6 +324,7 @@ footer{border-top:0}
       <button class="buy lbl" id="buy" type="submit"><span id="buyT">Submit my size</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
     </form>
     <p class="note m" id="note" role="status"></p>
+    <div class="wlok" id="wlOk" role="status" hidden><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2"><circle cx="14" cy="14" r="12"/><path d="M8 14.5l4 4 8-9"/></svg><div><b class="lbl" id="wlT"></b><p id="wlM"></p><button class="lbl" id="wlAgain" type="button">Use another email</button></div></div>
     <form class="wl" id="wl" novalidate>
       <label class="lbl" for="wlE" id="wlL"></label>
       <div class="row"><input type="email" id="wlE" name="email" placeholder="you@email.com" autocomplete="email" inputmode="email" required><input class="hp" type="text" id="wlH" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="lbl" type="submit" id="wlB">Join</button></div>
@@ -517,7 +533,25 @@ footer{border-top:0}
   var sh=$('sh'),shImg=$('shImg'),thumbs=$('thumbs'),colsEl=$('cols'),sizesEl=$('sizes');
   var cur=null,color=null,size=null,last=null,pics=[],ordRef='';
   function setPic(i){shImg.src=IMG[pics[i]];shImg.alt=cur.n+(i?' detail board '+i:' mockup');[].slice.call(thumbs.children).forEach(function(t,k){t.setAttribute('aria-pressed',k===i)})}
-  function showColor(c){if(!cur.cw)return;var k=cur.cw[c],i=k?pics.indexOf(k):0;if(i>-1)setPic(i)}
+  // A color with its own photo swaps the picture; otherwise the stage takes on the color and says so.
+  function tint(c){
+    var st=$('stage'),cap=$('tCap');
+    st.style.background=c&&COL[c]?'radial-gradient(circle at 50% 45%,'+COL[c]+'66,#0E0E0E 72%)':'';
+    cap.hidden=!c;if(c)cap.textContent=c+' / photo shows the main mockup';
+  }
+  function showColor(c){
+    var k=cur.cw&&cur.cw[c],i=k?pics.indexOf(k):-1;
+    if(i>-1){setPic(i);tint(null)}else{if(cur.cw)setPic(0);tint(c)}
+  }
+  function pop(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
+  var NOTE_OK=['Sent. Thank you, we read every note.','Got it. This helps decide what gets made.','Thanks. Your note is on its way to us.'];
+  function sendNote(){
+    var m=$('msg').value.trim(),s=$('msgS');
+    if(!m){s.hidden=false;s.textContent='Write a note first.';$('msg').focus();return}
+    send({action:'note',item:cur.k,message:m});track('fablab/note/'+cur.k);
+    $('msg').value='';s.hidden=false;s.textContent=NOTE_OK[Math.floor(Math.random()*NOTE_OK.length)];pop(s);
+  }
+  function noteSent(had){if(!had)return;var s=$('msgS');s.hidden=false;s.textContent='Your note went with it.'}
   function pick(box,val){[].slice.call(box.children).forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v===val)})}
   var NOTE_PRE='No payment now. We confirm price, fit and timing by email.';
   function stockBlock(){
@@ -552,9 +586,12 @@ footer{border-top:0}
     b.setAttribute('aria-pressed',v);$('voteT').textContent=v?'Voted. Thanks':'Vote for this piece';
     var c=colorVoted();
     $('shCol').textContent=c?'Your pick: '+c:'Tap one to vote';
-    [].slice.call(colsEl.children).forEach(function(x){
-      x.setAttribute('aria-pressed',c===x.dataset.v);x.disabled=!!c&&c!==x.dataset.v;
-    });
+    [].slice.call(colsEl.children).forEach(function(x){x.setAttribute('aria-pressed',c===x.dataset.v)});
+    var rw=$('rw');
+    if(v||c){
+      rw.hidden=false;
+      rw.textContent=v&&c?'Vote locked in, and '+c+' is your color. Changed your mind? Tap another color.':v?'Vote locked in. Thanks for helping decide what gets made. Pick your favorite color too.':c+' is your color pick. Tap another color to change it, and vote for the piece too.';
+    }else rw.hidden=true;
     $('note').textContent=ENDPOINT?'':'Preview only: this vote is kept on this device.';
   }
   function open(p,btn){
@@ -579,9 +616,12 @@ footer{border-top:0}
       b.addEventListener('click',function(){
         showColor(c);
         if(isPre(cur)){color=c;$('note').textContent=NOTE_PRE;paintPre();return}
-        if(colorVoted())return;
+        if(colorVoted()===c)return;
+        var m=$('msg').value.trim();
         mine[cur.k]=mine[cur.k]||{};mine[cur.k].color=c;wr('format-votes',mine);
-        send({action:'vote',item:cur.k,kind:'color',value:c,message:$('msg').value.trim()});track('fablab/vote-color/'+cur.k);paintVote();
+        send({action:'vote',item:cur.k,kind:'color',value:c,message:m});track('fablab/vote-color/'+cur.k);
+        if(m){$('msg').value='';noteSent(1)}
+        paintVote();pop($('rw'));
       });
       colsEl.appendChild(b);
     });
@@ -598,8 +638,9 @@ footer{border-top:0}
     var wl=joined[p.k];
     $('wlL').textContent=pre?'Waitlist: email me when more drop':'Waitlist: email me when this gets dropped';
     $('wlB').textContent='Join';
-    $('wlE').value='';$('wlE').disabled=!!wl;$('wlB').disabled=!!wl;
-    $('wlS').hidden=!wl;if(wl)$('wlS').textContent='You’re on the list for '+p.n+'.';
+    $('wlE').value='';$('wlS').hidden=true;showWl(!!wl);
+    $('msg').value='';$('msgS').hidden=true;tint(null);
+    var vc=mine[p.k]&&mine[p.k].color;if(vc&&!pre)showColor(vc);
 
     var sp=$('specs');sp.innerHTML='';p.sp.forEach(function(x){sp.appendChild(el('li','',x))});
     sh.hidden=false;sh.scrollTop=0;document.querySelector('.shi').scrollTop=0;document.body.classList.add('lock');
@@ -612,7 +653,10 @@ footer{border-top:0}
   $('vote').addEventListener('click',function(){
     if(mine[cur.k]&&mine[cur.k].item)return;
     mine[cur.k]=mine[cur.k]||{};mine[cur.k].item=1;wr('format-votes',mine);
-    send({action:'vote',item:cur.k,kind:'item',message:$('msg').value.trim()});track('fablab/vote/'+cur.k);paintVote();
+    var m=$('msg').value.trim();
+    send({action:'vote',item:cur.k,kind:'item',message:m});track('fablab/vote/'+cur.k);
+    if(m){$('msg').value='';noteSent(1)}
+    paintVote();pop($('vote'));pop($('rw'));
   });
   $('wl').addEventListener('submit',function(e){
     e.preventDefault();
@@ -621,9 +665,19 @@ footer{border-top:0}
     if(!/^\S+@\S+\.\S+$/.test(em)){st.hidden=false;st.textContent='Enter a valid email address.';$('wlE').focus();return}
     send({action:'waitlist',item:cur.k,email:em,message:$('msg').value.trim(),website:$('wlH').value});
     joined[cur.k]=1;wr('format-waitlist',joined);track('fablab/waitlist/'+cur.k);
-    $('wlE').disabled=true;$('wlB').disabled=true;st.hidden=false;
-    st.textContent=isPre(cur)?'You’re on the list. We’ll email you when more drop.':'You’re on the list. We’ll email you when '+cur.n+' gets dropped.';
+    var had=$('msg').value.trim();$('msg').value='';
+    $('wlE').value='';showWl(true);noteSent(had);
   });
+  function showWl(on){
+    var f=$('wl'),ok=$('wlOk');f.hidden=!!on;ok.hidden=!on;
+    if(on){
+      $('wlT').textContent='You’re on the list';
+      $('wlM').textContent=isPre(cur)?'You’ll be first to know when more '+cur.n+' drops.':'You’ll be first to know when '+cur.n+' gets dropped. Early voices like yours decide what we make next.';
+      pop(ok);
+    }else{$('wlE').value='';$('wlS').hidden=true}
+  }
+  $('wlAgain').addEventListener('click',function(){delete joined[cur.k];wr('format-waitlist',joined);showWl(false);$('wlE').focus()});
+  $('msgB').addEventListener('click',sendNote);
   $('ordF').addEventListener('submit',function(e){
     e.preventDefault();var n=$('note');
     if($('ordH').value)return;
