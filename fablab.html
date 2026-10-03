@@ -560,6 +560,9 @@ footer{border-top:0}
     paintPre();
   }
   // colors and sizes for a pre-order piece: counts left, sold out ones greyed out
+  // After an order goes through, that piece's button stays greyed out for 10 minutes (kept across reloads).
+  var COOL_MS=10*60*1000,coolT=0,cool=rd('format-cool',{});
+  function coolLeft(k){var t=cool[k];return t?Math.max(0,t+COOL_MS-Date.now()):0}
   function paintPre(){
     if(!isPre(cur))return;
     [].slice.call(colsEl.children).forEach(function(b){
@@ -577,7 +580,9 @@ footer{border-top:0}
     });
     pick(sizesEl,size||'');
     var out=stockInfo(cur.k).out||cur.col.every(function(c){return colLeft(cur.k,c)===0});
-    $('buy').disabled=out;$('buyT').textContent=out?'Sold out':'Submit my size';
+    var cl=coolLeft(cur.k);
+    $('buy').disabled=out||cl>0;$('buyT').textContent=out?'Sold out':cl>0?'Submitted':'Submit my size';
+    clearTimeout(coolT);if(cl>0&&!out){var ck=cur.k;coolT=setTimeout(function(){if(!sh.hidden&&cur.k===ck)paintPre()},cl+50)}
     if(out)$('note').textContent='Sold out. Join the waitlist below.';
   }
   function colorVoted(){return mine[cur.k]&&mine[cur.k].color}
@@ -705,6 +710,7 @@ footer{border-top:0}
       code=code.trim();
       if(code==='ok'){
         n.textContent='Submitted: '+byKey[item].n+', '+col+', '+sz+'. We\u2019ll email you to confirm.';
+        cool[item]=Date.now();wr('format-cool',cool);
         track('fablab/order/'+item);ordRef=rid();size=null;$('shSize').textContent='Choose a size';
       }else if(code==='sold_out')n.textContent='Sorry, '+col+' in '+sz+' just sold out. Pick another size.';
       else if(code==='limit')n.textContent='That\u2019s the limit: '+MAXP+' per person for this piece.';
