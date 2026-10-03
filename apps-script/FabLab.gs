@@ -42,18 +42,26 @@ var HEADERS = {
   Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref']
 };
 
-// Size run per color for pieces with a fixed size breakdown (starting values for
-// the Sizes tab; after setup you edit the Sizes tab, not this). 10 per color.
+// Size run for pieces with a fixed size breakdown: starting values for the Sizes tab
+// (after setup you edit the Sizes tab, not this). Use `all` for the same run in every
+// color, or list colors one by one when the split is uneven.
 var RUNS = {
-  'core-hoodie': { S: 1, M: 3, L: 3, XL: 2, XXL: 1 }
+  'signal-tee': { all: { S: 1, M: 3, L: 3, XL: 2, XXL: 1 } },                     // 6 colors x 10 = 60
+  'polo': {                                                                       // 8 + 8 + 7 + 7 = 30
+    'Black': { S: 1, M: 2, L: 2, XL: 2, XXL: 1 },
+    'Off-white': { S: 1, M: 2, L: 2, XL: 2, XXL: 1 },
+    'Hot pink': { S: 1, M: 2, L: 2, XL: 1, XXL: 1 },
+    'Charcoal': { S: 1, M: 2, L: 2, XL: 1, XXL: 1 }
+  },
+  'core-hoodie': { all: { S: 1, M: 3, L: 3, XL: 2, XXL: 1 } }                     // 3 colors x 10 = 30
 };
 
-// Starting roster for the Items tab: key, name, category, status, colors.
+// Starting roster for the Items tab: key, name, category, status, colors, cap (pre-order only).
 // After setup you manage this in the sheet, not here.
 var SEED = [
   ["frame-tee", "Frame Tee", "Shirts", "Concept", "Off-white, Black"],
-  ["signal-tee", "Signal Tee", "Shirts", "Pre-order", "Off-white, Black, Charcoal, Hot pink"],
-  ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink"],
+  ["signal-tee", "Signal Tee", "Shirts", "Pre-order", "Off-white, Black, Charcoal, Hot pink, Stone, White", 60],
+  ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink, Charcoal", 30],
   ["core-hoodie", "Core Hoodie", "Hoodies", "Pre-order", "Black, Off-white, Hot pink", 30],
   ["archive-sweater", "Archive Sweater", "Sweaters", "Concept", "Black, Off-white, Charcoal"],
   ["blueprint-sweater", "Blueprint Sweater", "Sweaters", "Concept", "Black, Stone, Hot pink"],
@@ -358,10 +366,13 @@ function setup() {
   if (sizes.getLastRow() < 2) {
     var srows = [];
     SEED.forEach(function (s) {
-      var run = RUNS[s[0]];
-      if (!run || s[3] !== 'Pre-order') return;
+      var runs = RUNS[s[0]];
+      if (!runs || s[3] !== 'Pre-order') return;
       s[4].split(',').forEach(function (c) {
-        Object.keys(run).forEach(function (size) { srows.push([s[0], c.trim(), size, run[size]]); });
+        c = c.trim();
+        var run = runs[c] || runs.all;
+        if (!run) return;
+        Object.keys(run).forEach(function (size) { srows.push([s[0], c, size, run[size]]); });
       });
     });
     sizes.getRange(2, 1, srows.length, 4).setValues(srows);
