@@ -254,7 +254,7 @@ footer{border-top:0}
       <div class="sech">
         <div class="lbl m">FabLab Drop, 2026 Q4 / Pre-drop</div>
         <h3 id="preH">Pre-order</h3>
-        <p class="m">Small runs. When a piece or a size sells out, it's gone until the next drop.</p>
+        <p class="m">Limited runs. Once a piece or size sells out, it will not return until the next drop.</p>
       </div>
       <div id="announce" hidden></div>
       <div class="pgrid pre" id="pgridPre"></div>
@@ -449,12 +449,12 @@ footer{border-top:0}
     if(!cards.length){box.hidden=true;return}
     var wrap=el('div','announce'),txt=el('div');
     txt.appendChild(el('span','lbl','Pre-drop'));
-    txt.appendChild(el('p','','Small runs, split by color and size. If you need a specific size in a specific color, tell us now or forever hold your peace. When a size is gone, it\u2019s gone.'));
+    txt.appendChild(el('p','','Each piece is produced in a limited run, divided by color and size. Reserve the size and color you need now. Once a size is full, it will not be restocked until the next drop.'));
     var ul=el('ul','alist');
     cards.forEach(function(b){
       var p=byKey[b.dataset.k],e=runEach(p.k),li=el('li'),bt=el('button','lbl',p.n);bt.type='button';
       bt.addEventListener('click',function(){open(p,b)});
-      li.appendChild(bt);li.appendChild(el('span','m',' '+runTotal(p.k)+' in '+p.col.length+' colors'+(e?', '+e+' each':'')));ul.appendChild(li);
+      li.appendChild(bt);li.appendChild(el('span','m',' '+runTotal(p.k)+' pieces, '+p.col.length+' colors'+(e?', '+e+' per color':'')));ul.appendChild(li);
     });
     txt.appendChild(ul);wrap.appendChild(txt);box.appendChild(wrap);box.hidden=false;
   }
