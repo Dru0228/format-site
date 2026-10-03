@@ -14,11 +14,12 @@
 <meta name="description" content="Format / Audio: unreleased tracks from the Houston studio FORMAT. Preview, license or download a track, or order a Blind Drive of five random songs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#F1F0ED; --ink:#161616; --mute:#6E6D69; --line:#D9D7D2; --accent:#E3124B;
   --sans:"Barlow","DIN Alternate","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --pad:clamp(20px,4vw,56px);
   --hh:64px;
   box-sizing:border-box;
@@ -274,6 +275,39 @@ body.sub main{display:none}
 .gt{display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:14px 22px;color:inherit}
 .gt:hover{background:var(--ink);color:var(--paper)}
 /* audio page: catalog list, three license tiers, Blind Drive product */
+/* tech layer: blueprint grid, HUD readouts, scan line, live waveform on the playing track */
+.apage{position:relative;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;background-position:-1px -1px}
+.apage::before{content:"";position:absolute;inset:0;background:linear-gradient(var(--paper),transparent 22%,transparent 78%,var(--paper));pointer-events:none}
+.apage>.wrap{position:relative}
+.apage .m,.apage .ref,.apage .tm,.apage .lbl.m,.tier .pr,.tier li,.stat{font-family:var(--mono)}
+.apage .lbl{font-family:var(--mono);letter-spacing:.2em}
+.apage .ghead h2{font-weight:300;letter-spacing:.14em;text-shadow:0 0 28px color-mix(in srgb,var(--accent) 35%,transparent)}
+.stat{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0 0 18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.stat b{font-weight:500;color:var(--ink)}
+.stat .dot{display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.cover{position:relative;height:clamp(110px,16vw,190px);margin:30px 0 8px;background:#0E0E0E;border:1px solid var(--line);overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover::before,.cover::after{content:"";position:absolute;width:16px;height:16px;border:0 solid rgba(255,255,255,.7)}
+.cover::before{top:8px;left:8px;border-top-width:1px;border-left-width:1px}
+.cover::after{bottom:8px;right:8px;border-bottom-width:1px;border-right-width:1px}
+.cover i{position:absolute;top:0;bottom:0;left:0;width:1px;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:scan 6s linear infinite}
+@keyframes scan{from{left:0}to{left:100%}}
+.shead{border-bottom:1px solid var(--accent)}
+.trow{transition:background .3s,box-shadow .3s}
+.trow::before{content:"";position:absolute;left:-12px;top:12px;bottom:12px;width:2px;background:var(--accent);transform:scaleY(0);transition:transform .3s}
+.trow:hover,.trow.on{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.trow:hover::before,.trow.on::before{transform:scaleY(1)}
+.trow.on{box-shadow:inset 0 0 28px color-mix(in srgb,var(--accent) 12%,transparent)}
+.trow .tt{display:flex;align-items:center;gap:16px}
+.trow .tn{flex:0 1 auto;min-width:0}
+.wv{flex:none;display:flex;align-items:center;gap:3px;height:26px;margin-left:auto;opacity:0;transition:opacity .25s}
+.trow.on .wv{opacity:1}
+.wv i{width:2px;height:100%;background:var(--accent);box-shadow:0 0 6px var(--accent);transform:scaleY(.15);animation:wv 700ms ease-in-out infinite alternate;animation-play-state:paused;animation-delay:calc(var(--i)*-83ms);animation-duration:calc(420ms + var(--i)*47ms)}
+.trow.on .wv i{animation-play-state:running}
+@keyframes wv{to{transform:scaleY(1)}}
+.tier,.dvis{position:relative}
+.tier:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
 .apage{padding:clamp(40px,6vw,80px) 0 clamp(64px,10vw,128px)}
 .apage .ghead h2{margin:28px 0 10px;font-size:clamp(40px,6vw,88px);letter-spacing:.06em}
 .apage .ghead p{max-width:44ch;margin:18px 0 22px}
@@ -343,6 +377,7 @@ body.sub main{display:none}
 .note{margin:14px 0 0;font-size:14px;max-width:40ch}
 @media (max-width:900px){.tiers{grid-template-columns:minmax(0,1fr)}.drive{grid-template-columns:minmax(0,1fr)}.dvis{min-height:320px}}
 @media (max-width:640px){
+  .trow .tt{flex-wrap:wrap;gap:8px}.trow .tn{flex:1 1 100%}.wv{margin-left:0}.trow:not(.on) .wv{display:none}
   .trow{grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"pl tt lic" "pl ref tm"}
   .trow .pl{grid-area:pl}.trow .tt{grid-area:tt}.trow .ref{grid-area:ref}.trow .tm{grid-area:tm;justify-self:end}.trow .tl2{grid-area:lic;justify-self:end}
   .usb{transform:rotate(-14deg) scale(.82)}.cd{transform:scale(.85)}
@@ -365,11 +400,13 @@ body.sub main{display:none}
   <div class="wrap">
     <div class="ghead">
       <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
+      <div class="stat" aria-hidden="true"><span><span class="dot"></span><b>Online</b></span><span>Sys / Audio</span><span>Tracks <b id="sCount">--</b></span><span>Sample 44.1 kHz</span></div>
       <h2>Format <span class="sl">/</span> Audio</h2>
       <div class="lbl m">Tracks / Licensing / Blind Drive</div>
       <p class="m">Unreleased music made at FORMAT. Preview a track, license it for your project, or download it to keep.</p>
       <span class="tick"></span>
     </div>
+    <div class="cover" aria-hidden="true"><img src="assets/audio-cover-wide.svg" alt=""><i></i></div>
 
     <section class="tracks" aria-labelledby="tracksH">
       <div class="shead"><h3 id="tracksH" class="lbl">Tracks</h3><span class="lbl m" id="tCount"></span></div>
@@ -464,7 +501,7 @@ body.sub main{display:none}
   var tl=document.getElementById('tlist'),PLAY='<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2.5 1.2v9.6L10.5 6z"/></svg>',PAUSE='<svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2.5 1.5h2.6v9H2.5zM6.9 1.5h2.6v9H6.9z"/></svg>';
   var audio=new Audio(),playing=null;
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
-  function stop(){if(!playing)return;audio.pause();playing.btn.setAttribute('aria-pressed','false');playing.btn.innerHTML=PLAY;playing.btn.setAttribute('aria-label','Play preview of '+playing.t.title);playing.bar.style.width='0';playing=null}
+  function stop(){if(!playing)return;audio.pause();playing.btn.setAttribute('aria-pressed','false');playing.btn.innerHTML=PLAY;playing.btn.setAttribute('aria-label','Play preview of '+playing.t.title);playing.bar.style.width='0';playing.li.classList.remove('on');playing=null}
   audio.addEventListener('timeupdate',function(){if(playing&&audio.duration)playing.bar.style.width=(audio.currentTime/audio.duration*100)+'%'});
   audio.addEventListener('ended',stop);
   function row(t,i){
@@ -472,15 +509,16 @@ body.sub main{display:none}
     btn.type='button';btn.innerHTML=PLAY;
     var ref=el('span','lbl m ref','FMT-'+(t?t.ref:'A'+String(i+1).padStart(2,'0')));
     var tt=el('div','tt'),tn=el('div','tn',t?t.title:'Coming soon');tt.appendChild(tn);
+    var wv=el('span','wv');wv.setAttribute('aria-hidden','true');for(var w=0;w<14;w++){var b=el('i');b.style.setProperty('--i',w);wv.appendChild(b)}tt.appendChild(wv);
     var tm=el('span','lbl m tm',t?[t.bpm&&t.bpm+' BPM',t.key,t.len,t.year&&'Produced '+t.year].filter(Boolean).join(' / '):'Unreleased');
     var lic=el('button','tl2 lbl',t?'License':'Soon');lic.type='button';
     if(t&&t.preview){btn.setAttribute('aria-label','Play preview of '+t.title);btn.setAttribute('aria-pressed','false');
-      btn.addEventListener('click',function(){var same=playing&&playing.btn===btn;stop();if(same)return;audio.src=t.preview;var r=audio.play();if(r&&r.catch)r.catch(function(){});playing={btn:btn,bar:bar,t:t};btn.setAttribute('aria-pressed','true');btn.innerHTML=PAUSE;btn.setAttribute('aria-label','Pause preview of '+t.title)})}
+      btn.addEventListener('click',function(){var same=playing&&playing.btn===btn;stop();if(same)return;audio.src=t.preview;var r=audio.play();if(r&&r.catch)r.catch(function(){});playing={btn:btn,bar:bar,t:t,li:li};li.classList.add('on');btn.setAttribute('aria-pressed','true');btn.innerHTML=PAUSE;btn.setAttribute('aria-label','Pause preview of '+t.title)})}
     else{btn.disabled=true;btn.setAttribute('aria-label','Preview not available yet')}
     if(t)lic.addEventListener('click',function(){picked(t)});else lic.disabled=true;
     [btn,ref,tt,tm,lic,bar].forEach(function(n){li.appendChild(n)});return li;
   }
-  if(TRACKS.length){TRACKS.forEach(function(t,i){tl.appendChild(row(t,i))});document.getElementById('tCount').textContent=TRACKS.length+(TRACKS.length===1?' track':' tracks')}
+  if(TRACKS.length){TRACKS.forEach(function(t,i){tl.appendChild(row(t,i))});document.getElementById('tCount').textContent=TRACKS.length+(TRACKS.length===1?' track':' tracks');var sc=document.getElementById('sCount');if(sc)sc.textContent=String(TRACKS.length).padStart(2,'0')}
   else{for(var i=0;i<SLOTS;i++)tl.appendChild(row(null,i));document.getElementById('tCount').textContent='First tracks coming soon'}
 
   // license tiers
