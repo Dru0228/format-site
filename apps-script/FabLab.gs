@@ -110,6 +110,7 @@ function doPost(e) {
     try {
       if (d.action === 'vote') return reply_(vote_(key, item, d, client));
       if (d.action === 'waitlist') return reply_(waitlist_(key, item, d, client));
+      if (d.action === 'note') return reply_(note_(key, item, d, client));
       if (d.action === 'order') return reply_(order_(key, item, d, client));
       return reply_('invalid');
     } finally {
@@ -132,7 +133,17 @@ function vote_(key, item, d, client) {
   if (n >= 2) {
     var rows = sh.getRange(2, 2, n - 1, 4).getValues();   // Item, Type, Color, Visitor
     for (var i = 0; i < rows.length; i++) {
-      if (rows[i][0] === key && rows[i][1] === type && rows[i][3] === client) return 'duplicate';
+      if (rows[i][0] === key && rows[i][1] === type && rows[i][3] === client) {
+        if (type !== 'color') return 'duplicate';
+        // A visitor can change their color pick: update their row instead of adding another.
+        var msg = clean_(d.message, MAX_MESSAGE);
+        sh.getRange(i + 2, 4).setValue(noFormula_(color));
+        if (msg) sh.getRange(i + 2, 6).setValue(noFormula_(msg));
+        notify_('FORMAT vote: ' + item.name + ' / ' + color + ' (changed)',
+          ['A visitor changed their color pick for ' + item.name + ' to ' + color + '.',
+            msg ? 'Message: ' + msg : ''].join('\n'));
+        return 'ok';
+      }
     }
   }
   var message = clean_(d.message, MAX_MESSAGE);
@@ -141,6 +152,15 @@ function vote_(key, item, d, client) {
   notify_('FORMAT vote: ' + item.name + (type === 'color' ? ' / ' + color : ''),
     [type === 'color' ? 'Color vote for ' + item.name + ': ' + color : 'Someone voted for ' + item.name + '.',
       message ? 'Message: ' + message : ''].join('\n'));
+  return 'ok';
+}
+
+// A note sent on its own, without a vote or signup.
+function note_(key, item, d, client) {
+  var message = clean_(d.message, MAX_MESSAGE);
+  if (!message) return 'invalid';
+  sheet_(TAB_VOTES).appendRow([new Date(), key, 'note', '', client, message].map(noFormula_));
+  notify_('FORMAT note: ' + item.name, 'Note about ' + item.name + ':\n\n' + message);
   return 'ok';
 }
 
