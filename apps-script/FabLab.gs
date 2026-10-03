@@ -13,6 +13,9 @@
  *   4. Serves the live numbers the site needs (stock left, top 3 concepts by
  *      day / week / month / year, how long each concept has been listed).
  *
+ * Votes, waitlist signups and pre-orders each email NOTIFY_EMAIL and can carry an
+ * optional visitor message (saved in a Message column).
+ *
  * It also builds the Dashboard tab (tables and charts). Setup steps are in
  * README.md under "FabLab voting, waitlist and stock".
  */
@@ -25,7 +28,8 @@ var TAB_SIZES = 'Sizes';
 var TAB_DASH = 'Dashboard';
 
 var DEFAULT_CAP = 50;              // units per pre-order piece when Items > Cap is blank
-var NOTIFY_EMAIL = 'info@madebyformat.com';   // gets an email for every pre-order submission
+var NOTIFY_EMAIL = 'info@madebyformat.com';   // gets an email for every vote, waitlist signup and pre-order
+var MAX_MESSAGE = 1000;            // longest optional visitor note kept
 var MAX_PER_PERSON = 2;            // units one email address can hold per piece
 var SIZE_LIST = ['S', 'M', 'L', 'XL', 'XXL', 'One size'];
 var MAX_ACTIONS = 60;              // actions allowed per visitor...
@@ -36,10 +40,10 @@ var DASH_ROWS = 60;                // how many Items rows the Dashboard table co
 
 var HEADERS = {
   Items: ['Key', 'Name', 'Category', 'Status', 'Cap', 'Listed', 'Colors'],
-  Votes: ['Time', 'Item', 'Type', 'Color', 'Visitor'],
-  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor'],
+  Votes: ['Time', 'Item', 'Type', 'Color', 'Visitor', 'Message'],
+  Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message'],
   Sizes: ['Item', 'Color', 'Size', 'Cap', 'Taken', 'Left'],
-  Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref']
+  Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref', 'Message']
 };
 
 // Size run for pieces with a fixed size breakdown: starting values for the Sizes tab
@@ -131,7 +135,12 @@ function vote_(key, item, d, client) {
       if (rows[i][0] === key && rows[i][1] === type && rows[i][3] === client) return 'duplicate';
     }
   }
-  sh.appendRow([new Date(), key, type, color, client].map(noFormula_));
+  var message = clean_(d.message, MAX_MESSAGE);
+  sh.appendRow([new Date(), key, type, color, client, message].map(noFormula_));
+  CacheService.getScriptCache().remove('summary');
+  notify_('FORMAT vote: ' + item.name + (type === 'color' ? ' / ' + color : ''),
+    [type === 'color' ? 'Color vote for ' + item.name + ': ' + color : 'Someone voted for ' + item.name + '.',
+      message ? 'Message: ' + message : ''].join('\n'));
   return 'ok';
 }
 
@@ -149,7 +158,11 @@ function waitlist_(key, item, d, client) {
     }
   }
   var list = item.status === 'Pre-order' ? 'Pre-order' : 'Concept';
-  sh.appendRow([new Date(), key, list, email, client].map(noFormula_));
+  var message = clean_(d.message, MAX_MESSAGE);
+  sh.appendRow([new Date(), key, list, email, client, message].map(noFormula_));
+  notify_('FORMAT waitlist: ' + item.name + ' from ' + email,
+    [email + ' joined the ' + list + ' waitlist for ' + item.name + '.',
+      message ? 'Message: ' + message : '', '', '(Reply to this email to answer them.)'].join('\n'), email);
   return 'ok';
 }
 
@@ -160,6 +173,7 @@ function order_(key, item, d, client) {
   var name = clean_(d.name, 120);
   var email = clean_(d.email, 200).toLowerCase();
   var ref = clean_(d.ref, 40);
+  var message = clean_(d.message, MAX_MESSAGE);
   if (!name || !ref || !/^\S+@\S+\.\S+$/.test(email)) return 'invalid';
   if (item.colors.length && item.colors.indexOf(color) < 0) return 'invalid';
   if (SIZE_LIST.indexOf(size) < 0) return 'invalid';
@@ -178,19 +192,22 @@ function order_(key, item, d, client) {
     return 'sold_out';
   }
 
-  sheet_(TAB_ORDERS).appendRow([new Date(), key, color, size, 1, 'Requested', '', client, name, email, ref].map(noFormula_));
+  sheet_(TAB_ORDERS).appendRow([new Date(), key, color, size, 1, 'Requested', '', client, name, email, ref, message].map(noFormula_));
   CacheService.getScriptCache().remove('summary');
-  try {
-    MailApp.sendEmail({
-      to: NOTIFY_EMAIL,
-      replyTo: email,
-      name: 'FORMAT website',
-      subject: 'FORMAT pre-order: ' + item.name + ' / ' + color + ' / ' + size + ' from ' + name,
-      body: [item.name + ', ' + color + ', size ' + size, 'Name: ' + name, 'Email: ' + email, '',
-        '(Reply to this email to answer ' + name + '. Set the row to Cancelled in the Orders tab to free the unit.)'].join('\n')
-    });
-  } catch (err) { console.error(err); }
+  notify_('FORMAT pre-order: ' + item.name + ' / ' + color + ' / ' + size + ' from ' + name,
+    [item.name + ', ' + color + ', size ' + size, 'Name: ' + name, 'Email: ' + email,
+      message ? 'Message: ' + message : '', '',
+      '(Reply to this email to answer ' + name + '. Set the row to Cancelled in the Orders tab to free the unit.)'].join('\n'), email);
   return 'ok';
+}
+
+// Emails NOTIFY_EMAIL. A mail failure (quota, missing permission) never loses the sheet row.
+function notify_(subject, body, replyTo) {
+  try {
+    var o = { to: NOTIFY_EMAIL, name: 'FORMAT website', subject: subject.replace(/[\r\n]+/g, ' '), body: body };
+    if (replyTo) o.replyTo = replyTo;
+    MailApp.sendEmail(o);
+  } catch (err) { console.error(err); }
 }
 
 // Units held per size / piece / email, from every Orders row that is not Cancelled.
@@ -390,6 +407,9 @@ function setup() {
 
   var orders = ss.getSheetByName(TAB_ORDERS);
   // Older sheets were created before the Name / Email / Ref columns existed.
+  [TAB_VOTES, TAB_WAIT].forEach(function (n) {
+    ss.getSheetByName(n).getRange(1, 1, 1, HEADERS[n].length).setValues([HEADERS[n]]).setFontWeight('bold');
+  });
   orders.getRange(1, 1, 1, HEADERS.Orders.length).setValues([HEADERS.Orders]).setFontWeight('bold');
   orders.getRange(2, 6, 1000, 1).setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(['Requested', 'Confirmed', 'Cancelled'], true).build());

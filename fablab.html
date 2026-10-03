@@ -195,6 +195,8 @@ footer{border-top:0}
 .vote{margin-top:0}
 .vote[aria-pressed="true"]{background:transparent;border-color:var(--accent);color:var(--ink)}
 .buy:disabled{opacity:.5;cursor:default;background:transparent;color:var(--mute);border-color:var(--line)}
+.msg textarea{width:100%;background:transparent;border:1px solid var(--line);color:var(--ink);padding:12px;font:400 16px var(--sans);border-radius:0;resize:vertical}
+.msg textarea:focus{border-color:var(--ink);outline:0}
 .wl{margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
 .wl .lbl{display:block;margin-bottom:10px}
 .wl .row{display:flex;gap:8px}
@@ -296,6 +298,7 @@ footer{border-top:0}
     <p class="lbl m run" id="shRun" hidden style="margin:-14px 0 24px"></p>
     <div class="opt"><div class="lbl"><span id="colLbl">Color</span><span class="m" id="shCol"></span></div><div class="opts" id="cols" role="group" aria-label="Color"></div></div>
     <div class="opt" id="sizeOpt"><div class="lbl"><span>Size</span><span class="m" id="shSize">Choose a size</span></div><div class="opts" id="sizes" role="group" aria-label="Size"></div></div>
+    <div class="opt msg"><label class="lbl" for="msg">Leave a note about this piece <span class="m">Optional</span></label><textarea id="msg" maxlength="1000" rows="3" placeholder="What would make it better? Fit, color, price, anything."></textarea></div>
     <button class="buy lbl vote" id="vote" type="button" aria-pressed="false" hidden><span id="voteT">Vote for this piece</span> <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></button>
     <form class="ordf" id="ordF" novalidate>
       <label class="lbl" for="ordN">Name</label>
@@ -578,7 +581,7 @@ footer{border-top:0}
         if(isPre(cur)){color=c;$('note').textContent=NOTE_PRE;paintPre();return}
         if(colorVoted())return;
         mine[cur.k]=mine[cur.k]||{};mine[cur.k].color=c;wr('format-votes',mine);
-        send({action:'vote',item:cur.k,kind:'color',value:c});track('fablab/vote-color/'+cur.k);paintVote();
+        send({action:'vote',item:cur.k,kind:'color',value:c,message:$('msg').value.trim()});track('fablab/vote-color/'+cur.k);paintVote();
       });
       colsEl.appendChild(b);
     });
@@ -586,6 +589,7 @@ footer{border-top:0}
     sizesEl.innerHTML='';
     SIZES.forEach(function(s){var b=el('button','o sz',s);b.type='button';b.dataset.v=s;b.addEventListener('click',function(){size=s;pick(sizesEl,s);$('shSize').textContent=s;$('note').textContent=NOTE_PRE});sizesEl.appendChild(b)});
     pick(sizesEl,size||'');$('shSize').textContent='Choose a size';
+    $('msg').value='';
     $('ordF').hidden=!pre;$('vote').hidden=pre;ordRef=rid();
     var run=RUN[p.k];$('shRun').hidden=!(pre&&run);if(pre&&run)$('shRun').textContent=runText(p.k)+' Pick a color, then a size.';
     if(pre){$('note').textContent=NOTE_PRE;pick(colsEl,color);$('shCol').textContent=color;stockBlock()}else paintVote();
@@ -608,14 +612,14 @@ footer{border-top:0}
   $('vote').addEventListener('click',function(){
     if(mine[cur.k]&&mine[cur.k].item)return;
     mine[cur.k]=mine[cur.k]||{};mine[cur.k].item=1;wr('format-votes',mine);
-    send({action:'vote',item:cur.k,kind:'item'});track('fablab/vote/'+cur.k);paintVote();
+    send({action:'vote',item:cur.k,kind:'item',message:$('msg').value.trim()});track('fablab/vote/'+cur.k);paintVote();
   });
   $('wl').addEventListener('submit',function(e){
     e.preventDefault();
     var em=$('wlE').value.trim(),st=$('wlS');
     if($('wlH').value)return;
     if(!/^\S+@\S+\.\S+$/.test(em)){st.hidden=false;st.textContent='Enter a valid email address.';$('wlE').focus();return}
-    send({action:'waitlist',item:cur.k,email:em,website:$('wlH').value});
+    send({action:'waitlist',item:cur.k,email:em,message:$('msg').value.trim(),website:$('wlH').value});
     joined[cur.k]=1;wr('format-waitlist',joined);track('fablab/waitlist/'+cur.k);
     $('wlE').disabled=true;$('wlB').disabled=true;st.hidden=false;
     st.textContent=isPre(cur)?'You’re on the list. We’ll email you when more drop.':'You’re on the list. We’ll email you when '+cur.n+' gets dropped.';
@@ -631,7 +635,7 @@ footer{border-top:0}
     var item=cur.k,col=color,sz=size,btn=$('buy');
     btn.disabled=true;$('buyT').textContent='Submitting\u2026';
     fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'order',item:item,color:col,size:sz,qty:1,name:nm,email:em,ref:ordRef,client:cid,website:''})})
+      body:JSON.stringify({action:'order',item:item,color:col,size:sz,qty:1,name:nm,email:em,message:$('msg').value.trim(),ref:ordRef,client:cid,website:''})})
     .then(function(r){return r.text()}).then(function(code){
       code=code.trim();
       if(code==='ok'){

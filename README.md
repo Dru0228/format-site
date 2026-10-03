@@ -76,8 +76,9 @@ The previous page is kept as `fablab-v1.html` (hidden from search engines). To r
 ### Set up the sheet (once)
 
 1. Create a Google Sheet named **FORMAT FabLab**.
-2. **Extensions → Apps Script**, delete the sample code, paste in `apps-script/FabLab.gs`, save.
+2. **Extensions → Apps Script**, delete the sample code, paste in `apps-script/FabLab.gs`, save. Open it from the sheet's own **Extensions** menu, not from script.google.com: a standalone script is not attached to the sheet and every vote and signup fails.
 3. Reload the sheet, then use the new **FabLab → Set up / refresh dashboard** menu (approve the permissions). This creates the Items, Sizes, Votes, Waitlist, Orders and Dashboard tabs. If you already ran setup before the size-run update, paste in the new `FabLab.gs`, run setup again, and deploy a **new version** (Deploy → Manage deployments → Edit → New version) so the URL stays the same.
+Votes, waitlist signups and pre-orders each email `NOTIFY_EMAIL` (top of `FabLab.gs`) and keep the visitor's optional note in a Message column. After pasting the script, run `setup` once so Google asks to approve the mail permission.
 4. **Deploy → New deployment → Web app**, Execute as **Me**, access **Anyone**. Copy the URL.
 5. In `fablab.html` set `ENDPOINT` (top of the script) to that URL. The "Preview" banner disappears once it is set.
 
