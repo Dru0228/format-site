@@ -5,11 +5,10 @@ Static site: plain HTML, CSS and JS. No build step.
 ```
 index.html     Home
 studio.html    FORMAT // Studio
-archive.html   FORMAT // Archive (gallery)
+archive.html   FORMAT // Archive (filing system: Audio by year, Videos, Photos by content, FabLab Drops)
 fablab.html    FORMAT // FabLab Drop (pre-order with size runs, concepts with voting, waitlist)
 fablab-v1.html Previous FabLab store page (kept for rollback, noindex)
 contact.html   Contact
-audio.html     FORMAT // Audio (tracks, licensing, Blind Drive)
 apps-script/   Backends (Google Apps Script): Code.gs = contact form, FabLab.gs = FabLab votes / waitlist / stock
 analytics.js   Visitor analytics (GoatCounter), loaded by every page
 stats.html     Private stats dashboard (not linked, not indexed)
@@ -35,7 +34,6 @@ Then add your custom domain in the host's settings and update DNS at your regist
 
 ## Still to wire up
 
-- **Audio:** fill in `TRACKS`, `TIERS` (prices and checkout links) and `DRIVE` at the top of the script in `audio.html`. Only tracks that aren't on Spotify go on this page or the Blind Drive.
 - **FabLab checkout:** "Request to order" sends people to the contact form; there is no payment checkout yet.
 - **Footer:** the Facebook link still points to facebook.com (marked `data-todo="facebook-profile-url"`).
 
