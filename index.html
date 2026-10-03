@@ -11,7 +11,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="FORMAT">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive, FabLab apparel, and Format // Audio.">
+<meta name="description" content="FORMAT is a Houston creative studio: photo, video and FPV production, a media archive with photo, video and music, and FabLab apparel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
@@ -215,7 +215,7 @@ body.lock{overflow:hidden}
 }
 @media (max-width:480px){.logo img{height:13px}.brk{font-size:17px;letter-spacing:.2em}.work .grid3{grid-template-columns:1fr}}
 
-/* card with two links, FORMAT // AI page */
+/* two-link cards */
 .acts{display:flex;gap:24px;flex-wrap:wrap}
 .card a:hover .ph img{transform:scale(1.03)}
 .act:hover{color:var(--accent)}
@@ -256,6 +256,27 @@ body.sub main{display:none}
 .advl li span:first-child{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;padding-top:2px}
 .advl li .m{font-size:15px;line-height:1.55}
 @media (max-width:820px){.adv{grid-template-columns:1fr}.advl li{grid-template-columns:1fr}}
+/* brands */
+.brands .head{align-items:flex-end}
+.brands .head p{margin:0;max-width:34ch;color:var(--mute);font-size:15px}
+.by{display:grid;grid-template-columns:96px minmax(0,1fr);gap:0 clamp(16px,3vw,40px);border-top:1px solid var(--line)}
+.by>.yr{padding-top:22px;font-size:12px;letter-spacing:.18em;font-weight:500;font-variant-numeric:tabular-nums}
+.by>.yr b{color:var(--accent);font-weight:500;margin-right:.5em}
+.by+.by{margin-top:0}
+.bl{list-style:none;margin:0;padding:0}
+.bl details{border-bottom:1px solid var(--line)}
+.bl details:last-child{border-bottom:0}
+.bl summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto 14px;gap:16px;align-items:center;padding:20px 0;cursor:pointer}
+.bl summary::-webkit-details-marker{display:none}
+.bl .bn{font-size:clamp(18px,2.2vw,26px);letter-spacing:.1em;text-transform:uppercase;font-weight:400;transition:color .3s}
+.bl summary:hover .bn{color:var(--accent)}
+.bl .bt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);text-align:right}
+.bl .bc{width:9px;height:9px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .35s cubic-bezier(.77,0,.18,1)}
+.bl details[open] .bc{transform:rotate(-135deg);color:var(--accent)}
+.bl .bd{padding:0 0 24px;max-width:58ch;color:var(--mute);font-size:15px;line-height:1.6}
+.bl .bd p{margin:0 0 10px}
+.bl .bd .lbl{display:block;margin-top:4px}
+@media (max-width:640px){.by{grid-template-columns:1fr}.by>.yr{padding:18px 0 0}.bl summary{grid-template-columns:minmax(0,1fr) 14px}.bl .bt{display:none}}
 /* closing line on every page, links to Contact */
 .closer{padding:clamp(64px,10vw,128px) 0;border-top:1px solid var(--line)}
 .closer .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap}
@@ -270,7 +291,7 @@ body.sub main{display:none}
 <header>
   <div class="wrap bar">
     <a class="logo" href="#top" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">//</span>Studio</a><a href="archive.html"><span class="sl">//</span>Archive</a><a href="fablab.html"><span class="sl">//</span>FabLab</a><a href="audio.html"><span class="sl">//</span>Audio</a></nav>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">//</span>Studio</a><a href="archive.html"><span class="sl">//</span>Archive</a><a href="fablab.html"><span class="sl">//</span>FabLab</a></nav>
     <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
@@ -301,12 +322,11 @@ body.sub main{display:none}
 
 <section class="block" aria-labelledby="whatH">
   <div class="wrap">
-  <div class="head"><h2 id="whatH">Four pillars.<br>One format.</h2></div>
-  <div class="grid4 div">
+  <div class="head"><h2 id="whatH">Three pillars.<br>One format.</h2></div>
+  <div class="grid3 div">
     <a href="studio.html"><div class="ph"><img src="assets/b3031f081b.jpg" alt="Florence Cathedral dome and bell tower lit at dusk above the rooftops" loading="lazy"></div><h3>Studio</h3><div class="lbl m">Photo // Video // FPV</div><p>Photo, video and FPV production for brands, events and people. From concept to final cut, on the ground and in the air.</p><div class="lbl act">Enter Studio <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="archive.html"><div class="ph"><img src="assets/10d3b531e5.jpg" alt="Small red-roofed cabin in snow under a sky full of stars" loading="lazy"></div><h3>Archive</h3><div class="lbl m">Prints // Licensing // AI</div><p>A growing archive of people, places, things, and ideas. Browse the gallery, order prints, license photo and video, or explore FORMAT // AI.</p><div class="lbl act">Enter Archive <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
+    <a href="archive.html"><div class="ph"><img src="assets/10d3b531e5.jpg" alt="Small red-roofed cabin in snow under a sky full of stars" loading="lazy"></div><h3>Archive</h3><div class="lbl m">Prints // Licensing // Drops</div><p>A growing archive of people, places, things, and ideas. Browse photo, video and music, order prints, license work, or request a piece from a past FabLab drop.</p><div class="lbl act">Enter Archive <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
     <a href="fablab.html"><div class="ph"><img src="assets/7bb9df16f7.jpg" alt="Model seated on a chrome chair in a black and white FORMAT track jacket under red light" loading="lazy" style="object-position:50% 0"></div><h3>FabLab</h3><div class="lbl m">Apparel // Builds</div><p>Apparel, objects and experiments. Limited-run clothing and custom FPV builds, made in small batches.</p><div class="lbl act">Enter FabLab <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
-    <a href="audio.html"><div class="ph"><img src="assets/audio-cover.svg" width="400" height="500" alt="Audio waveform" loading="lazy"></div><h3>Audio</h3><div class="lbl m">Tracks // Licensing // Blind Drive</div><p>Unreleased music from the studio. License a track for your project, download it, or order a Blind Drive of five random songs.</p><div class="lbl act">Enter Audio <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a>
   </div>
   </div>
 </section>
@@ -322,6 +342,25 @@ body.sub main{display:none}
       <figure style="margin:0"><div class="ph"><img src="assets/e6ffae7957.jpg" alt="Layered mountain ridges in mist under a red sunset" loading="lazy"></div><figcaption class="cap lbl"><span>Last light</span><span class="m">Landscape</span></figcaption></figure>
       <figure style="margin:0"><div class="ph"><img src="assets/f8a55aaa82.jpg" alt="Black and white photo of a pop-top camper van parked on a beach" loading="lazy"></div><figcaption class="cap lbl"><span>Low tide</span><span class="m">Places</span></figcaption></figure>
     </div>
+  </div>
+</section>
+
+<section class="block brands" id="clients" aria-labelledby="clientsH">
+  <div class="wrap">
+    <div class="head"><h2 id="clientsH">Brands we’ve<br>worked with</h2><p>Newest first. Open a name to see what we made for them.</p></div>
+      <div class="by"><div class="yr lbl"><b>//</b>2026</div><div class="bl">
+        <details><summary><span class="bn">Ran Exotics</span><span class="bt">Automotive</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">Lone Star Drifts</span><span class="bt">Motorsport</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">The George at Clear Fork</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">Heights House Hotel</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">Machine Elves</span><span class="bt">Brand</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+      </div></div>
+      <div class="by"><div class="yr lbl"><b>//</b>2025</div><div class="bl">
+        <details><summary><span class="bn">F1 Vegas</span><span class="bt">Motorsport // Events</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">The Venetian</span><span class="bt">Hospitality</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">Flight Club</span><span class="bt">Retail</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+        <details><summary><span class="bn">XS Nightclub</span><span class="bt">Nightlife</span><span class="bc" aria-hidden="true"></span></summary><div class="bd"><p>What we did: details coming soon.</p></div></details>
+      </div></div>
   </div>
 </section>
 

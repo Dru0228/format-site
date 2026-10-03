@@ -176,7 +176,7 @@ footer button{background:none;border:0;padding:0;color:var(--mute);text-decorati
 (function(){
   var API='https://madebyformat.goatcounter.com/api/v0';
   var KEY_NAME='format-gc-token', RANGE_NAME='format-stats-range';
-  var PAGES={'/':'Home','/index':'Home','/studio':'Studio','/archive':'Archive','/fablab':'FabLab','/contact':'Contact','/audio':'Audio'};
+  var PAGES={'/':'Home','/index':'Home','/studio':'Studio','/archive':'Archive','/fablab':'FabLab','/contact':'Contact'};
   var $=function(id){return document.getElementById(id)};
   function store(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
   var token=store(KEY_NAME), days=+(store(RANGE_NAME)||7);
