@@ -40,7 +40,7 @@ var DASH_ROWS = 60;                // how many Items rows the Dashboard table co
 
 var HEADERS = {
   Items: ['Key', 'Name', 'Category', 'Status', 'Cap', 'Listed', 'Colors'],
-  Votes: ['Time', 'Item', 'Type', 'Color', 'Visitor', 'Message'],
+  Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message'],
   Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message'],
   Sizes: ['Item', 'Color', 'Size', 'Cap', 'Taken', 'Left'],
   Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref', 'Message']
@@ -124,9 +124,10 @@ function doPost(e) {
 
 function vote_(key, item, d, client) {
   if (item.status !== 'Concept') return 'invalid';
-  var type = d.kind === 'color' ? 'color' : 'item';
-  var color = type === 'color' ? clean_(d.value, 40) : '';
+  var type = d.kind === 'color' ? 'color' : d.kind === 'size' ? 'size' : 'item';
+  var color = type === 'item' ? '' : clean_(d.value, 40);   // the Color column holds the picked color or size
   if (type === 'color' && (!color || (item.colors.length && item.colors.indexOf(color) < 0))) return 'invalid';
+  if (type === 'size' && SIZE_LIST.indexOf(color) < 0) return 'invalid';
 
   var sh = sheet_(TAB_VOTES);
   var n = sh.getLastRow();
@@ -134,13 +135,13 @@ function vote_(key, item, d, client) {
     var rows = sh.getRange(2, 2, n - 1, 4).getValues();   // Item, Type, Color, Visitor
     for (var i = 0; i < rows.length; i++) {
       if (rows[i][0] === key && rows[i][1] === type && rows[i][3] === client) {
-        if (type !== 'color') return 'duplicate';
-        // A visitor can change their color pick: update their row instead of adding another.
+        if (type === 'item') return 'duplicate';
+        // A visitor can change their color or size pick: update their row instead of adding another.
         var msg = clean_(d.message, MAX_MESSAGE);
         sh.getRange(i + 2, 4).setValue(noFormula_(color));
         if (msg) sh.getRange(i + 2, 6).setValue(noFormula_(msg));
         notify_('FORMAT vote: ' + item.name + ' / ' + color + ' (changed)',
-          ['A visitor changed their color pick for ' + item.name + ' to ' + color + '.',
+          ['A visitor changed their ' + type + ' pick for ' + item.name + ' to ' + color + '.',
             msg ? 'Message: ' + msg : ''].join('\n'));
         return 'ok';
       }
@@ -149,8 +150,8 @@ function vote_(key, item, d, client) {
   var message = clean_(d.message, MAX_MESSAGE);
   sh.appendRow([new Date(), key, type, color, client, message].map(noFormula_));
   CacheService.getScriptCache().remove('summary');
-  notify_('FORMAT vote: ' + item.name + (type === 'color' ? ' / ' + color : ''),
-    [type === 'color' ? 'Color vote for ' + item.name + ': ' + color : 'Someone voted for ' + item.name + '.',
+  notify_('FORMAT vote: ' + item.name + (type === 'item' ? '' : ' / ' + color),
+    [type === 'item' ? 'Someone voted for ' + item.name + '.' : (type === 'color' ? 'Color' : 'Size') + ' pick for ' + item.name + ': ' + color,
       message ? 'Message: ' + message : ''].join('\n'));
   return 'ok';
 }
