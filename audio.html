@@ -275,7 +275,7 @@ body.sub main{display:none}
 .gt{display:inline-flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:14px 22px;color:inherit}
 .gt:hover{background:var(--ink);color:var(--paper)}
 /* audio page: catalog list, three license tiers, Blind Drive product */
-/* tech layer: HUD readouts, scan line, live waveform on the playing track */
+/* tech layer: HUD readouts, live waveform on the playing track */
 .apage{position:relative}
 .apage>.wrap{position:relative}
 .apage .m,.apage .ref,.apage .tm,.apage .lbl.m,.tier .pr,.tier li,.stat{font-family:var(--mono)}
@@ -285,13 +285,6 @@ body.sub main{display:none}
 .stat b{font-weight:500;color:var(--ink)}
 .stat .dot{display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:blink 1.6s ease-in-out infinite}
 @keyframes blink{50%{opacity:.25}}
-.cover{position:relative;height:56px;margin:24px 0 4px;opacity:.7;background:#0E0E0E;border:1px solid var(--line);overflow:hidden}
-.cover img{width:100%;height:100%;object-fit:cover}
-.cover::before,.cover::after{content:"";position:absolute;width:16px;height:16px;border:0 solid rgba(255,255,255,.7)}
-.cover::before{top:8px;left:8px;border-top-width:1px;border-left-width:1px}
-.cover::after{bottom:8px;right:8px;border-bottom-width:1px;border-right-width:1px}
-.cover i{position:absolute;top:0;bottom:0;left:0;width:1px;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:scan 6s linear infinite}
-@keyframes scan{from{left:0}to{left:100%}}
 .shead{border-bottom:1px solid var(--accent)}
 .trow{transition:background .3s,box-shadow .3s}
 .trow::before{content:"";position:absolute;left:-12px;top:12px;bottom:12px;width:2px;background:var(--accent);transform:scaleY(0);transition:transform .3s}
@@ -405,7 +398,6 @@ body.sub main{display:none}
       <p class="m">Unreleased music made at FORMAT. Preview a track, license it for your project, or download it to keep.</p>
       <span class="tick"></span>
     </div>
-    <div class="cover" aria-hidden="true"><img src="assets/audio-cover-wide.svg" alt=""><i></i></div>
 
     <section class="tracks" aria-labelledby="tracksH">
       <div class="shead"><h3 id="tracksH" class="lbl">Tracks</h3><span class="lbl m" id="tCount"></span></div>
