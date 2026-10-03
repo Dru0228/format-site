@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FORMAT / FabLab</title>
+<title>FORMAT // FabLab</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -253,7 +253,7 @@ footer{border-top:0}
 <header>
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="#top" aria-current="page"><span class="sl">/</span>FabLab</a><a href="audio.html"><span class="sl">/</span>Audio</a></nav>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">//</span>Studio</a><a href="archive.html"><span class="sl">//</span>Archive</a><a href="#top" aria-current="page"><span class="sl">//</span>FabLab</a><a href="audio.html"><span class="sl">//</span>Audio</a></nav>
     <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
@@ -263,14 +263,14 @@ footer{border-top:0}
     <div class="pv lbl" id="pv" hidden>Preview: voting, the waitlist and live stock aren't connected yet.</div>
     <div class="ghead">
       <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
-      <h2>Format <span class="sl">/</span> FabLab</h2>
+      <h2>Format <span class="sl">//</span> FabLab</h2>
       <div class="lbl m">FabLab Drop, 2026 Q4</div>
       <p class="m">Limited-run apparel, made in small batches. Three pieces are in production now. Vote on what we make next.</p>
     </div>
 
     <section class="sec" id="preorder" aria-labelledby="preH">
       <div class="sech">
-        <div class="lbl m">FabLab Drop, 2026 Q4 / Pre-drop</div>
+        <div class="lbl m">FabLab Drop, 2026 Q4 // Pre-drop</div>
         <h3 id="preH">Pre-order</h3>
         <p class="m">Limited runs. Once a piece or size sells out, it will not return until the next drop.</p>
       </div>
@@ -489,7 +489,7 @@ footer{border-top:0}
     conCards.forEach(function(b){
       var p=byKey[b.dataset.k],ag=b.querySelector('.age');
       ag.textContent=ageText(p);
-      if(mine[p.k]&&mine[p.k].item){var v=el('span','vd',' / Voted');ag.appendChild(v)}
+      if(mine[p.k]&&mine[p.k].item){var v=el('span','vd',' // Voted');ag.appendChild(v)}
     });
   }
 
@@ -541,7 +541,7 @@ footer{border-top:0}
   function tint(c){
     var st=$('stage'),cap=$('tCap');
     st.style.background=c&&COL[c]?'radial-gradient(circle at 50% 45%,'+COL[c]+'66,#0E0E0E 72%)':'';
-    cap.hidden=!c;if(c)cap.textContent=c+' / photo shows the main mockup';
+    cap.hidden=!c;if(c)cap.textContent=c+' // photo shows the main mockup';
   }
   function showColor(c){
     var k=cur.cw&&cur.cw[c],i=k?pics.indexOf(k):-1;
@@ -618,8 +618,8 @@ footer{border-top:0}
     color=pre?p.col[0]:null;size=p.sz?null:'One size';
     var grp=(pre?preCards:conCards).filter(function(b){return !b.hidden});
     var ix=grp.map(function(b){return b.dataset.k}).indexOf(p.k);
-    $('shIdx').textContent=ix>-1?String(ix+1).padStart(2,'0')+' / '+String(grp.length).padStart(2,'0'):'';
-    $('shC').textContent=p.c+' / '+(pre?'Pre-order':'Concept');
+    $('shIdx').textContent=ix>-1?String(ix+1).padStart(2,'0')+' // '+String(grp.length).padStart(2,'0'):'';
+    $('shC').textContent=p.c+' // '+(pre?'Pre-order':'Concept');
     $('shN').textContent=p.n;
     $('shT').textContent=p.t;
     pics=['c:'+p.k].concat(p.b.map(function(b){return 'b:'+b}));

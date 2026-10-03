@@ -4,12 +4,12 @@ Static site: plain HTML, CSS and JS. No build step.
 
 ```
 index.html     Home
-studio.html    FORMAT / Studio
-archive.html   FORMAT / Archive (gallery)
-fablab.html    FORMAT / FabLab Drop (pre-order with size runs, concepts with voting, waitlist)
+studio.html    FORMAT // Studio
+archive.html   FORMAT // Archive (gallery)
+fablab.html    FORMAT // FabLab Drop (pre-order with size runs, concepts with voting, waitlist)
 fablab-v1.html Previous FabLab store page (kept for rollback, noindex)
 contact.html   Contact
-audio.html     FORMAT / Audio (tracks, licensing, Blind Drive)
+audio.html     FORMAT // Audio (tracks, licensing, Blind Drive)
 apps-script/   Backends (Google Apps Script): Code.gs = contact form, FabLab.gs = FabLab votes / waitlist / stock
 analytics.js   Visitor analytics (GoatCounter), loaded by every page
 stats.html     Private stats dashboard (not linked, not indexed)
