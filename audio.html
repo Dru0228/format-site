@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FORMAT / Audio</title>
+<title>FORMAT // Audio</title>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -11,7 +11,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="FORMAT">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Format / Audio: unreleased tracks from the Houston studio FORMAT. Preview, license or download a track, or order a Blind Drive of five random songs.">
+<meta name="description" content="Format // Audio: unreleased tracks from the Houston studio FORMAT. Preview, license or download a track, or order a Blind Drive of five random songs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -383,7 +383,7 @@ body.sub main{display:none}
 <header>
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="FORMAT home"><img class="li" src="assets/2a49f35d6b.png" alt="FORMAT"><img class="lp" src="assets/de76567afb.png" alt=""></a>
-    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">/</span>Studio</a><a href="archive.html"><span class="sl">/</span>Archive</a><a href="fablab.html"><span class="sl">/</span>FabLab</a><a href="#top" aria-current="page"><span class="sl">/</span>Audio</a></nav>
+    <nav class="lbl pnav" aria-label="Main"><a href="studio.html"><span class="sl">//</span>Studio</a><a href="archive.html"><span class="sl">//</span>Archive</a><a href="fablab.html"><span class="sl">//</span>FabLab</a><a href="#top" aria-current="page"><span class="sl">//</span>Audio</a></nav>
     <div class="hr"><a class="lbl cta" href="contact.html">Contact</a><button class="brk" id="themeBtn" type="button" aria-label="Switch to light theme" title="Switch theme">[ ]</button></div>
   </div>
 </header>
@@ -392,9 +392,9 @@ body.sub main{display:none}
   <div class="wrap">
     <div class="ghead">
       <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
-      <div class="stat" aria-hidden="true"><span><span class="dot"></span><b>Online</b></span><span>Sys / Audio</span><span>Tracks <b id="sCount">--</b></span><span>Sample 44.1 kHz</span></div>
-      <h2>Format <span class="sl">/</span> Audio</h2>
-      <div class="lbl m">Tracks / Licensing / Blind Drive</div>
+      <div class="stat" aria-hidden="true"><span><span class="dot"></span><b>Online</b></span><span>Sys // Audio</span><span>Tracks <b id="sCount">--</b></span><span>Sample 44.1 kHz</span></div>
+      <h2>Format <span class="sl">//</span> Audio</h2>
+      <div class="lbl m">Tracks // Licensing // Blind Drive</div>
       <p class="m">Unreleased music made at FORMAT. Preview a track, license it for your project, or download it to keep.</p>
       <span class="tick"></span>
     </div>
@@ -414,11 +414,11 @@ body.sub main{display:none}
     <section class="drive" id="blind-drive" aria-labelledby="driveH">
       <div class="dvis" aria-hidden="true">
         <div class="obj usb" id="objUsb"><i class="cap"></i><i class="body"><b>FORMAT</b><span>05</span></i></div>
-        <div class="obj cd" id="objCd" hidden><i class="case"></i><i class="disc"><b>FORMAT</b><span>05 / ?</span></i></div>
+        <div class="obj cd" id="objCd" hidden><i class="case"></i><i class="disc"><b>FORMAT</b><span>05 // ?</span></i></div>
         <div class="dtag lbl">Contents unknown</div>
       </div>
       <div class="dinfo">
-        <div class="lbl m">Physical / Limited</div>
+        <div class="lbl m">Physical // Limited</div>
         <h3 id="driveH">Blind Drive</h3>
         <p class="dlede">Five unreleased tracks, picked at random. Some hit. Some don't. You won't know which five until you press play.</p>
         <div class="opt">
@@ -501,7 +501,7 @@ body.sub main{display:none}
     var ref=el('span','lbl m ref','FMT-'+(t?t.ref:'A'+String(i+1).padStart(2,'0')));
     var tt=el('div','tt'),tn=el('div','tn',t?t.title:'Coming soon');tt.appendChild(tn);
     var wv=el('span','wv');wv.setAttribute('aria-hidden','true');for(var w=0;w<14;w++){var b=el('i');b.style.setProperty('--i',w);wv.appendChild(b)}tt.appendChild(wv);
-    var tm=el('span','lbl m tm',t?[t.bpm&&t.bpm+' BPM',t.key,t.len,t.year&&'Produced '+t.year].filter(Boolean).join(' / '):'Unreleased');
+    var tm=el('span','lbl m tm',t?[t.bpm&&t.bpm+' BPM',t.key,t.len,t.year&&'Produced '+t.year].filter(Boolean).join(' // '):'Unreleased');
     var lic=el('button','tl2 lbl',t?'License':'Soon');lic.type='button';
     if(t&&t.preview){btn.setAttribute('aria-label','Play preview of '+t.title);btn.setAttribute('aria-pressed','false');
       btn.addEventListener('click',function(){var same=playing&&playing.btn===btn;stop();if(same)return;audio.src=t.preview;var r=audio.play();if(r&&r.catch)r.catch(function(){});playing={btn:btn,bar:bar,t:t,li:li};li.classList.add('on');btn.setAttribute('aria-pressed','true');btn.innerHTML=PAUSE;btn.setAttribute('aria-label','Pause preview of '+t.title)})}
