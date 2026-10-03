@@ -253,7 +253,7 @@ footer{border-top:0}
       <div class="sech">
         <div class="lbl m">FabLab Drop, 2026 Q4 / Pre-drop</div>
         <h3 id="preH">Pre-order</h3>
-        <p class="m">Limited runs. Once a piece or size sells out, it will not return until the next drop.</p>
+        <p class="m">Limited runs: only 10 of each color. Once a color or size sells out, it will not return until the next drop.</p>
       </div>
       <div id="announce" hidden></div>
       <div class="pgrid pre" id="pgridPre"></div>
@@ -337,13 +337,13 @@ footer{border-top:0}
   function even(sizes,colors){var o={};colors.forEach(function(c){o[c]=sizes});return o}
   var RUN={
     'signal-tee':even({S:1,M:3,L:3,XL:2,XXL:1},['Off-white','Black','Charcoal','Hot pink','Stone','White']),   // 60
-    'polo':{'Black':{S:1,M:2,L:2,XL:2,XXL:1},'Off-white':{S:1,M:2,L:2,XL:2,XXL:1},'Hot pink':{S:1,M:2,L:2,XL:1,XXL:1},'Charcoal':{S:1,M:2,L:2,XL:1,XXL:1}},  // 30
+    'polo':even({S:1,M:3,L:3,XL:2,XXL:1},['Black','Off-white','Hot pink','Charcoal']),   // 40
     'core-hoodie':even({S:1,M:3,L:3,XL:2,XXL:1},['Black','Off-white','Hot pink'])   // 30
   };
   function sum(o){var n=0;Object.keys(o).forEach(function(k){n+=o[k]});return n}
   function runTotal(k){var n=0;Object.keys(RUN[k]).forEach(function(c){n+=sum(RUN[k][c])});return n}
   function runEach(k){var v=Object.keys(RUN[k]).map(function(c){return sum(RUN[k][c])});return v.every(function(x){return x===v[0]})?v[0]:null}
-  function runText(k){var e=runEach(k);return runTotal(k)+' made'+(e?'. '+e+' per color.':' across '+Object.keys(RUN[k]).length+' colors.')}
+  function runText(k){var e=runEach(k);return e?'Only '+e+' of each color. '+runTotal(k)+' made.':runTotal(k)+' made across '+Object.keys(RUN[k]).length+' colors.'}
   var MAXP=2;                                   // units one person can hold per piece (matches the sheet script)
   var CAP=50;                                   // units per pre-order piece until the sheet says otherwise
   var SINCE='2026-10-02';                       // "on the board since" until the sheet says otherwise
