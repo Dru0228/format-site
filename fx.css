@@ -1,0 +1,48 @@
+/* FORMAT brand motion: [ ] loader, bracket hovers, viewfinder cursor, page enter.
+   Everything here is skipped for visitors who prefer reduced motion. */
+
+/* ---- [ ] loader: first visit per session (add ?loader to any URL to preview) ---- */
+.fx-load{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:var(--paper,#F1F0ED);transition:opacity .6s .12s ease,visibility 0s .72s;cursor:pointer}
+.fx-load.out{opacity:0;visibility:hidden;pointer-events:none}
+.fx-load svg{width:min(36vw,190px);height:auto;overflow:visible}
+.fx-load .b{fill:none;stroke:var(--ink,#161616);stroke-width:2.4;stroke-linecap:square;stroke-dasharray:74;stroke-dashoffset:74;animation:fxdraw .75s cubic-bezier(.77,0,.18,1) forwards;transition:transform .7s cubic-bezier(.77,0,.18,1)}
+.fx-load .b.r{animation-delay:.2s}
+.fx-load.out .b.l{transform:translateX(-16px)}
+.fx-load.out .b.r{transform:translateX(16px)}
+.fx-load .ln{stroke:var(--accent,#E3124B);stroke-width:1.6;opacity:0;animation:fxsweep 1.2s cubic-bezier(.45,0,.25,1) .55s infinite}
+.fx-load .w{font:500 11px/1 var(--sans,Arial,sans-serif);letter-spacing:.55em;text-indent:.55em;text-transform:uppercase;color:var(--mute,#6E6D69);opacity:0;animation:fxfade .8s ease .5s forwards}
+@keyframes fxdraw{to{stroke-dashoffset:0}}
+@keyframes fxsweep{0%{transform:translateX(-30px);opacity:0}20%,80%{opacity:1}100%{transform:translateX(30px);opacity:0}}
+@keyframes fxfade{to{opacity:1}}
+
+/* ---- page enter: content rises in once the loader (if any) clears ---- */
+main{animation:fxrise .75s cubic-bezier(.2,.7,.2,1) both}
+html.fx-wait main{animation:none;opacity:0}
+@keyframes fxrise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---- bracket hover on text links ---- */
+@media (hover:hover){
+  .act,.cta{position:relative}
+  .act::before,.act::after,.cta::before,.cta::after{position:absolute;top:50%;margin-top:-.62em;line-height:1.1;font-size:15px;font-weight:300;letter-spacing:0;color:var(--accent);opacity:0;transition:opacity .3s,transform .4s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+  .act::before,.cta::before{content:"[";left:-17px;transform:translateX(7px)}
+  .act::after,.cta::after{content:"]";right:-17px;transform:translateX(-7px)}
+  a:hover .act::before,a:hover .act::after,.act:hover::before,.act:hover::after,.cta:hover::before,.cta:hover::after{opacity:1;transform:none}
+}
+
+/* ---- viewfinder cursor over linked photos (mouse only) ---- */
+.fx-cur{position:fixed;left:0;top:0;width:0;height:0;z-index:9998;pointer-events:none}
+.fx-cur .bx{position:absolute;left:-30px;top:-30px;width:60px;height:60px;color:#fff;mix-blend-mode:difference;opacity:0;transform:scale(1.7);transition:opacity .25s,transform .45s cubic-bezier(.2,.7,.2,1)}
+.fx-cur.on .bx{opacity:1;transform:none}
+.fx-cur i{position:absolute;width:14px;height:14px;border:0 solid currentColor}
+.fx-cur .tl{top:0;left:0;border-top-width:1px;border-left-width:1px}
+.fx-cur .tr{top:0;right:0;border-top-width:1px;border-right-width:1px}
+.fx-cur .bl{bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
+.fx-cur .br{bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
+.fx-cur .t{position:absolute;left:0;right:0;top:50%;margin-top:-5px;text-align:center;font:500 9px/1 var(--sans,Arial,sans-serif);letter-spacing:.3em;text-indent:.3em;text-transform:uppercase}
+html.fx-cur-on a .ph{cursor:none}
+
+@media (prefers-reduced-motion:reduce){
+  .fx-load,.fx-cur{display:none}
+  main{animation:none}
+  .act::before,.act::after,.cta::before,.cta::after{transition:none}
+}
