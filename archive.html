@@ -284,6 +284,11 @@ li.on .fr .rg{background:var(--accent);border-color:var(--accent);color:#fff}
 li.on .fr .rg .pl{display:none}li.on .fr .rg .ps{display:block}
 li.on .rn{color:var(--accent)}
 .fr .th{width:64px;height:40px;object-fit:cover;background:#0E0E0E}
+.fa .fr{padding-right:52px}
+.hf{position:absolute;right:12px;top:6px;width:32px;height:32px;display:grid;place-items:center;background:none;border:0;color:var(--mute);cursor:pointer;transition:color .25s}
+.hf:hover{color:var(--accent)}
+.hf[aria-pressed="true"]{color:var(--accent)}
+.hf[aria-pressed="true"] svg path{fill:currentColor}
 .fp{height:2px;background:var(--line);margin:0 16px 0 52px}
 .fp i{display:block;height:100%;width:0;background:var(--accent)}
 .fv{padding:10px 16px 18px 52px}
@@ -337,7 +342,7 @@ li.on .fvh{display:block}
       <details class="fsd" id="fAudio">
         <summary><span class="ix">01</span><span class="nm"><i>/</i>Audio</span><span class="ct" id="fAudioCt"></span><span class="cv" aria-hidden="true"></span></summary>
         <div class="fsb" id="fAudioL"></div>
-        <div class="fsnote">Previews only. Organized by the year each track was made.</div>
+        <div class="fsnote">Previews only. Heart a song to add it to Your Favorites. Crowd Favorites ranks the most hearted. The rest is organized by the year each track was made.</div>
       </details>
 
       <details class="fsd" id="fVideo">
@@ -574,22 +579,73 @@ li.on .fvh{display:block}
     ];
     var years=[];AUDIO.forEach(function(t){if(years.indexOf(t[2])<0)years.push(t[2])});
     years.sort(function(a,b){return b-a});
-    var au=new Audio(),curLi=null;au.preload='none';
-    function audioRow(t){
-      var li=el('<li><button class="fr" type="button" aria-label="Play '+esc(t[1])+'"><span class="rg">'+PL+'</span><span class="ri">'+t[0]+'</span><span class="rn">'+esc(t[1])+'</span><span class="rm">MP3 // '+t[2]+'</span><span class="rl">'+t[3]+'</span></button><div class="fp fvh"><i></i></div></li>');
-      li.querySelector('button').addEventListener('click',function(){
-        if(curLi===li){if(au.paused)au.play();else au.pause();return}
-        if(curLi){curLi.classList.remove('on');curLi._bar.style.width='0'}
-        curLi=li;au.src=t[4];au.play();li.classList.add('on');
+    var byId={};AUDIO.forEach(function(t){byId[t[0]]=t});
+    var ENDPOINT='https://script.google.com/macros/s/AKfycbxu5UuKU0olzqpKBiKpbz3OqGfOWen2QYjyyNJ5Sr-wKE0NzfXQCfDWvMiR8BweaRS7/exec'; // same Apps Script as FabLab
+    var ANDREW=['A01','A02','A04'];   // Andrew's Favorites: track ids, in the order shown
+    var mine=[],crowd={};
+    try{mine=JSON.parse(localStorage.getItem('format-song-favs')||'[]')}catch(e){}
+    function cid(){var c=null;try{c=localStorage.getItem('format-cid')}catch(e){}
+      if(!c){var a=new Uint8Array(12);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(var i=0;i<12;i++)a[i]=Math.random()*256;
+        c=[].map.call(a,function(b){return('0'+b.toString(16)).slice(-2)}).join('');try{localStorage.setItem('format-cid',c)}catch(e){}}
+      return c}
+    function sendFav(id,on){try{fetch(ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'songfav',song:id,on:on,client:cid()})}).catch(function(){})}catch(e){}}
+    var HEART='<svg width="16" height="14" viewBox="0 0 24 22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20.5S2 14.4 2 7.6A5.1 5.1 0 0 1 12 5.3a5.1 5.1 0 0 1 10 2.3c0 6.8-10 12.9-10 12.9z"/></svg>';
+    var au=new Audio(),curId=null,rows={};au.preload='none';
+    function liveRows(id){rows[id]=(rows[id]||[]).filter(function(l){return l.isConnected});return rows[id]}
+    function setOn(id,on){liveRows(id).forEach(function(l){l.classList.toggle('on',on);if(!on)l._bar.style.width='0'})}
+    function paintHearts(id){var on=mine.indexOf(id)>-1;liveRows(id).forEach(function(l){var h=l.querySelector('.hf');h.setAttribute('aria-pressed',on);h.setAttribute('aria-label',(on?'Remove ':'Favorite ')+byId[id][1]+(on?' from favorites':''))})}
+    function audioRow(t,extra){
+      var id=t[0];
+      var li=el('<li class="fa"><button class="fr" type="button" aria-label="Play '+esc(t[1])+'"><span class="rg">'+PL+'</span><span class="ri">'+id+'</span><span class="rn">'+esc(t[1])+'</span><span class="rm">MP3 // '+t[2]+(extra?' // '+esc(extra):'')+'</span><span class="rl">'+t[3]+'</span></button><button class="hf" type="button" aria-pressed="false">'+HEART+'</button><div class="fp fvh"><i></i></div></li>');
+      li.querySelector('.fr').addEventListener('click',function(){
+        if(curId===id){if(au.paused)au.play();else au.pause();return}
+        if(curId)setOn(curId,false);
+        curId=id;au.src=t[4];au.play();setOn(id,true);
       });
-      li.querySelector('.fp').addEventListener('click',function(e){if(curLi!==li||!au.duration)return;var r=this.getBoundingClientRect();au.currentTime=au.duration*Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))});
-      li._bar=li.querySelector('.fp i');return li;
+      li.querySelector('.hf').addEventListener('click',function(){toggleFav(id)});
+      li.querySelector('.fp').addEventListener('click',function(e){if(curId!==id||!au.duration)return;var r=this.getBoundingClientRect();au.currentTime=au.duration*Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))});
+      li._bar=li.querySelector('.fp i');
+      (rows[id]=rows[id]||[]).push(li);
+      if(curId===id&&!au.paused)li.classList.add('on');
+      li.querySelector('.hf').setAttribute('aria-pressed',mine.indexOf(id)>-1);
+      return li;
     }
-    au.addEventListener('timeupdate',function(){if(curLi&&au.duration)curLi._bar.style.width=(au.currentTime/au.duration*100)+'%'});
-    au.addEventListener('pause',function(){if(curLi)curLi.classList.remove('on')});
-    au.addEventListener('play',function(){if(curLi)curLi.classList.add('on')});
-    au.addEventListener('ended',function(){if(curLi){curLi.classList.remove('on');curLi._bar.style.width='0'}});
-    mount(document.getElementById('fAudioL'),years.map(function(y){return{label:y,items:AUDIO.filter(function(t){return t[2]===y})}}),audioRow);
+    au.addEventListener('timeupdate',function(){if(curId&&au.duration)liveRows(curId).forEach(function(l){l._bar.style.width=(au.currentTime/au.duration*100)+'%'})});
+    au.addEventListener('pause',function(){if(curId)liveRows(curId).forEach(function(l){l.classList.remove('on')})});
+    au.addEventListener('play',function(){if(curId)setOn(curId,true)});
+    au.addEventListener('ended',function(){if(curId)setOn(curId,false)});
+
+    // virtual folders first (Andrew's / Crowd / Yours), then one folder per year
+    function vfolder(label,idx){var d=sub(label,0,idx);d._ul=d.querySelector('ul');d._ct=d.querySelector('.ct');return d}
+    function fill(d,list,empty,extra){
+      d._ul.innerHTML='';
+      if(list.length)list.forEach(function(t){d._ul.appendChild(audioRow(t,extra&&extra(t)))});
+      else d._ul.appendChild(el('<li class="fsempty">'+esc(empty)+'</li>'));
+      d._ct.textContent=pad(list.length)+(list.length===1?' file':' files');
+    }
+    var host=document.getElementById('fAudioL');
+    var dA=vfolder('Andrew’s Favorites',1),dC=vfolder('Crowd Favorites',2),dY=vfolder('Your Favorites',3);
+    [dA,dC,dY].forEach(function(d){host.appendChild(d)});
+    function renderAndrew(){fill(dA,ANDREW.map(function(i){return byId[i]}).filter(Boolean),'Nothing picked yet.')}
+    function renderCrowd(){
+      var list=Object.keys(crowd).filter(function(i){return byId[i]&&crowd[i]>0}).sort(function(a,b){return crowd[b]-crowd[a]||(a<b?-1:1)}).map(function(i){return byId[i]});
+      fill(dC,list,'No hearts yet. Be the first.',function(t){return crowd[t[0]]+' ♥'});
+    }
+    function renderMine(){fill(dY,mine.map(function(i){return byId[i]}).filter(Boolean),'Tap the heart on any song to keep it here.')}
+    function toggleFav(id){
+      var k=mine.indexOf(id),on=k<0;
+      if(on)mine.push(id);else mine.splice(k,1);
+      try{localStorage.setItem('format-song-favs',JSON.stringify(mine))}catch(e){}
+      crowd[id]=Math.max(0,(crowd[id]||0)+(on?1:-1));
+      sendFav(id,on);
+      renderMine();renderCrowd();paintHearts(id);
+    }
+    renderAndrew();renderMine();renderCrowd();
+    // crowd counts from the sheet (stays empty if the backend isn't reachable)
+    try{fetch(ENDPOINT+'?action=songs').then(function(r){return r.json()}).then(function(c){if(c&&typeof c==='object'){crowd=c;mine.forEach(function(i){if(!crowd[i])crowd[i]=1});renderCrowd()}}).catch(function(){})}catch(e){}
+    mount(host,years.map(function(y){return{label:y,items:AUDIO.filter(function(t){return t[2]===y})}}),audioRow);
+    // years are numbered after the three favorites folders
+    [].slice.call(host.querySelectorAll('.fss')).slice(3).forEach(function(d,i){d.querySelector('.ix').textContent=pad(i+4)});
 
     // ---- Videos
     var VIDEO=[['V01','Texas Motor Speedway','FPV // Motorsport','assets/f27790ee67.mp4','assets/15090d0f12.jpg']];

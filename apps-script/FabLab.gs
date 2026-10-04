@@ -26,6 +26,7 @@ var TAB_WAIT = 'Waitlist';
 var TAB_ORDERS = 'Orders';
 var TAB_SIZES = 'Sizes';
 var TAB_DASH = 'Dashboard';
+var TAB_SONGS = 'SongFavs';        // Archive > Audio hearts: one row per visitor per song
 
 var DEFAULT_CAP = 50;              // units per pre-order piece when Items > Cap is blank
 var NOTIFY_EMAIL = 'info@madebyformat.com';   // gets an email for every vote, waitlist signup and pre-order
@@ -44,6 +45,7 @@ var HEADERS = {
   Votes: ['Time', 'Item', 'Type', 'Color / size', 'Visitor', 'Message', 'Name'],
   Waitlist: ['Time', 'Item', 'List', 'Email', 'Visitor', 'Message', 'Name'],
   Sizes: ['Item', 'Color', 'Size', 'Cap', 'Taken', 'Left'],
+  SongFavs: ['Time', 'Song', 'Visitor'],
   Orders: ['Time', 'Item', 'Color', 'Size', 'Qty', 'Status', 'Confirmed on', 'Visitor', 'Name', 'Email', 'Ref', 'Message']
 };
 
@@ -84,6 +86,9 @@ function doGet(e) {
     if (e && e.parameter && e.parameter.action === 'summary') {
       return ContentService.createTextOutput(summary_()).setMimeType(ContentService.MimeType.JSON);
     }
+    if (e && e.parameter && e.parameter.action === 'songs') {
+      return ContentService.createTextOutput(songCounts_()).setMimeType(ContentService.MimeType.JSON);
+    }
   } catch (err) {
     console.error(err);
     return ContentService.createTextOutput(JSON.stringify({ ok: false })).setMimeType(ContentService.MimeType.JSON);
@@ -100,6 +105,12 @@ function doPost(e) {
 
     var client = clean_(d.client, 64);
     if (!client || tooMany_('c:' + client, MAX_ACTIONS)) return reply_('rate_limited');
+
+    if (d.action === 'songfav') {
+      var slock = LockService.getScriptLock();
+      if (!slock.tryLock(15000)) return reply_('busy');
+      try { return reply_(songFav_(d, client)); } finally { slock.releaseLock(); }
+    }
 
     var key = clean_(d.item, 60);
     var items = readItems_();
@@ -605,6 +616,43 @@ function buildDashboard_(ss) {
   chart(Charts.ChartType.LINE, 'X4:Y94', 'Votes per day', top, 8);
   chart(Charts.ChartType.COLUMN, 'AA4:AB94', 'Units taken per day', top + 17, 1);
   chart(Charts.ChartType.COLUMN, 'AG4:AI10', 'Pre-order stock (taken vs left)', top + 17, 8);
+}
+
+// ---------- audio favorites (Archive > Audio > Crowd Favorites) ----------
+
+// d.song is the track id (e.g. 'A01'); d.on true adds this visitor's heart, false removes it.
+function songFav_(d, client) {
+  var song = clean_(d.song, 20);
+  if (!/^[A-Za-z0-9_-]+$/.test(song)) return 'invalid';
+  var sh = sheet_(TAB_SONGS);
+  var n = sh.getLastRow();
+  var at = -1;
+  if (n >= 2) {
+    var rows = sh.getRange(2, 2, n - 1, 2).getValues();   // Song, Visitor
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i][0] === song && rows[i][1] === client) { at = i + 2; break; }
+    }
+  }
+  if (d.on) { if (at < 0) sh.appendRow([new Date(), song, client]); }
+  else if (at > 0) sh.deleteRow(at);
+  CacheService.getScriptCache().remove('songs');
+  return 'ok';
+}
+
+// {"A01": 12, "A04": 7, ...} hearts per song
+function songCounts_() {
+  var cache = CacheService.getScriptCache();
+  var hit = cache.get('songs');
+  if (hit) return hit;
+  var out = {};
+  var sh = sheet_(TAB_SONGS);
+  var n = sh.getLastRow();
+  if (n >= 2) {
+    sh.getRange(2, 2, n - 1, 1).getValues().forEach(function (r) { out[r[0]] = (out[r[0]] || 0) + 1; });
+  }
+  var json = JSON.stringify(out);
+  cache.put('songs', json, 60);
+  return json;
 }
 
 // ---------- helpers ----------
