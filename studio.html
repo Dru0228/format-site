@@ -120,6 +120,8 @@ h2{margin:0;font-size:clamp(26px,3.2vw,42px);line-height:1.1;font-weight:400;let
 .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
 a:hover .ph img{transform:scale(1.03)}
 .div .ph{aspect-ratio:4/5}
+.grid3.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.two .ph{aspect-ratio:4/3}
 .div .act{margin-top:14px;display:inline-flex;gap:10px;align-items:center;border-bottom:1px solid currentColor;padding-bottom:3px}
 a:hover .act{color:var(--accent)}
 .div p{margin:12px 0 0;color:var(--mute);max-width:36ch;font-size:15px;line-height:1.6}
@@ -203,7 +205,7 @@ body.lock{overflow:hidden}
 }
 
 @media (max-width:820px){
-  .grid3{grid-template-columns:1fr}
+  .grid3,.grid3.two{grid-template-columns:1fr}
   .work .grid3{grid-template-columns:1fr 1fr}
   .div .ph{aspect-ratio:4/3}
   .about,.contact{grid-template-columns:1fr}
@@ -306,11 +308,11 @@ body.sub main{display:none}
     <div class="ghead">
       <a class="lbl back" href="index.html"><svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M16 5H1M5 1L1 5l4 4"/></svg> Home</a>
       <h2 id="studioH">Format <span class="sl">//</span> Studio</h2>
-      <div class="lbl m">Media // Consultations // AI Integrations</div>
-      <p class="m">Houston media production for brands, events and people, plus brand + media consultations and AI business integrations. From concept to final cut, on the ground and in the air.</p>
+      <div class="lbl m">Drones // Media // Consultations</div>
+      <p class="m">Houston media production for brands, events and people: drones (FPV + traditional) and media, plus brand + media consultations and AI business integrations. From concept to final cut, on the ground and in the air.</p>
       <span class="tick"></span>
     </div>
-    <div class="grid3 div"><a href="contact.html#s=photo"><div class="ph"><img src="assets/3c2263a3fe.jpg" alt="Gray wolf walking across patchy snow, looking off to the side" loading="lazy" style="object-position:55% 50%"></div><h3>Photo</h3><div class="lbl m">Portraits // Places // Products</div><p>Stills for brands, events and people.</p><div class="lbl act">Book photo <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="contact.html#s=video"><div class="ph vf-on"><img src="assets/07e31d1d4d.jpg" alt="Green drift car at speed along a track at golden hour" loading="lazy"><div class="vfo" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><span class="rec"><b></b>REC</span><span class="fmt">4K // 24P</span><span class="x"></span></div></div><h3>Video</h3><div class="lbl m">Brand // Automotive // Social</div><p>Concept, shoot and edit, delivered as a finished cut. Automotive and motorsports content creation included.</p><div class="lbl act">Book video <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="contact.html#s=fpv"><div class="ph"><img src="assets/4cd71a82df.jpg" alt="FPV pilot in goggles and headset, wearing a FORMAT varsity jacket, flying with a radio controller under red and blue neon" loading="lazy" style="object-position:50% 30%"></div><h3>FPV</h3><div class="lbl m">Motorsport // Aerial // Property</div><p>FAA Part 107 certified FPV and drone pilot in Houston. Close, fast flying for motorsport, automotive, property and places.</p><div class="lbl act">Book FPV <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a></div>
+    <div class="grid3 two div"><a href="contact.html#s=drones"><div class="ph"><img src="assets/4cd71a82df.jpg" alt="FPV pilot in goggles and headset, wearing a FORMAT varsity jacket, flying with a radio controller under red and blue neon" loading="lazy" style="object-position:50% 30%"></div><h3>Drones</h3><div class="lbl m">FPV + Traditional</div><p>FAA Part 107 certified drone pilot in Houston. Close, fast FPV for motorsport and automotive, plus traditional aerial photo and video for property, events and places.</p><div class="lbl act">Book a drone pilot <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a><a href="contact.html#s=media"><div class="ph vf-on"><img src="assets/07e31d1d4d.jpg" alt="Green drift car at speed along a track at golden hour" loading="lazy"><div class="vfo" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><span class="rec"><b></b>REC</span><span class="fmt">4K // 24P</span><span class="x"></span></div></div><h3>Media</h3><div class="lbl m">Brand // Automotive // Events</div><p>Photo and video for brands, events and people, from concept to a finished cut. Automotive and motorsports content creation included.</p><div class="lbl act">Book media <svg width="14" height="9" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M0 5h15M11 1l4 4-4 4"/></svg></div></a></div>
     <div class="adv" aria-labelledby="advH">
       <div>
         <h3 id="advH">Consultations</h3>
