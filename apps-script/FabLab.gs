@@ -52,12 +52,7 @@ var HEADERS = {
 // color, or list colors one by one when the split is uneven.
 var RUNS = {
   'signal-tee': { all: { S: 1, M: 3, L: 3, XL: 2, XXL: 1 } },                     // 6 colors x 10 = 60
-  'polo': {                                                                       // 8 + 8 + 7 + 7 = 30
-    'Black': { S: 1, M: 2, L: 2, XL: 2, XXL: 1 },
-    'Off-white': { S: 1, M: 2, L: 2, XL: 2, XXL: 1 },
-    'Hot pink': { S: 1, M: 2, L: 2, XL: 1, XXL: 1 },
-    'Charcoal': { S: 1, M: 2, L: 2, XL: 1, XXL: 1 }
-  },
+  'polo': { all: { S: 1, M: 3, L: 3, XL: 2, XXL: 1 } },                           // 4 colors x 10 = 40
   'core-hoodie': { all: { S: 1, M: 3, L: 3, XL: 2, XXL: 1 } }                     // 3 colors x 10 = 30
 };
 
@@ -66,7 +61,7 @@ var RUNS = {
 var SEED = [
   ["frame-tee", "Frame Tee", "Shirts", "Concept", "Off-white, Black"],
   ["signal-tee", "Signal Tee", "Shirts", "Pre-order", "Off-white, Black, Charcoal, Hot pink, Stone, White", 60],
-  ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink, Charcoal", 30],
+  ["polo", "Field Polo", "Shirts", "Pre-order", "Black, Off-white, Hot pink, Charcoal", 40],
   ["core-hoodie", "Core Hoodie", "Hoodies", "Pre-order", "Black, Off-white, Hot pink", 30],
   ["archive-sweater", "Archive Sweater", "Sweaters", "Concept", "Black, Off-white, Charcoal"],
   ["blueprint-sweater", "Blueprint Sweater", "Sweaters", "Concept", "Black, Stone, Hot pink"],
