@@ -608,7 +608,25 @@ li.on .fvh{display:block}
     mount(document.getElementById('fAudioL'),years.map(function(y){return{label:y,items:AUDIO.filter(function(t){return t[2]===y})}}),audioRow);
 
     // ---- Videos
-    var VIDEO=[['V01','Texas Motor Speedway','FPV // Motorsport','assets/f27790ee67.mp4','assets/15090d0f12.jpg']];
+    var VIDEO=[['V01','Texas Motor Speedway','FPV // Motorsport','assets/f27790ee67.mp4','assets/15090d0f12.jpg'],
+      ['V02','Call the Police','FPV // Motorsport','assets/v02.mp4','assets/v02.jpg'],
+      ['V03','Car Wash','Video // Horizontal','assets/v03.mp4','assets/v03.jpg'],
+      ['V04','Christina','Behind the Scenes','assets/v04.mp4','assets/v04.jpg'],
+      ['V05','Drag','First Rough Cut','assets/v05.mp4','assets/v05.jpg'],
+      ['V06','Drift N Drag','Full Edit','assets/v06.mp4','assets/v06.jpg'],
+      ['V07','Drag Race','Reel Cut 1','assets/v07.mp4','assets/v07.jpg'],
+      ['V08','Slow Drift','Video','assets/v08.mp4','assets/v08.jpg'],
+      ['V09','Lorelei','Rough Cut 6','assets/v09.mp4','assets/v09.jpg'],
+      ['V10','Terraform Planet Ooo','Intro','assets/v10.mp4','assets/v10.jpg'],
+      ['V11','Boxed In','Film','assets/v11.mp4','assets/v11.jpg'],
+      ['V12','Camp Huawni','Feature','assets/v12.mp4','assets/v12.jpg'],
+      ['V13','Ellipsis','Final','assets/v13.mp4','assets/v13.jpg'],
+      ['V14','Bike Chase','Cut 2','assets/v14.mp4','assets/v14.jpg'],
+      ['V15','RAN','Cut 3','assets/v15.mp4','assets/v15.jpg'],
+      ['V16','Eric Lopez','Video','assets/v16.mp4','assets/v16.jpg'],
+      ['V17','Lucas','Reel','assets/v17.mp4','assets/v17.jpg'],
+      ['V18','Christina','Reel // Rough Cut','assets/v18.mp4','assets/v18.jpg'],
+      ['V19','House Flight','Riverlake Road','assets/v19.mp4','assets/v19.jpg']];
     function videoRow(v){
       var li=el('<li><button class="fr" type="button" aria-expanded="false"><span class="rg">'+PL+'</span><span class="ri">'+v[0]+'</span><span class="rn">'+esc(v[1])+'</span><span class="rm">MP4 // '+esc(v[2])+'</span><span class="rl"></span></button><div class="fv fvh"></div></li>');
       var b=li.querySelector('button'),box=li.querySelector('.fv'),vid=null;
