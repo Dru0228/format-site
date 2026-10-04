@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /stats.html
+Disallow: /fablab-v1.html
+
+Sitemap: https://madebyformat.com/sitemap.xml
