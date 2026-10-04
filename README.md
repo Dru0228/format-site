@@ -35,7 +35,6 @@ Then add your custom domain in the host's settings and update DNS at your regist
 ## Still to wire up
 
 - **FabLab checkout:** "Request to order" sends people to the contact form; there is no payment checkout yet.
-- **Footer:** the Facebook link still points to facebook.com (marked `data-todo="facebook-profile-url"`).
 
 ## Contact form
 
