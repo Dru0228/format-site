@@ -343,7 +343,7 @@ li.on .fvh{display:block}
         <summary><span class="ix">01</span><span class="nm"><i>/</i>Audio</span><span class="ct" id="fAudioCt"></span><span class="cv" aria-hidden="true"></span></summary>
         <div class="fsnote">Warning: I didn’t make these for you. You won’t like them all. Shieet, you may not like any of them. But they’re here for you. Enjoy, favorite, download, sample + reuse&hellip;.made by format. Made for you.</div>
         <div class="fsb" id="fAudioL"></div>
-        <div class="fsnote">Previews only. Heart a song to add it to Your Favorites. Crowd Favorites ranks the most hearted. The rest is organized by the year each track was made.</div>
+        <div class="fsnote">Previews only. Heart a song to add it to Your Favorites. Crowd Favorites ranks the most hearted. The rest is organized by drop.</div>
       </details>
 
       <details class="fsd" id="fVideo">
@@ -570,16 +570,15 @@ li.on .fvh{display:block}
       });
     }
 
-    // ---- Audio: grouped by the year each track was made
+    // ---- Audio: grouped by drop. Track: [id, title, year made, length, file, drop number]. New music goes in the next drop (add a DROPS line if needed).
+    var DROPS_A=[[1,'Q1 2027'],[2,''],[3,'']];   // [drop number, release label]; a drop only shows once it has a track
     var AUDIO=[
-      ['A01','Don’t You Know','2026','3:18','assets/audio/dont-you-know.mp3'],
-      ['A02','I Loved You Once','2026','5:06','assets/audio/i-loved-you-once.mp3'],
-      ['A03','That’s Love','2024','2:48','assets/audio/thats-love.mp3'],
-      ['A04','VOX 4 Fire','2025','4:11','assets/audio/vox-4-fire.mp3'],
-      ['A05','Rough Boi','2022','1:55','assets/audio/rough-boi.mp3']
+      ['A01','Don’t You Know','2026','3:18','assets/audio/dont-you-know.mp3',2],
+      ['A02','I Loved You Once','2026','5:06','assets/audio/i-loved-you-once.mp3',3],
+      ['A03','That’s Love','2024','2:48','assets/audio/thats-love.mp3',1],
+      ['A04','VOX 4 Fire','2025','4:11','assets/audio/vox-4-fire.mp3',2],
+      ['A05','Rough Boi','2022','1:55','assets/audio/rough-boi.mp3',1]
     ];
-    var years=[];AUDIO.forEach(function(t){if(years.indexOf(t[2])<0)years.push(t[2])});
-    years.sort(function(a,b){return b-a});
     var byId={};AUDIO.forEach(function(t){byId[t[0]]=t});
     var ENDPOINT='https://script.google.com/macros/s/AKfycbxu5UuKU0olzqpKBiKpbz3OqGfOWen2QYjyyNJ5Sr-wKE0NzfXQCfDWvMiR8BweaRS7/exec'; // same Apps Script as FabLab
     var ANDREW=['A01','A02','A04'];   // Andrew's Favorites: track ids, in the order shown
@@ -644,8 +643,11 @@ li.on .fvh{display:block}
     renderAndrew();renderMine();renderCrowd();
     // crowd counts from the sheet (stays empty if the backend isn't reachable)
     try{fetch(ENDPOINT+'?action=songs').then(function(r){return r.json()}).then(function(c){if(c&&typeof c==='object'){crowd=c;mine.forEach(function(i){if(!crowd[i])crowd[i]=1});renderCrowd()}}).catch(function(){})}catch(e){}
-    mount(host,years.map(function(y){return{label:y,items:AUDIO.filter(function(t){return t[2]===y})}}),audioRow);
-    // years are numbered after the three favorites folders
+    // one folder per drop, in order: Drop 01, Drop 02, ...
+    var dropGroups=DROPS_A.filter(function(d){return AUDIO.some(function(t){return t[5]===d[0]})}).map(function(d){
+      return{label:'Drop '+pad(d[0])+(d[1]?' // '+d[1]:''),items:AUDIO.filter(function(t){return t[5]===d[0]})}});
+    mount(host,dropGroups,audioRow);
+    // drop folders are numbered after the three favorites folders
     [].slice.call(host.querySelectorAll('.fss')).slice(3).forEach(function(d,i){d.querySelector('.ix').textContent=pad(i+4)});
 
     // ---- Videos
