@@ -368,7 +368,7 @@ legend{padding:0;margin-bottom:14px}
         <form class="cform" id="cform" novalidate>
           <fieldset>
             <legend class="lbl">What can we help with? <span class="m">Required</span></legend>
-            <div class="svc" id="svc" role="group" aria-label="Service"><button type="button" data-s="drones" aria-pressed="false">Drones (FPV + traditional)</button><button type="button" data-s="media" aria-pressed="false">Media</button><button type="button" data-s="advisory" aria-pressed="false">Brand + media consultation</button><button type="button" data-s="ai" aria-pressed="false">AI business integration</button><button type="button" data-s="prints" aria-pressed="false">Prints + licensing</button><button type="button" data-s="fablab" aria-pressed="false">FabLab</button><button type="button" data-s="other" aria-pressed="false">Something else…</button></div>
+            <div class="svc" id="svc" role="group" aria-label="Service"><button type="button" data-s="drones" aria-pressed="false">Drones (FPV + traditional)</button><button type="button" data-s="media" aria-pressed="false">Media</button><button type="button" data-s="design" aria-pressed="false">Design</button><button type="button" data-s="advisory" aria-pressed="false">Brand + media consultation</button><button type="button" data-s="ai" aria-pressed="false">AI business integration</button><button type="button" data-s="prints" aria-pressed="false">Prints + licensing</button><button type="button" data-s="fablab" aria-pressed="false">FabLab</button><button type="button" data-s="other" aria-pressed="false">Something else…</button></div>
           </fieldset>
           <div class="other" id="otherWrap" hidden><input id="other" name="other" placeholder="What do you have in mind?" aria-label="What do you have in mind?" maxlength="120"></div>
           <div class="row2">
@@ -426,7 +426,7 @@ legend{padding:0;margin-bottom:14px}
     try{navigator.clipboard.writeText(t).then(ok,function(){sel();cpy.textContent='Selected'})}catch(e){sel();cpy.textContent='Selected'}});
   // contact form: sends in the background to the lead sheet + email, never opens a mail app
   var ENDPOINT="https://script.google.com/macros/s/AKfycbxIQYFTD9WZtCy1J6lDCrr8Mx-m9CRyJefzKQ4d5l-gNtOIeOPKpHgbGUxxZAMmial30w/exec";
-  var NAMES={drones:'Drones (FPV + traditional)',media:'Media',advisory:'Brand + media consultation',ai:'AI business integration',prints:'Prints + licensing',fablab:'FabLab',other:'Something else'};
+  var NAMES={drones:'Drones (FPV + traditional)',media:'Media',design:'Design (digital + print)',advisory:'Brand + media consultation',ai:'AI business integration',prints:'Prints + licensing',fablab:'FabLab',other:'Something else'};
   var form=document.getElementById('cform'),svc=document.getElementById('svc'),ow=document.getElementById('otherWrap'),other=document.getElementById('other');
   var stat=document.getElementById('cstat'),send=document.getElementById('send'),sendHTML=send.innerHTML,chosen=null;
   var dn=document.getElementById('done');
