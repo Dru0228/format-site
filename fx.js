@@ -4,29 +4,6 @@
   var reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(reduced)return;
 
-  // [ ] loader: shown once per browser session, held for ~0.6s so the draw-on finishes.
-  // Add ?loader to any page URL to preview it.
-  var seen;try{seen=sessionStorage.getItem('fxSeen')}catch(e){}
-  try{sessionStorage.setItem('fxSeen','1')}catch(e){}
-  if(/[?&]loader\b/.test(location.search)||!seen){
-    var t0=Date.now(),MIN=600,done=false;
-    h.classList.add('fx-wait');
-    var el=d.createElement('div');
-    el.className='fx-load';el.setAttribute('aria-hidden','true');
-    el.innerHTML='<svg viewBox="0 0 120 60"><path class="b l" d="M24 6H10v48h14"/><path class="b r" d="M96 6h14v48H96"/><line class="ln" x1="60" y1="14" x2="60" y2="46"/></svg><span class="w">Format</span>';
-    h.appendChild(el);
-    var out=function(){
-      if(done)return;done=true;
-      el.classList.add('out');
-      setTimeout(function(){h.classList.remove('fx-wait')},150);
-      setTimeout(function(){el.remove()},600);
-    };
-    var go=function(){setTimeout(out,Math.max(0,MIN-(Date.now()-t0)))};
-    if(d.readyState==='complete')go();else window.addEventListener('load',go);
-    setTimeout(out,4500);
-    el.addEventListener('click',out);
-  }
-
   // viewfinder cursor over linked photos, mouse devices only
   if(!(window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches))return;
   d.addEventListener('DOMContentLoaded',function(){
