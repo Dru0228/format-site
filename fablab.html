@@ -174,6 +174,7 @@ footer a:hover{color:var(--accent)}
 footer{border-top:0}
 
 /* ---- v2: drop sections, stock, voting ---- */
+.pastE{margin:0;padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .pv{margin:0 0 24px;padding:10px 14px;border:1px dashed var(--accent);color:var(--accent)}
 .pv[hidden]{display:none}
 .sec{padding-top:clamp(8px,2vw,24px)}
@@ -304,22 +305,13 @@ footer{border-top:0}
       <div class="pgrid pre" id="pgridPre"></div>
     </section>
 
-    <section class="sec" id="concepts" aria-labelledby="conH">
+    <section class="sec" id="past" aria-labelledby="pastH">
       <div class="sech">
-        <div class="lbl m">Not produced yet</div>
-        <h3 id="conH">Concepts</h3>
-        <p class="m">Open any concept to vote for the piece and for the color you'd wear. The most wanted ones get made.</p>
+        <div class="lbl m">Expired</div>
+        <h3 id="pastH">Past drops</h3>
+        <p class="m">Earlier runs that have closed. Once a drop ends, it is archived here.</p>
       </div>
-      <div class="top3" id="top3">
-        <div class="hd"><span class="lbl">Most wanted</span><div class="per lbl" id="per" role="group" aria-label="Time period"></div></div>
-        <ol class="t3" id="t3"></ol>
-        <p class="t3msg m" id="t3msg" role="status" hidden></p>
-      </div>
-      <div class="gbar">
-        <div class="chips" role="group" aria-label="Filter by category" id="chips"></div>
-        <span class="lbl m" id="count" role="status"></span>
-      </div>
-      <div class="pgrid" id="pgrid"></div>
+      <p class="pastE lbl m">Previous drops will be archived here.</p>
     </section>
 
     <section class="sec" id="custom" aria-labelledby="cusH">
@@ -486,20 +478,16 @@ footer{border-top:0}
     return b;
   }
   function build(){
-    var gp=$('pgridPre'),gc=$('pgrid');gp.innerHTML='';gc.innerHTML='';preCards=[];conCards=[];
+    var gp=$('pgridPre');gp.innerHTML='';preCards=[];conCards=[];
     DATA.forEach(function(p){
+      if(!isPre(p))return;
       var b=card(p);
-      if(isPre(p)){
-        if(RUN[p.k])b.appendChild(el('span','lbl m run',runText(p.k)));
-        var st=el('div','stock');st.appendChild(el('div','lbl')).appendChild(el('span'));
-        var bar=el('div','sbar');bar.appendChild(el('i'));st.appendChild(bar);b.appendChild(st);
-        gp.appendChild(b);preCards.push(b);
-      }else{
-        var ag=el('span','lbl m age');b.appendChild(ag);
-        gc.appendChild(b);conCards.push(b);
-      }
+      if(RUN[p.k])b.appendChild(el('span','lbl m run',runText(p.k)));
+      var st=el('div','stock');st.appendChild(el('div','lbl')).appendChild(el('span'));
+      var bar=el('div','sbar');bar.appendChild(el('i'));st.appendChild(bar);b.appendChild(st);
+      gp.appendChild(b);preCards.push(b);
     });
-    refreshCards();buildChips();renderTop();renderAnnounce();
+    refreshCards();renderAnnounce();
   }
   function renderAnnounce(){
     var box=$('announce');box.innerHTML='';
@@ -526,46 +514,6 @@ footer{border-top:0}
       var p=byKey[b.dataset.k],ag=b.querySelector('.age');
       ag.textContent=ageText(p);
       if(mine[p.k]&&mine[p.k].item){var v=el('span','vd',' // Voted');ag.appendChild(v)}
-    });
-  }
-
-  // concept category filter
-  var chipsEl=$('chips'),count=$('count'),chips=[];
-  function buildChips(){
-    var cats=['All'];conCards.forEach(function(b){if(cats.indexOf(b.dataset.c)<0)cats.push(b.dataset.c)});
-    var sc=null;try{sc=localStorage.getItem('format-cat')}catch(e){}
-    cat=cats.indexOf(sc)>-1?sc:'All';
-    chipsEl.innerHTML='';chips=[];
-    cats.forEach(function(c){var b=el('button','chip lbl',c);b.type='button';b.addEventListener('click',function(){setCat(c)});chipsEl.appendChild(b);chips.push(b)});
-    setCat(cat);
-  }
-  function setCat(c){
-    cat=c;var v=0;
-    conCards.forEach(function(b){var on=c==='All'||b.dataset.c===c;b.hidden=!on;if(on)v++});
-    chips.forEach(function(b){b.setAttribute('aria-pressed',b.textContent===c)});
-    count.textContent=v+(v===1?' concept':' concepts');
-    try{localStorage.setItem('format-cat',c)}catch(e){}
-  }
-
-  // most wanted: top 3 only, by day / week / month / year
-  var period='month',perEl=$('per'),perBtns=[];
-  PERIODS.forEach(function(x){var b=el('button','lbl',x[1]);b.type='button';b.addEventListener('click',function(){period=x[0];renderTop()});perEl.appendChild(b);perBtns.push(b)});
-  function renderTop(){
-    perBtns.forEach(function(b,i){b.setAttribute('aria-pressed',PERIODS[i][0]===period)});
-    var ol=$('t3'),msg=$('t3msg');ol.innerHTML='';
-    var keys=((live.top&&live.top[period])||[]).filter(function(k){return byKey[k]});
-    if(keys.length){msg.hidden=true}
-    else{
-      msg.hidden=false;
-      msg.textContent=!ENDPOINT?'Voting opens soon.':!live.top?'Loading votes…':'No votes this '+period+' yet. Be the first.';
-    }
-    keys.forEach(function(k,i){
-      var p=byKey[k],li=el('li'),b=el('button');b.type='button';b.setAttribute('aria-label','Number '+(i+1)+': '+p.n);
-      b.appendChild(el('span','rk','0'+(i+1)));
-      var im=el('img');im.src=IMG['c:'+k];im.alt='';im.loading='lazy';b.appendChild(im);
-      var w=el('span');w.appendChild(el('span','nm',p.n));w.appendChild(el('span','lbl m',p.c));b.appendChild(w);
-      b.addEventListener('click',function(){open(p,b)});
-      li.appendChild(b);ol.appendChild(li);
     });
   }
 
@@ -785,7 +733,7 @@ footer{border-top:0}
       var was=DATA.map(isPre).join();
       live={stock:d.stock||{},v:d.variants||{},top:d.top||{},status:d.status||{},since:d.since||{}};
       if(DATA.map(isPre).join()!==was){if(sh.hidden)build();else dirty=true}
-      else{refreshCards();renderTop()}
+      else{refreshCards()}
       if(!sh.hidden&&isPre(cur))stockBlock();
     }).catch(function(){});
   }
